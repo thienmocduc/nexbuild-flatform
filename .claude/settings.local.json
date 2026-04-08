@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@14 . --typescript --tailwind --eslint --app --src-dir --no-import-alias --use-npm)",
+      "Bash(cp -r \"C:\\\\Users\\\\Admin\\\\Documents\\\\nexbuild-platform\"/* \"C:\\\\Users\\\\Admin\\\\Documents\\\\NexBuild-OS-Flatforrm/\")",
+      "Bash(cp -r \"C:\\\\Users\\\\Admin\\\\Documents\\\\nexbuild-platform\"/.* \"C:\\\\Users\\\\Admin\\\\Documents\\\\NexBuild-OS-Flatforrm/\")",
+      "Bash(cp \"C:\\\\Users\\\\Admin\\\\Documents\\\\nexbuild-platform/package.json\" \"C:\\\\Users\\\\Admin\\\\Documents\\\\NexBuild-OS-Flatforrm/\")",
+      "Bash(cp \"C:\\\\Users\\\\Admin\\\\Documents\\\\nexbuild-platform/tsconfig.json\" \"C:\\\\Users\\\\Admin\\\\Documents\\\\NexBuild-OS-Flatforrm/\")",
+      "Bash(cp \"C:\\\\Users\\\\Admin\\\\Documents\\\\nexbuild-platform/tailwind.config.ts\" \"C:\\\\Users\\\\Admin\\\\Documents\\\\NexBuild-OS-Flatforrm/\")",
+      "Bash(cp \"C:\\\\Users\\\\Admin\\\\Documents\\\\nexbuild-platform/postcss.config.mjs\" \"C:\\\\Users\\\\Admin\\\\Documents\\\\NexBuild-OS-Flatforrm/\")",
+      "Bash(cp \"C:\\\\Users\\\\Admin\\\\Documents\\\\nexbuild-platform/.eslintrc.json\" \"C:\\\\Users\\\\Admin\\\\Documents\\\\NexBuild-OS-Flatforrm/\")",
+      "Bash(npm run:*)"
+    ]
+  }
+}
