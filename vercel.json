@@ -1,11 +1,10 @@
 {
   "buildCommand": "",
+  "installCommand": "echo 'skip'",
   "outputDirectory": "public",
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/api/:path*" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/marketplace", "destination": "/marketplace.html" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/marketplace", "destination": "/marketplace.html" }
   ],
   "headers": [
     {

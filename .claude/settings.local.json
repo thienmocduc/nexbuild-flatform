@@ -34,7 +34,10 @@
       "Bash(mkdir -p public)",
       "Bash(cp \"C:/Users/Admin/Downloads/nexbuild-hub \\(9\\).html\" public/index.html)",
       "Bash(cp \"C:/Users/Admin/Downloads/nexbuild-dashboard \\(3\\).html\" public/dashboard.html)",
-      "Bash(cp \"C:/Users/Admin/Downloads/nexbuild-marketplace \\(2\\).html\" public/marketplace.html)"
+      "Bash(cp \"C:/Users/Admin/Downloads/nexbuild-marketplace \\(2\\).html\" public/marketplace.html)",
+      "Bash(where vercel:*)",
+      "Bash(vercel --prod --yes)",
+      "Bash(vercel link:*)"
     ]
   }
 }
