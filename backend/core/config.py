@@ -50,6 +50,10 @@ class Settings(BaseSettings):
     AWS_ACCESS_KEY_ID: str = ""
     AWS_SECRET_ACCESS_KEY: str = ""
 
+    # Gemini AI
+    GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-2.0-flash"
+
     # Escrow
     ESCROW_AUTO_RELEASE_DAYS: int = 30
     COMMISSION_SUPPLIER_PCT: float = 2.5
