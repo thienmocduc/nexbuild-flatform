@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NexDesign AI — Module 1 · NexBuild</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;0,900;1,400&family=Noto+Sans+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & ROOT ── */
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg0:#04080F;--bg1:#080F1C;--bg2:#0D1828;--bg3:#132034;
+  --c1:#00C9A7;--c2:#0EA5E9;--indigo:#6366F1;--violet:#A855F7;
+  --gold:#C9A84C;--red:#EF4444;--green:#22C55E;--amber:#F59E0B;
+  --grad:linear-gradient(135deg,#00C9A7,#0EA5E9,#6366F1,#A855F7);
+  --grad-btn:linear-gradient(135deg,#00C9A7,#0EA5E9,#6366F1,#A855F7);
+  --text:#EDF2FF;--text2:#8898B8;--text3:#3A4F6A;
+  --bdr:rgba(255,255,255,.07);--bdr2:rgba(0,201,167,.25);
+  --sur:rgba(255,255,255,.03);--sur2:rgba(0,201,167,.06);
+  --r:14px;--tr:.2s cubic-bezier(.4,0,.2,1);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Noto Sans',sans-serif;background:var(--bg0);color:var(--text);
+  min-height:100vh;line-height:1.6;font-size:15px;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── HEADER ── */
+.site-header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(6,13,26,.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:60px;
+}
+.logo{font-family:'Noto Sans',sans-serif;font-size:16px;font-weight:800;display:flex;align-items:center;gap:1px}
+.logo-nx{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-dot{color:var(--gold)}
+.logo-h{color:rgba(255,255,255,.4);font-weight:600;font-size:14px}
+.header-badge{
+  display:flex;align-items:center;gap:8px;
+  background:var(--surface2);border:1px solid var(--border2);
+  padding:6px 14px;border-radius:40px;
+}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.badge-txt{font-size:12px;font-weight:600;color:var(--teal);letter-spacing:.04em}
+.header-nav{display:flex;align-items:center;gap:6px}
+.nav-pill{
+  font-size:12px;padding:5px 12px;border-radius:20px;border:1px solid var(--border);
+  color:var(--text3);cursor:pointer;transition:all var(--tr);background:transparent;
+  font-family:'Noto Sans',sans-serif;
+}
+.nav-pill:hover,.nav-pill.on{background:var(--surface2);border-color:var(--border2);color:var(--teal)}
+
+/* ── HERO BANNER ── */
+.hero{
+  position:relative;padding:60px 40px 48px;overflow:hidden;
+  border-bottom:1px solid var(--border);
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 60% at 60% 50%,rgba(99,102,241,.08) 0%,transparent 70%),
+             radial-gradient(ellipse 40% 50% at 20% 80%,rgba(0,201,167,.06) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(0,201,167,.1);border:1px solid rgba(0,201,167,.25);
+  padding:5px 14px;border-radius:30px;margin-bottom:20px;
+}
+.hero-tag-ico{font-size:14px}
+.hero-tag-txt{font-size:12px;font-weight:600;color:var(--teal);letter-spacing:.06em;text-transform:uppercase}
+.hero-title{
+  font-family:'Noto Sans',sans-serif;font-size:clamp(28px,4vw,48px);
+  font-weight:800;line-height:1.1;margin-bottom:16px;
+}
+.hero-title span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:16px;color:var(--text2);max-width:600px;line-height:1.7;margin-bottom:32px}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap}
+.hstat{display:flex;flex-direction:column;gap:2px}
+.hstat-v{font-family:'Noto Sans',sans-serif;font-size:26px;font-weight:800;color:var(--teal)}
+.hstat-l{font-size:12px;color:var(--text3);font-weight:500}
+
+/* ── SECTION ── */
+.section{padding:40px 40px;border-bottom:1px solid var(--border)}
+.sec-label{
+  display:flex;align-items:center;gap:10px;margin-bottom:24px;
+}
+.sec-num{
+  width:28px;height:28px;border-radius:8px;
+  background:var(--grad);display:flex;align-items:center;justify-content:center;
+  font-family:'Noto Sans',sans-serif;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;
+}
+.sec-title{font-family:'Noto Sans',sans-serif;font-size:20px;font-weight:700}
+.sec-sub{font-size:13px;color:var(--text3);margin-left:auto;font-family:'Noto Sans Mono',monospace}
+
+/* ── 5 APPROACHES GRID ── */
+.approaches-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:32px}
+.approach-card{
+  background:var(--bg1);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px 16px;cursor:pointer;transition:all var(--tr);position:relative;overflow:hidden;
+}
+.approach-card::before{
+  content:'';position:absolute;inset:0;opacity:0;transition:opacity var(--tr);
+  background:linear-gradient(135deg,rgba(0,201,167,.08),transparent);
+}
+.approach-card:hover::before,.approach-card.on::before{opacity:1}
+.approach-card.on{border-color:var(--border2)}
+.approach-card.eliminated{opacity:.5}
+.approach-card.winner{border-color:var(--teal);background:rgba(0,201,167,.05)}
+.ac-ico{font-size:24px;margin-bottom:10px}
+.ac-num{
+  position:absolute;top:12px;right:12px;
+  font-family:'Noto Sans Mono',monospace;font-size:10px;font-weight:600;
+  color:var(--text3);
+}
+.ac-title{font-family:'Noto Sans',sans-serif;font-size:13px;font-weight:700;margin-bottom:6px}
+.ac-market{font-size:11px;color:var(--text3);margin-bottom:8px;font-style:italic}
+.ac-pros,.ac-cons{font-size:11px;line-height:1.5}
+.ac-pros{color:var(--green)}
+.ac-cons{color:var(--red)}
+.ac-verdict{
+  margin-top:10px;padding:6px 10px;border-radius:8px;
+  font-size:11px;font-weight:600;text-align:center;
+}
+.verdict-out{background:rgba(239,68,68,.1);color:var(--red)}
+.verdict-weak{background:rgba(245,158,11,.1);color:var(--amber)}
+.verdict-win{background:rgba(0,201,167,.15);color:var(--teal)}
+
+/* ── SYNTHESIS BOX ── */
+.synthesis{
+  background:linear-gradient(135deg,rgba(0,201,167,.06),rgba(99,102,241,.04));
+  border:1px solid rgba(0,201,167,.2);border-radius:16px;padding:28px;
+  margin-bottom:32px;position:relative;overflow:hidden;
+}
+.synthesis::before{
+  content:'SYNTHESIS';position:absolute;right:20px;top:16px;
+  font-family:'Noto Sans Mono',monospace;font-size:10px;letter-spacing:.2em;
+  color:rgba(0,201,167,.2);font-weight:600;
+}
+.syn-title{font-family:'Noto Sans',sans-serif;font-size:18px;font-weight:800;color:var(--teal);margin-bottom:8px}
+.syn-sub{font-size:14px;color:var(--text2);margin-bottom:20px;line-height:1.6}
+.syn-points{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.syn-point{
+  display:flex;align-items:flex-start;gap:10px;
+  background:rgba(255,255,255,.03);border:1px solid var(--border);
+  border-radius:10px;padding:12px 14px;
+}
+.syn-ico{font-size:18px;flex-shrink:0;margin-top:1px}
+.syn-text strong{display:block;font-size:12px;font-weight:600;color:var(--text);margin-bottom:2px}
+.syn-text span{font-size:11px;color:var(--text3);line-height:1.4}
+
+/* ── WHY SUPERIOR TABLE ── */
+.compare-table{width:100%;border-collapse:collapse;margin-bottom:24px}
+.compare-table th{
+  background:var(--bg2);padding:10px 16px;text-align:left;
+  font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;
+  border-bottom:1px solid var(--border);
+}
+.compare-table td{
+  padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.04);
+  font-size:13px;vertical-align:top;
+}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-table .feat{color:var(--text);font-weight:500}
+.compare-table .them{color:var(--red);font-size:12px}
+.compare-table .us{color:var(--teal);font-size:12px;font-weight:600}
+.compare-table tr:hover td{background:rgba(255,255,255,.02)}
+
+/* ── MAIN UI MOCK ── */
+.ui-mock{
+  background:var(--bg1);border:1px solid var(--border);border-radius:20px;
+  overflow:hidden;
+}
+.ui-topbar{
+  height:52px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:0;padding:0;
+}
+.ui-tab{
+  height:100%;display:flex;align-items:center;gap:8px;
+  padding:0 20px;font-size:13px;font-weight:500;color:var(--text3);
+  cursor:pointer;border-right:1px solid var(--border);transition:all var(--tr);
+  border-bottom:2px solid transparent;
+}
+.ui-tab.on{color:var(--teal);border-bottom-color:var(--teal);background:rgba(0,201,167,.05)}
+.ui-tab:hover:not(.on){color:var(--text2);background:var(--surface)}
+.tab-ico{font-size:15px}
+.ui-topright{margin-left:auto;display:flex;align-items:center;gap:8px;padding-right:16px}
+.status-chip{
+  display:flex;align-items:center;gap:6px;
+  padding:4px 12px;border-radius:30px;
+  background:rgba(0,201,167,.1);border:1px solid rgba(0,201,167,.2);
+}
+.status-chip span{font-size:11px;font-weight:600;color:var(--teal)}
+
+/* ── MAIN CONTENT AREA ── */
+.ui-body{display:flex;height:620px}
+.ui-left{
+  width:380px;flex-shrink:0;border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+}
+.ui-right{flex:1;display:flex;flex-direction:column}
+
+/* LEFT PANEL */
+.prompt-area{
+  padding:20px;border-bottom:1px solid var(--border);flex-shrink:0;
+}
+.prompt-label{font-size:11px;font-weight:600;color:var(--text3);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.prompt-input{
+  width:100%;background:var(--bg2);border:1px solid var(--border);
+  border-radius:12px;padding:14px;font-family:'Noto Sans',sans-serif;
+  font-size:14px;color:var(--text);resize:none;height:100px;
+  transition:border-color var(--tr);outline:none;line-height:1.5;
+}
+.prompt-input:focus{border-color:rgba(0,201,167,.4)}
+.prompt-input::placeholder{color:var(--text3)}
+.prompt-actions{display:flex;gap:8px;margin-top:10px}
+.btn-upload{
+  flex:1;height:38px;border:1px solid var(--border);border-radius:10px;
+  background:var(--surface);color:var(--text2);font-size:12px;font-weight:600;
+  cursor:pointer;transition:all var(--tr);display:flex;align-items:center;justify-content:center;gap:6px;
+  font-family:'Noto Sans',sans-serif;
+}
+.btn-upload:hover{border-color:var(--border2);color:var(--teal);background:var(--surface2)}
+.btn-gen{
+  height:38px;padding:0 20px;border-radius:10px;border:none;
+  background:var(--grad);color:#fff;font-size:13px;font-weight:700;
+  cursor:pointer;transition:opacity var(--tr);font-family:'Noto Sans',sans-serif;
+  display:flex;align-items:center;gap:6px;
+}
+.btn-gen:hover{opacity:.85}
+
+.style-area{padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+.style-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.style-chip{
+  padding:5px 12px;border-radius:20px;border:1px solid var(--border);
+  font-size:11px;font-weight:600;color:var(--text3);cursor:pointer;transition:all var(--tr);
+}
+.style-chip:hover{border-color:var(--border2);color:var(--teal)}
+.style-chip.on{background:rgba(0,201,167,.1);border-color:var(--teal);color:var(--teal)}
+
+.params-area{padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+.param-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.param-row:last-child{margin-bottom:0}
+.param-label{font-size:12px;color:var(--text2)}
+.param-val{
+  font-family:'Noto Sans Mono',monospace;font-size:12px;font-weight:600;color:var(--teal);
+  background:rgba(0,201,167,.1);padding:3px 10px;border-radius:6px;
+}
+.param-slider{
+  flex:1;margin:0 12px;height:4px;-webkit-appearance:none;appearance:none;
+  background:var(--bg3);border-radius:2px;outline:none;cursor:pointer;
+}
+.param-slider::-webkit-slider-thumb{
+  -webkit-appearance:none;width:14px;height:14px;border-radius:50%;
+  background:var(--teal);cursor:pointer;box-shadow:0 0 0 3px rgba(0,201,167,.2);
+}
+
+.history-area{flex:1;padding:16px 20px;overflow-y:auto;min-height:0}
+.history-item{
+  display:flex;gap:10px;margin-bottom:14px;align-items:flex-start;
+}
+.hi-avatar{
+  width:28px;height:28px;border-radius:8px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+}
+.hi-avatar.user{background:var(--bg3)}
+.hi-avatar.ai{background:var(--grad)}
+.hi-bubble{
+  flex:1;background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:10px 12px;font-size:12px;color:var(--text2);line-height:1.5;
+}
+.hi-bubble.ai{background:rgba(0,201,167,.05);border-color:rgba(0,201,167,.15);color:var(--text)}
+.hi-time{font-size:10px;color:var(--text3);margin-top:3px}
+
+/* RIGHT PANEL */
+.preview-header{
+  height:44px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;padding:0 16px;flex-shrink:0;
+}
+.preview-title{font-size:13px;font-weight:600;color:var(--text)}
+.preview-sub{font-size:11px;color:var(--text3)}
+.preview-actions{margin-left:auto;display:flex;gap:6px}
+.icon-btn{
+  width:30px;height:30px;border-radius:8px;border:1px solid var(--border);
+  background:transparent;color:var(--text3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+  transition:all var(--tr);
+}
+.icon-btn:hover{border-color:var(--border2);color:var(--teal);background:var(--surface2)}
+
+.preview-canvas{
+  flex:1;position:relative;overflow:hidden;min-height:0;
+  background:var(--bg0);display:flex;align-items:center;justify-content:center;
+}
+.render-img{
+  width:100%;height:100%;object-fit:cover;
+  background:linear-gradient(135deg,#0B1525 0%,#1A2C47 40%,#111E33 100%);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;
+  position:relative;overflow:hidden;
+}
+
+/* Animated room mock */
+.room-mock{
+  width:100%;height:100%;position:relative;
+}
+.room-floor{
+  position:absolute;bottom:0;left:0;right:0;height:45%;
+  background:linear-gradient(0deg,#1a3040 0%,#1e3a50 100%);
+}
+.room-wall{
+  position:absolute;top:0;left:0;right:0;height:58%;
+  background:linear-gradient(180deg,#0d2035 0%,#1a3040 100%);
+}
+.room-sofa{
+  position:absolute;bottom:28%;left:50%;transform:translateX(-50%);
+  width:220px;height:70px;
+  background:linear-gradient(135deg,#2d5a7a,#1e4060);
+  border-radius:12px 12px 4px 4px;
+  box-shadow:0 10px 30px rgba(0,0,0,.5);
+}
+.room-sofa::before{
+  content:'';position:absolute;top:-30px;left:-10px;right:-10px;
+  height:40px;background:linear-gradient(135deg,#3a6e90,#2d5a7a);
+  border-radius:10px;
+}
+.room-table{
+  position:absolute;bottom:18%;left:50%;transform:translateX(-50%);
+  width:100px;height:14px;background:#1a3a50;border-radius:4px;
+}
+.room-lamp{
+  position:absolute;bottom:45%;left:15%;
+  width:6px;height:80px;background:#1e3a50;
+}
+.room-lamp::before{
+  content:'';position:absolute;bottom:100%;left:-20px;
+  width:46px;height:40px;
+  background:radial-gradient(ellipse at bottom,rgba(200,160,76,.6),transparent 70%);
+  border-radius:50% 50% 0 0;
+}
+.room-plant{
+  position:absolute;bottom:40%;right:12%;font-size:32px;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,.4));
+}
+.hotspot{
+  position:absolute;width:10px;height:10px;border-radius:50%;
+  background:var(--teal);cursor:pointer;z-index:10;
+  box-shadow:0 0 0 4px rgba(0,201,167,.3),0 0 0 8px rgba(0,201,167,.1);
+  animation:hotpulse 2s infinite;
+  transition:transform .15s;
+}
+.hotspot:hover{transform:scale(1.5)}
+.hotspot:hover + .hotspot-label{opacity:1;transform:translateY(0)}
+@keyframes hotpulse{0%,100%{box-shadow:0 0 0 3px rgba(0,201,167,.3),0 0 0 6px rgba(0,201,167,.1)}50%{box-shadow:0 0 0 5px rgba(0,201,167,.2),0 0 0 10px rgba(0,201,167,.05)}}
+.hotspot-label{
+  position:absolute;background:rgba(11,21,37,.95);border:1px solid rgba(0,201,167,.3);
+  border-radius:10px;padding:8px 12px;font-size:11px;
+  color:var(--text);white-space:nowrap;z-index:20;
+  opacity:0;transform:translateY(4px);transition:all .15s;pointer-events:none;
+  bottom:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(4px);
+}
+.hotspot-label.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.hl-name{font-weight:700;color:var(--teal);margin-bottom:2px}
+.hl-price{color:var(--gold);font-family:'Noto Sans Mono',monospace;font-size:12px}
+
+/* streaming progress bar */
+.stream-bar{
+  position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:rgba(255,255,255,.05);overflow:hidden;
+}
+.stream-progress{
+  height:100%;background:var(--grad);border-radius:2px;
+  animation:stream 3s ease-in-out infinite;
+}
+@keyframes stream{0%{width:0;opacity:1}70%{width:85%;opacity:1}100%{width:100%;opacity:0}}
+
+/* BOQ PANEL */
+.boq-panel{
+  border-top:1px solid var(--border);
+  background:var(--bg1);flex-shrink:0;
+}
+.boq-header{
+  height:40px;display:flex;align-items:center;gap:10px;padding:0 16px;
+  border-bottom:1px solid var(--border);
+}
+.boq-title{font-size:12px;font-weight:700;color:var(--text);flex:1}
+.boq-total{
+  font-family:'Noto Sans Mono',monospace;font-size:13px;font-weight:600;color:var(--gold);
+}
+.boq-rows{display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.boq-rows::-webkit-scrollbar{display:none}
+.boq-item{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;
+  border-right:1px solid var(--border);flex-shrink:0;min-width:200px;
+  cursor:pointer;transition:background var(--tr);
+}
+.boq-item:hover{background:rgba(0,201,167,.05)}
+.bi-ico{font-size:20px;flex-shrink:0}
+.bi-name{font-size:12px;font-weight:600;line-height:1.3;margin-bottom:1px}
+.bi-spec{font-size:10px;color:var(--text3)}
+.bi-price{
+  margin-left:auto;font-family:'Noto Sans Mono',monospace;
+  font-size:12px;font-weight:700;color:var(--teal);flex-shrink:0;
+}
+.boq-cta{
+  display:flex;gap:0;border-top:1px solid var(--border);
+}
+.cta-btn{
+  flex:1;height:40px;border:none;cursor:pointer;
+  font-family:'Noto Sans',sans-serif;font-size:13px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:opacity var(--tr);
+}
+.cta-workers{background:rgba(99,102,241,.15);color:#818CF8;border-right:1px solid var(--border)}
+.cta-materials{background:rgba(0,201,167,.12);color:var(--teal)}
+.cta-btn:hover{opacity:.8}
+
+/* ── WORKFLOW FLOW ── */
+.flow-diagram{
+  background:var(--bg1);border:1px solid var(--border);border-radius:16px;
+  padding:28px;overflow-x:auto;
+}
+.flow-steps{display:flex;align-items:center;gap:0;min-width:max-content}
+.flow-step{
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  min-width:120px;padding:0 8px;
+}
+.fs-bubble{
+  width:52px;height:52px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  border:2px solid var(--border);background:var(--bg2);
+  transition:all .3s;cursor:pointer;position:relative;
+}
+.fs-bubble:hover{border-color:var(--teal);background:rgba(0,201,167,.1);transform:scale(1.1)}
+.fs-bubble.active{
+  border-color:var(--teal);background:rgba(0,201,167,.15);
+  box-shadow:0 0 20px rgba(0,201,167,.2);
+}
+.fs-num{
+  position:absolute;top:-6px;right:-6px;width:18px;height:18px;
+  border-radius:50%;background:var(--grad);
+  font-family:'Noto Sans',sans-serif;font-size:10px;font-weight:800;color:#fff;
+  display:flex;align-items:center;justify-content:center;
+}
+.fs-label{font-size:11px;font-weight:600;color:var(--text2);text-align:center;line-height:1.3}
+.fs-sub{font-size:10px;color:var(--text3);text-align:center;line-height:1.3}
+.flow-arrow{
+  color:var(--text3);font-size:20px;padding:0 4px;flex-shrink:0;
+  margin-top:-20px;
+}
+.flow-arrow.teal{color:var(--teal)}
+
+/* step detail panels */
+.step-details{margin-top:24px;display:none}
+.step-details.show{display:block}
+.sd-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.sd-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:16px;
+}
+.sd-ico{font-size:20px;margin-bottom:8px}
+.sd-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px}
+.sd-desc{font-size:12px;color:var(--text3);line-height:1.5}
+
+/* ── DATA LAYER ── */
+.data-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.data-card{
+  background:var(--bg1);border:1px solid var(--border);border-radius:12px;padding:18px;
+}
+.dc-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.dc-ico{
+  width:34px;height:34px;border-radius:10px;
+  background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:16px;
+}
+.dc-title{font-size:14px;font-weight:700}
+.dc-items{display:flex;flex-direction:column;gap:6px}
+.dc-item{
+  display:flex;align-items:center;gap:8px;padding:6px 10px;
+  background:var(--bg2);border-radius:8px;
+}
+.dc-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);flex-shrink:0}
+.dc-text{font-size:12px;color:var(--text2)}
+.dc-badge{
+  margin-left:auto;font-size:10px;font-weight:700;
+  padding:2px 8px;border-radius:20px;
+  background:rgba(0,201,167,.1);color:var(--teal);
+}
+
+/* ── FOOTER ── */
+.section-footer{
+  padding:32px 40px;background:var(--bg1);
+  display:flex;align-items:center;justify-content:space-between;
+  border-top:1px solid var(--border);
+}
+.sf-left .sf-label{font-size:11px;color:var(--text3);margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+.sf-left .sf-text{font-size:14px;color:var(--text2)}
+.sf-right{display:flex;gap:10px}
+.sf-btn{
+  height:40px;padding:0 20px;border-radius:10px;font-size:13px;font-weight:700;
+  cursor:pointer;transition:all var(--tr);font-family:'Noto Sans',sans-serif;
+  display:flex;align-items:center;gap:6px;
+}
+.sf-btn-sec{background:var(--surface);border:1px solid var(--border);color:var(--text2)}
+.sf-btn-sec:hover{border-color:var(--border2);color:var(--teal)}
+.sf-btn-pri{background:var(--grad);border:none;color:#fff}
+.sf-btn-pri:hover{opacity:.85}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--border);padding:0 40px;gap:0}
+.tab{
+  height:48px;display:flex;align-items:center;gap:8px;padding:0 16px;
+  font-size:13px;font-weight:600;color:var(--text3);cursor:pointer;
+  border-bottom:2px solid transparent;transition:all var(--tr);
+}
+.tab:hover{color:var(--text2)}
+.tab.on{color:var(--teal);border-bottom-color:var(--teal)}
+.tab-content{display:none}
+.tab-content.on{display:block}
+
+@media(max-width:1100px){
+  .approaches-grid{grid-template-columns:repeat(3,1fr)}
+  .ui-body{flex-direction:column;height:auto}
+  .ui-left{width:100%;border-right:none;border-bottom:1px solid var(--border)}
+  .ui-right{height:500px}
+}
+
+/* ── MESH GRADIENT BG (như trang chủ) ── */
+.mesh{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.mesh-orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.16}
+.orb1{width:700px;height:700px;background:radial-gradient(circle,#00C9A7,transparent 70%);top:-220px;left:-160px;animation:drift1 20s ease-in-out infinite}
+.orb2{width:600px;height:600px;background:radial-gradient(circle,#6366F1,transparent 70%);top:35%;right:-180px;animation:drift2 25s ease-in-out infinite}
+.orb3{width:500px;height:500px;background:radial-gradient(circle,#A855F7,transparent 70%);bottom:-120px;left:38%;animation:drift3 18s ease-in-out infinite}
+.orb4{width:380px;height:380px;background:radial-gradient(circle,#0EA5E9,transparent 70%);bottom:20%;left:-100px;animation:drift4 22s ease-in-out infinite}
+@keyframes drift1{0%,100%{transform:translate(0,0)}50%{transform:translate(70px,50px)}}
+@keyframes drift2{0%,100%{transform:translate(0,0)}50%{transform:translate(-60px,70px)}}
+@keyframes drift3{0%,100%{transform:translate(0,0)}50%{transform:translate(50px,-55px)}}
+@keyframes drift4{0%,100%{transform:translate(0,0)}50%{transform:translate(60px,-40px)}}
+
+</style>
+</head>
+<body>
+<div class="mesh">
+  <div class="mesh-orb orb1"></div>
+  <div class="mesh-orb orb2"></div>
+  <div class="mesh-orb orb3"></div>
+  <div class="mesh-orb orb4"></div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="logo">
+    <span class="logo-nx">NEXDESIGN</span><span class="logo-dot">.</span><span class="logo-h">AI</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="header-badge">
+      <div class="badge-dot"></div>
+      <span class="badge-txt">Module 1 / 8</span>
+    </div>
+    <span style="font-family:'Noto Sans Mono',monospace;font-size:12px;color:var(--text3)">NexDesign AI</span>
+  </div>
+  <div class="header-nav">
+    <button class="nav-pill on">01 NexDesign AI</button>
+    <button class="nav-pill">02 NexTalent</button>
+    <button class="nav-pill">03 NexSupply</button>
+    <button class="nav-pill" style="color:var(--text3);opacity:.5">04–08 →</button>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">
+    <span class="hero-tag-ico">🎨</span>
+    <span class="hero-tag-txt">Module 01 — Thu hút chiến lược</span>
+  </div>
+  <h1 class="hero-title">
+    NexDesign AI<br><span>Streaming Design Studio</span>
+  </h1>
+  <p class="hero-sub">
+    Phễu thu hút B2C mạnh nhất của BuildOS. Người dùng mô tả ý tưởng → AI stream render 3D theo thời gian thực → mỗi element là shoppable → 1-click thuê thợ hoặc mua vật liệu. Không một platform nào nối được design → quote → workers → materials trong một flow.
+  </p>
+  <div class="hero-stats">
+    <div class="hstat"><div class="hstat-v">$8</div><div class="hstat-l">CAC qua AI funnel</div></div>
+    <div class="hstat"><div class="hstat-v">78%</div><div class="hstat-l">Conversion sang bước tiếp theo</div></div>
+    <div class="hstat"><div class="hstat-v">34%</div><div class="hstat-l">Free → Paid trong 30 ngày</div></div>
+    <div class="hstat"><div class="hstat-v">30s</div><div class="hstat-l">Thời gian render 3D đầu tiên</div></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab on" onclick="switchTab('analysis')">📊 Phân tích 5 hướng</div>
+  <div class="tab" onclick="switchTab('synthesis')">⚡ Synthesis & Lý do chọn</div>
+  <div class="tab" onclick="switchTab('ui')">🖥️ UI Workflow</div>
+  <div class="tab" onclick="switchTab('data')">🗄️ Data Layer</div>
+</div>
+
+<!-- ════════════════════ TAB: ANALYSIS ════════════════════ -->
+<div id="tab-analysis" class="tab-content on">
+<div class="section">
+  <div class="sec-label">
+    <div class="sec-num">1</div>
+    <div class="sec-title">5 Hướng tiếp cận mạnh nhất thị trường</div>
+    <span class="sec-sub">Click để xem chi tiết</span>
+  </div>
+
+  <div class="approaches-grid">
+
+    <div class="approach-card eliminated" onclick="selectApproach(this)">
+      <span class="ac-num">①</span>
+      <div class="ac-ico">💬</div>
+      <div class="ac-title">Chat-First AI</div>
+      <div class="ac-market">Midjourney · DALL-E · ChatGPT</div>
+      <div class="ac-pros">✓ Familiar UX, low learning curve<br>✓ Conversational, natural feel</div>
+      <div class="ac-cons">✗ Output chỉ là ảnh — không có BOQ<br>✗ Zero connection sang labor/materials<br>✗ Không data proprietary</div>
+      <div class="ac-verdict verdict-out">Loại — không đủ depth</div>
+    </div>
+
+    <div class="approach-card eliminated" onclick="selectApproach(this)">
+      <span class="ac-num">②</span>
+      <div class="ac-ico">📌</div>
+      <div class="ac-title">Mood Board Visual</div>
+      <div class="ac-market">Houzz · Pinterest · Behance</div>
+      <div class="ac-pros">✓ Đẹp, viral content naturally<br>✓ User generated inspiration pool</div>
+      <div class="ac-cons">✗ Passive consumption, không action<br>✗ Gap lớn từ inspiration → thực tế<br>✗ Không AI-native, chỉ browse</div>
+      <div class="ac-verdict verdict-out">Loại — không đủ actionable</div>
+    </div>
+
+    <div class="approach-card eliminated" onclick="selectApproach(this)">
+      <span class="ac-num">③</span>
+      <div class="ac-ico">🖱️</div>
+      <div class="ac-title">Drag-Drop Canvas</div>
+      <div class="ac-market">Planner5D · RoomSketcher · Homestyler</div>
+      <div class="ac-pros">✓ Kiểm soát hoàn toàn<br>✓ Accurate floorplan</div>
+      <div class="ac-cons">✗ Steep learning curve — 30–60 phút/design<br>✗ Frustrating với non-technical users<br>✗ Không AI-first, AI chỉ là add-on</div>
+      <div class="ac-verdict verdict-weak">Yếu — sai đối tượng</div>
+    </div>
+
+    <div class="approach-card eliminated" onclick="selectApproach(this)">
+      <span class="ac-num">④</span>
+      <div class="ac-ico">📷</div>
+      <div class="ac-title">Photo → Redesign</div>
+      <div class="ac-market">Interior AI · DecorAI · AI Room Design</div>
+      <div class="ac-pros">✓ WOW moment mạnh nhất<br>✓ User thấy không gian thực của mình<br>✓ Low friction để bắt đầu</div>
+      <div class="ac-cons">✗ Output vẫn chỉ là ảnh đẹp<br>✗ Không có BOQ, không shoppable<br>✗ Zero path to hiring or buying</div>
+      <div class="ac-verdict verdict-weak">Tiềm năng — nhưng thiếu bridge</div>
+    </div>
+
+    <div class="approach-card eliminated" onclick="selectApproach(this)">
+      <span class="ac-num">⑤</span>
+      <div class="ac-ico">📋</div>
+      <div class="ac-title">Guided Wizard</div>
+      <div class="ac-market">Traditional Interior Design Forms</div>
+      <div class="ac-pros">✓ Thu thập đủ context<br>✓ Output chính xác hơn</div>
+      <div class="ac-cons">✗ Boring — không WOW moment<br>✗ Linear, không exploratory<br>✗ High drop-off rate trên mobile</div>
+      <div class="ac-verdict verdict-out">Loại — không phù hợp mobile-first</div>
+    </div>
+
+  </div>
+
+  <!-- SYNTHESIS PREVIEW -->
+  <div class="synthesis">
+    <div class="syn-title">⚡ Synthesis Winner — "Streaming Design Studio"</div>
+    <div class="syn-sub">Kết hợp WOW moment của Photo Redesign + tốc độ của Chat-First + data depth của Guided Wizard + stream render như xem tranh được vẽ trực tiếp + FULL pipeline sang workers và materials. Không một platform nào trên thế giới có toàn bộ chain này trong một UX flow.</div>
+    <div class="syn-points">
+      <div class="syn-point">
+        <div class="syn-ico">🌊</div>
+        <div class="syn-text">
+          <strong>Streaming render — không chờ đợi</strong>
+          <span>Render xuất hiện từng phần như xem painting, tạo dopamine loop giữ user engaged. Khác hoàn toàn với "loading..." 30 giây.</span>
+        </div>
+      </div>
+      <div class="syn-point">
+        <div class="syn-ico">🛒</div>
+        <div class="syn-text">
+          <strong>Every pixel is shoppable</strong>
+          <span>Click bất kỳ element nào trong render → xem specs + giá → thêm vào BOQ → order ngay. Không platform nào làm được điều này.</span>
+        </div>
+      </div>
+      <div class="syn-point">
+        <div class="syn-ico">📊</div>
+        <div class="syn-text">
+          <strong>Auto BOQ generation</strong>
+          <span>AI tự động tính toán vật liệu, số lượng, đơn giá thị trường thực tế. BOQ là shoppable trực tiếp trên NexSupply.</span>
+        </div>
+      </div>
+      <div class="syn-point">
+        <div class="syn-ico">🔗</div>
+        <div class="syn-text">
+          <strong>Design → Workers → Materials trong 1 flow</strong>
+          <span>Không bước nào bị ngắt quãng. CAC $8 vì toàn bộ funnel là seamless — user không rời app để thực hiện bước tiếp theo.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="sec-label" style="margin-top:0">
+    <div class="sec-num">2</div>
+    <div class="sec-title">So sánh với thị trường — Lý do vượt trội</div>
+  </div>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Tính năng</th>
+        <th>Midjourney / Interior AI</th>
+        <th>Houzz / Planner5D</th>
+        <th style="color:var(--teal)">NexDesign AI ✓</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="feat">3D Render chất lượng cao</td>
+        <td class="them">✓ Có (nhưng chờ 30s+)</td>
+        <td class="them">✓ Có (nhưng manual)</td>
+        <td class="us">✓ Streaming real-time — render dần từng phần</td>
+      </tr>
+      <tr>
+        <td class="feat">Clickable elements trong render</td>
+        <td class="them">✗ Không</td>
+        <td class="them">✗ Không</td>
+        <td class="us">✓ Mỗi element clickable — xem giá, spec, buy</td>
+      </tr>
+      <tr>
+        <td class="feat">Tự động tạo BOQ</td>
+        <td class="them">✗ Không</td>
+        <td class="them">△ Có nhưng không linked to real price</td>
+        <td class="us">✓ BOQ thực tế theo giá thị trường VN realtime</td>
+      </tr>
+      <tr>
+        <td class="feat">Kết nối sang lao động (book thợ)</td>
+        <td class="them">✗ Không</td>
+        <td class="them">✗ Không</td>
+        <td class="us">✓ 1-click "Book Workers cho thiết kế này"</td>
+      </tr>
+      <tr>
+        <td class="feat">Kết nối sang vật liệu (mua ngay)</td>
+        <td class="them">✗ Không</td>
+        <td class="them">✗ Không</td>
+        <td class="us">✓ BOQ → NexSupply cart trong 1 click</td>
+      </tr>
+      <tr>
+        <td class="feat">Data proprietary accumulation</td>
+        <td class="them">△ Có nhưng không specific ngành XD</td>
+        <td class="them">△ Có nhưng general</td>
+        <td class="us">✓ Mỗi design = training data VN construction AI</td>
+      </tr>
+      <tr>
+        <td class="feat">Affiliate-embedded sharing</td>
+        <td class="them">✗ Không</td>
+        <td class="them">✗ Không</td>
+        <td class="us">✓ Share design → mỗi view/order = hoa hồng cho người share</td>
+      </tr>
+      <tr>
+        <td class="feat">Voice input cho mobile</td>
+        <td class="them">△ Text only</td>
+        <td class="them">✗ Không</td>
+        <td class="us">✓ "Nói chuyện với AI designer" — voice + text + photo</td>
+      </tr>
+      <tr>
+        <td class="feat">CAC để thu hút 1 user</td>
+        <td class="them">$25–80 (paid ads)</td>
+        <td class="them">$30–100 (paid ads)</td>
+        <td class="us">$8 — organic qua viral design sharing</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<!-- ════════════════════ TAB: SYNTHESIS ════════════════════ -->
+<div id="tab-synthesis" class="tab-content">
+<div class="section">
+  <div class="sec-label">
+    <div class="sec-num">S</div>
+    <div class="sec-title">Tại sao đây là hướng cách mạng</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:28px">
+    <div style="background:var(--bg1);border:1px solid rgba(0,201,167,.2);border-radius:14px;padding:20px">
+      <div style="font-size:28px;margin-bottom:10px">🌊</div>
+      <div style="font-family:'Noto Sans',sans-serif;font-size:15px;font-weight:700;color:var(--teal);margin-bottom:8px">Streaming — Dopamine Loop</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6">Thay vì màn hình loading 30 giây tẻ nhạt, render xuất hiện từng chi tiết như đang được vẽ trực tiếp. Não bộ nhận liên tục feedback → user không rời màn hình. Đây là cơ chế giữ attention mạnh nhất trong UX hiện đại.</div>
+    </div>
+    <div style="background:var(--bg1);border:1px solid rgba(99,102,241,.2);border-radius:14px;padding:20px">
+      <div style="font-size:28px;margin-bottom:10px">🛒</div>
+      <div style="font-family:'Noto Sans',sans-serif;font-size:15px;font-weight:700;color:#818CF8;margin-bottom:8px">Commerce Inside Creativity</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6">Không bao giờ in history có một platform cho phép user click trực tiếp vào element trong ảnh AI-generated để mua. NexDesign AI biến mỗi pixel thành một commerce touchpoint — khi user đang ở đỉnh cao của purchase intent.</div>
+    </div>
+    <div style="background:var(--bg1);border:1px solid rgba(168,85,247,.2);border-radius:14px;padding:20px">
+      <div style="font-size:28px;margin-bottom:10px">🔄</div>
+      <div style="font-family:'Noto Sans',sans-serif;font-size:15px;font-weight:700;color:#C084FC;margin-bottom:8px">Data Flywheel Proprietary</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6">Mỗi design session → training data. AI ngày càng hiểu phong cách Việt, giá vật liệu VN, preference của gia chủ Hà Nội vs HCM. Sau 3 năm, NexDesign AI sẽ là AI thiết kế nhà tốt nhất dành riêng cho Việt Nam — không ai copy được dataset này.</div>
+    </div>
+  </div>
+
+  <div style="background:linear-gradient(135deg,rgba(0,201,167,.05),rgba(99,102,241,.03));border:1px solid rgba(0,201,167,.15);border-radius:16px;padding:24px;margin-bottom:28px">
+    <div style="font-family:'Noto Sans',sans-serif;font-size:16px;font-weight:800;color:var(--text);margin-bottom:16px">Revenue attribution hoàn hảo — cơ chế chưa từng có</div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px">
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:8px 14px;color:var(--text)">User mô tả ý tưởng</div>
+      <div style="color:var(--teal);font-size:18px">→</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:8px 14px;color:var(--text)">AI stream render 3D</div>
+      <div style="color:var(--teal);font-size:18px">→</div>
+      <div style="background:rgba(0,201,167,.08);border:1px solid rgba(0,201,167,.2);border-radius:10px;padding:8px 14px;color:var(--teal);font-weight:600">BOQ tự động</div>
+      <div style="color:var(--teal);font-size:18px">→</div>
+      <div style="background:rgba(0,201,167,.08);border:1px solid rgba(0,201,167,.2);border-radius:10px;padding:8px 14px;color:var(--teal);font-weight:600">Mua vật liệu / Đặt thợ</div>
+      <div style="color:var(--teal);font-size:18px">→</div>
+      <div style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.3);border-radius:10px;padding:8px 14px;color:#818CF8;font-weight:600">Revenue NexBuild</div>
+    </div>
+    <div style="margin-top:12px;font-size:12px;color:var(--text3)">
+      ↑ Toàn bộ chain này xảy ra trong một app, không rời platform. Attribution 100% chính xác. Không có bất kỳ platform nào trên thị trường Việt Nam — hay thậm chí khu vực — có cấu trúc này.
+    </div>
+  </div>
+
+  <div class="sec-label">
+    <div class="sec-num">M</div>
+    <div class="sec-title">Cơ chế Moat — Tại sao khó sao chép</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div style="display:flex;gap:12px;background:var(--bg1);border:1px solid var(--border);border-radius:12px;padding:16px">
+      <div style="font-size:24px;flex-shrink:0">🗄️</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Data moat — càng dùng AI càng giỏi hơn</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.5">50,000 designs/tháng = 600,000 training records/năm. Đối thủ bắt đầu muộn hơn 3 năm → data gap không thể bù bằng tiền trong ngắn hạn.</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;background:var(--bg1);border:1px solid var(--border);border-radius:12px;padding:16px">
+      <div style="font-size:24px;flex-shrink:0">🔗</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Integration moat — seamless với 7 module khác</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.5">BOQ → NexSupply, Workers → NexTalent, Finance → NexFinance. Đối thủ copy được NexDesign AI nhưng không có các module này → giá trị giảm 80%.</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;background:var(--bg1);border:1px solid var(--border);border-radius:12px;padding:16px">
+      <div style="font-size:24px;flex-shrink:0">🛡️</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Supplier moat — giá thực tế realtime</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.5">BOQ sử dụng giá từ 200+ suppliers trên NexSupply — độ chính xác mà không ai có. Đối thủ phải build supplier network từ đầu.</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:12px;background:var(--bg1);border:1px solid var(--border);border-radius:12px;padding:16px">
+      <div style="font-size:24px;flex-shrink:0">📣</div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px">Viral moat — mỗi share là affiliate link</div>
+        <div style="font-size:12px;color:var(--text3);line-height:1.5">Design đẹp được share lên mạng xã hội → mỗi người xem có thể tương tác → affiliate attribution tự động. Không tốn chi phí acquisition thêm.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════ TAB: UI WORKFLOW ════════════════════ -->
+<div id="tab-ui" class="tab-content">
+<div class="section">
+  <div class="sec-label">
+    <div class="sec-num">3</div>
+    <div class="sec-title">UI Workflow — NexDesign AI</div>
+    <span class="sec-sub">Interactive mockup</span>
+  </div>
+
+  <!-- MAIN UI MOCK -->
+  <div class="ui-mock">
+    <!-- TOP BAR -->
+    <div class="ui-topbar">
+      <div class="ui-tab on"><span class="tab-ico">✨</span>Studio</div>
+      <div class="ui-tab"><span class="tab-ico">📁</span>Lịch sử</div>
+      <div class="ui-tab"><span class="tab-ico">🎨</span>Templates</div>
+      <div class="ui-tab"><span class="tab-ico">📊</span>BOQ Manager</div>
+      <div class="ui-topright">
+        <div class="status-chip">
+          <div class="badge-dot"></div>
+          <span>AI đang render...</span>
+        </div>
+        <button class="icon-btn" title="Toàn màn hình">⤢</button>
+        <button class="icon-btn" title="Chia sẻ">↗</button>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="ui-body">
+
+      <!-- LEFT: INPUT PANEL -->
+      <div class="ui-left">
+        <div class="prompt-area">
+          <div class="prompt-label">Mô tả không gian của bạn</div>
+          <textarea class="prompt-input" placeholder="Ví dụ: Phòng khách 30m2, phong cách Indochine hiện đại, tông màu xanh navy và vàng đồng, có góc đọc sách gần cửa sổ, ngân sách 150 triệu..."></textarea>
+          <div class="prompt-actions">
+            <button class="btn-upload" onclick="showUpload()">📷 Upload ảnh phòng</button>
+            <button class="btn-upload" onclick="toggleVoice(this)" id="voiceBtn">🎙️ Nói</button>
+            <button class="btn-gen" onclick="triggerGen()">⚡ Thiết kế</button>
+          </div>
+        </div>
+
+        <div class="style-area">
+          <div class="prompt-label">Phong cách</div>
+          <div class="style-chips">
+            <div class="style-chip on" onclick="toggleChip(this)">Indochine</div>
+            <div class="style-chip" onclick="toggleChip(this)">Scandinavian</div>
+            <div class="style-chip" onclick="toggleChip(this)">Japandi</div>
+            <div class="style-chip" onclick="toggleChip(this)">Industrial</div>
+            <div class="style-chip" onclick="toggleChip(this)">Luxury</div>
+            <div class="style-chip" onclick="toggleChip(this)">Minimalist</div>
+            <div class="style-chip" onclick="toggleChip(this)">Art Deco</div>
+          </div>
+        </div>
+
+        <div class="params-area">
+          <div class="prompt-label" style="margin-bottom:12px">Thông số</div>
+          <div class="param-row">
+            <span class="param-label">Diện tích (m²)</span>
+            <input type="range" class="param-slider" min="10" max="100" value="30" oninput="updateParam(this,'area')">
+            <span class="param-val" id="area">30</span>
+          </div>
+          <div class="param-row">
+            <span class="param-label">Ngân sách (tr)</span>
+            <input type="range" class="param-slider" min="50" max="1000" value="150" oninput="updateParam(this,'budget')">
+            <span class="param-val" id="budget">150</span>
+          </div>
+          <div class="param-row">
+            <span class="param-label">Chất lượng render</span>
+            <input type="range" class="param-slider" min="1" max="3" value="2" oninput="updateParam(this,'quality')">
+            <span class="param-val" id="quality">Cao</span>
+          </div>
+        </div>
+
+        <div class="history-area">
+          <div class="prompt-label" style="margin-bottom:12px">Cuộc hội thoại</div>
+          <div class="history-item">
+            <div class="hi-avatar user">👤</div>
+            <div>
+              <div class="hi-bubble">Cho tôi xem phòng khách phong cách Indochine, tone xanh navy</div>
+              <div class="hi-time">2 phút trước</div>
+            </div>
+          </div>
+          <div class="history-item">
+            <div class="hi-avatar ai">✨</div>
+            <div>
+              <div class="hi-bubble ai">Đã render xong! Tôi đã tạo phòng khách 30m² phong cách Indochine với sofa velvet xanh navy, bàn cà phê brass, đèn rattan... BOQ ước tính 143 triệu. Bạn muốn điều chỉnh gì không?</div>
+              <div class="hi-time">1 phút trước</div>
+            </div>
+          </div>
+          <div class="history-item">
+            <div class="hi-avatar user">👤</div>
+            <div>
+              <div class="hi-bubble">Thêm một cây cọ lớn ở góc phải đi</div>
+              <div class="hi-time">30 giây trước</div>
+            </div>
+          </div>
+          <div class="history-item">
+            <div class="hi-avatar ai">✨</div>
+            <div>
+              <div class="hi-bubble ai">Đã cập nhật! Cây Phoenix Roebelenii trong chậu Terracotta — thêm 2.4 triệu vào BOQ 🌴</div>
+              <div class="hi-time">Vừa xong</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: PREVIEW + BOQ -->
+      <div class="ui-right">
+        <div class="preview-header">
+          <div>
+            <div class="preview-title">Phòng khách — Indochine Modern</div>
+            <div class="preview-sub">30m² · Tông xanh navy · Render #3</div>
+          </div>
+          <div class="preview-actions">
+            <button class="icon-btn" title="View 360°" onclick="showToast('360° view')">360°</button>
+            <button class="icon-btn" title="AR view" onclick="showToast('AR Mode')">AR</button>
+            <button class="icon-btn" title="Light mode" onclick="showToast('Thay lighting')">💡</button>
+            <button class="icon-btn" title="Download" onclick="showToast('Đang xuất PDF...')">⬇</button>
+          </div>
+        </div>
+
+        <div class="preview-canvas">
+          <!-- Animated Room Mock -->
+          <div class="room-mock" id="roomMock">
+            <div class="room-wall"></div>
+            <div class="room-floor"></div>
+            <div class="room-sofa"></div>
+            <div class="room-table"></div>
+            <div class="room-lamp"></div>
+            <div class="room-plant">🌿</div>
+
+            <!-- Hotspots -->
+            <div style="position:absolute;top:45%;left:40%">
+              <div class="hotspot" onclick="toggleHotspot('hs1')"></div>
+              <div class="hotspot-label" id="hs1">
+                <div class="hl-name">Sofa Velvet Navy</div>
+                <div class="hl-price">42.500.000 ₫</div>
+              </div>
+            </div>
+            <div style="position:absolute;top:58%;left:50%">
+              <div class="hotspot" onclick="toggleHotspot('hs2')"></div>
+              <div class="hotspot-label" id="hs2">
+                <div class="hl-name">Bàn Cà Phê Brass</div>
+                <div class="hl-price">8.200.000 ₫</div>
+              </div>
+            </div>
+            <div style="position:absolute;top:30%;left:20%">
+              <div class="hotspot" onclick="toggleHotspot('hs3')"></div>
+              <div class="hotspot-label" id="hs3">
+                <div class="hl-name">Đèn Rattan Pendant</div>
+                <div class="hl-price">5.800.000 ₫</div>
+              </div>
+            </div>
+            <div style="position:absolute;top:38%;right:16%">
+              <div class="hotspot" onclick="toggleHotspot('hs4')"></div>
+              <div class="hotspot-label" id="hs4">
+                <div class="hl-name">Cây Phoenix Roebelenii</div>
+                <div class="hl-price">2.400.000 ₫</div>
+              </div>
+            </div>
+
+            <div class="stream-bar"><div class="stream-progress"></div></div>
+
+            <!-- Overlay hint -->
+            <div style="position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(6,13,26,.8);border:1px solid rgba(0,201,167,.3);border-radius:20px;padding:5px 14px;font-size:11px;color:var(--teal);font-weight:600;white-space:nowrap;pointer-events:none">
+              💡 Click các điểm sáng để xem chi tiết & mua
+            </div>
+          </div>
+        </div>
+
+        <!-- BOQ PANEL -->
+        <div class="boq-panel">
+          <div class="boq-header">
+            <span class="boq-title">📋 Bill of Quantities (BOQ) — Tự động từ AI</span>
+            <span class="boq-total">143.200.000 ₫</span>
+          </div>
+          <div class="boq-rows">
+            <div class="boq-item">
+              <div class="bi-ico">🛋️</div>
+              <div>
+                <div class="bi-name">Sofa Velvet 3 chỗ</div>
+                <div class="bi-spec">Xanh Navy · 220×85cm</div>
+              </div>
+              <div class="bi-price">42.5M</div>
+            </div>
+            <div class="boq-item">
+              <div class="bi-ico">🪑</div>
+              <div>
+                <div class="bi-name">Bàn cà phê Brass</div>
+                <div class="bi-spec">Ø80cm · Cao 42cm</div>
+              </div>
+              <div class="bi-price">8.2M</div>
+            </div>
+            <div class="boq-item">
+              <div class="bi-ico">💡</div>
+              <div>
+                <div class="bi-name">Đèn Rattan Pendant</div>
+                <div class="bi-spec">Ø45cm · Dây 1.5m</div>
+              </div>
+              <div class="bi-price">5.8M</div>
+            </div>
+            <div class="boq-item">
+              <div class="bi-ico">🪟</div>
+              <div>
+                <div class="bi-name">Rèm linen đôi</div>
+                <div class="bi-spec">3m × 2.8m × 2 tấm</div>
+              </div>
+              <div class="bi-price">12.4M</div>
+            </div>
+            <div class="boq-item">
+              <div class="bi-ico">🏺</div>
+              <div>
+                <div class="bi-name">Thảm jute tự nhiên</div>
+                <div class="bi-spec">200×300cm</div>
+              </div>
+              <div class="bi-price">7.6M</div>
+            </div>
+            <div class="boq-item" style="background:rgba(0,201,167,.04);border:1px solid rgba(0,201,167,.15)">
+              <div style="font-size:12px;font-weight:700;color:var(--teal);white-space:nowrap">+ 14 hạng mục khác</div>
+              <div class="bi-price" style="color:var(--text3)">66.7M</div>
+            </div>
+          </div>
+          <div class="boq-cta">
+            <button class="cta-btn cta-workers" onclick="showToast('Chuyển sang NexTalent...')">
+              👷 Tìm thợ thi công theo thiết kế này
+            </button>
+            <button class="cta-btn cta-materials" onclick="showToast('Thêm BOQ vào giỏ NexSupply...')">
+              🛒 Mua vật liệu theo BOQ (143.2M)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WORKFLOW FLOW DIAGRAM -->
+<div class="section">
+  <div class="sec-label">
+    <div class="sec-num">4</div>
+    <div class="sec-title">User Journey Flow — từng bước</div>
+    <span class="sec-sub">Click từng bước để xem chi tiết</span>
+  </div>
+  <div class="flow-diagram">
+    <div class="flow-steps">
+      <div class="flow-step" onclick="showStep(0)">
+        <div class="fs-bubble active" id="step0">📝<div class="fs-num">1</div></div>
+        <div class="fs-label">Mô tả ý tưởng</div>
+        <div class="fs-sub">Text / Voice / Photo</div>
+      </div>
+      <div class="flow-arrow teal">→</div>
+      <div class="flow-step" onclick="showStep(1)">
+        <div class="fs-bubble" id="step1">🌊<div class="fs-num">2</div></div>
+        <div class="fs-label">AI Stream Render</div>
+        <div class="fs-sub">30–60 giây realtime</div>
+      </div>
+      <div class="flow-arrow teal">→</div>
+      <div class="flow-step" onclick="showStep(2)">
+        <div class="fs-bubble" id="step2">🖱️<div class="fs-num">3</div></div>
+        <div class="fs-label">Khám phá & Click</div>
+        <div class="fs-sub">Mỗi element clickable</div>
+      </div>
+      <div class="flow-arrow teal">→</div>
+      <div class="flow-step" onclick="showStep(3)">
+        <div class="fs-bubble" id="step3">📋<div class="fs-num">4</div></div>
+        <div class="fs-label">BOQ tự động</div>
+        <div class="fs-sub">Giá thực tế thị trường</div>
+      </div>
+      <div class="flow-arrow teal">→</div>
+      <div class="flow-step" onclick="showStep(4)">
+        <div class="fs-bubble" id="step4">🔀<div class="fs-num">5</div></div>
+        <div class="fs-label">Chọn action</div>
+        <div class="fs-sub">Workers hoặc Materials</div>
+      </div>
+      <div class="flow-arrow teal">→</div>
+      <div class="flow-step" onclick="showStep(5)">
+        <div class="fs-bubble" id="step5">👷<div class="fs-num">6a</div></div>
+        <div class="fs-label">NexTalent</div>
+        <div class="fs-sub">Book thợ thi công</div>
+      </div>
+      <div class="flow-arrow">|</div>
+      <div class="flow-step" onclick="showStep(6)">
+        <div class="fs-bubble" id="step6">🛒<div class="fs-num">6b</div></div>
+        <div class="fs-label">NexSupply</div>
+        <div class="fs-sub">Order vật liệu</div>
+      </div>
+      <div class="flow-arrow teal">→</div>
+      <div class="flow-step" onclick="showStep(7)">
+        <div class="fs-bubble" id="step7">💰<div class="fs-num">7</div></div>
+        <div class="fs-label">Revenue NexBuild</div>
+        <div class="fs-sub">Commission + Fee</div>
+      </div>
+    </div>
+
+    <div class="step-details" id="stepDetails">
+      <div class="sd-grid" id="stepGrid"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ════════════════════ TAB: DATA ════════════════════ -->
+<div id="tab-data" class="tab-content">
+<div class="section">
+  <div class="sec-label">
+    <div class="sec-num">5</div>
+    <div class="sec-title">Data Layer — NexDesign AI tạo ra gì</div>
+  </div>
+  <div class="data-grid">
+    <div class="data-card">
+      <div class="dc-header">
+        <div class="dc-ico">🎨</div>
+        <div>
+          <div class="dc-title">Design Data</div>
+          <div style="font-size:11px;color:var(--text3)">Training set độc quyền</div>
+        </div>
+      </div>
+      <div class="dc-items">
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Style preference theo region VN</div><div class="dc-badge">→ AI</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Color palette phổ biến nhất</div><div class="dc-badge">→ AI</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Budget range theo loại phòng</div><div class="dc-badge">→ Finance</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Vật liệu được chọn nhiều nhất</div><div class="dc-badge">→ Supply</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Iteration patterns (edit gì nhiều nhất)</div><div class="dc-badge">→ UX</div></div>
+      </div>
+    </div>
+    <div class="data-card">
+      <div class="dc-header">
+        <div class="dc-ico">💰</div>
+        <div>
+          <div class="dc-title">Commerce Data</div>
+          <div style="font-size:11px;color:var(--text3)">Purchase intent signals</div>
+        </div>
+      </div>
+      <div class="dc-items">
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Element nào được click nhiều nhất</div><div class="dc-badge">→ Ads</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">BOQ → Purchase conversion rate</div><div class="dc-badge">→ Finance</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Price sensitivity theo segment</div><div class="dc-badge">→ Supply</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Design → Worker booking rate</div><div class="dc-badge">→ Talent</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Seasonal demand pattern XD</div><div class="dc-badge">→ BI</div></div>
+      </div>
+    </div>
+    <div class="data-card">
+      <div class="dc-header">
+        <div class="dc-ico">👤</div>
+        <div>
+          <div class="dc-title">User Profile Data</div>
+          <div style="font-size:11px;color:var(--text3)">Behavioral intelligence</div>
+        </div>
+      </div>
+      <div class="dc-items">
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Property type & size</div><div class="dc-badge">→ CRM</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Wealth signal từ budget input</div><div class="dc-badge">→ Finance</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Taste & style DNA</div><div class="dc-badge">→ Ads</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Project timeline intent</div><div class="dc-badge">→ Talent</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Referral network (share patterns)</div><div class="dc-badge">→ Affiliate</div></div>
+      </div>
+    </div>
+    <div class="data-card">
+      <div class="dc-header">
+        <div class="dc-ico">📊</div>
+        <div>
+          <div class="dc-title">Market Intelligence</div>
+          <div style="font-size:11px;color:var(--text3)">Sellable data product</div>
+        </div>
+      </div>
+      <div class="dc-items">
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Trend forecast vật liệu 6 tháng</div><div class="dc-badge">→ BI API</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Demand by province/district</div><div class="dc-badge">→ BI API</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Style trend index realtime</div><div class="dc-badge">→ Media</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Budget inflation index XD</div><div class="dc-badge">→ Finance</div></div>
+        <div class="dc-item"><div class="dc-dot"></div><div class="dc-text">Material substitution demand</div><div class="dc-badge">→ Supply</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- FOOTER NAV -->
+<div class="section-footer">
+  <div class="sf-left">
+    <div class="sf-label">Trạng thái</div>
+    <div class="sf-text">Module 1/8 · NexDesign AI · Draft for review</div>
+  </div>
+  <div class="sf-right">
+    <button class="sf-btn sf-btn-sec" onclick="showToast('← Quay lại tổng quan')">← Tổng quan</button>
+    <button class="sf-btn sf-btn-pri" onclick="showToast('Module 02: NexTalent đang build...')">Module 02: NexTalent →</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:rgba(11,21,37,.96);border:1px solid rgba(0,201,167,.3);border-radius:14px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--teal);transition:transform .35s cubic-bezier(.34,1.2,.64,1);z-index:999;white-space:nowrap;pointer-events:none">
+</div>
+
+<script>
+function switchTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const ids=['analysis','synthesis','ui','data'];
+    t.classList.toggle('on',i===ids.indexOf(id));
+  });
+  document.querySelectorAll('.tab-content').forEach(c=>{
+    c.classList.toggle('on',c.id==='tab-'+id);
+  });
+}
+
+function selectApproach(el){
+  document.querySelectorAll('.approach-card').forEach(c=>c.classList.remove('on'));
+  el.classList.toggle('on');
+}
+
+function toggleChip(el){el.classList.toggle('on')}
+
+function updateParam(el,id){
+  const labels={quality:['Cơ bản','Cao','Ultra']};
+  const v=el.value;
+  document.getElementById(id).textContent=labels[id]?labels[id][v-1]:v;
+}
+
+function triggerGen(){
+  showToast('✨ AI đang phân tích yêu cầu...');
+  setTimeout(()=>showToast('🌊 Đang stream render 3D...'),1800);
+  setTimeout(()=>showToast('📋 BOQ đã được tạo tự động!'),4000);
+}
+
+function showUpload(){showToast('📷 Chọn ảnh phòng thực tế...')}
+
+function toggleVoice(btn){
+  const on=btn.textContent.includes('🔴');
+  btn.textContent=on?'🎙️ Nói':'🔴 Đang nghe...';
+  showToast(on?'Dừng ghi âm':'🎙️ Đang nghe — hãy mô tả phòng của bạn...');
+}
+
+function toggleHotspot(id){
+  const el=document.getElementById(id);
+  const isOn=el.classList.contains('on');
+  document.querySelectorAll('.hotspot-label').forEach(h=>h.classList.remove('on'));
+  if(!isOn)el.classList.add('on');
+}
+
+const stepData=[
+  {title:'Input Đa phương thức',cards:[
+    {ico:'⌨️',t:'Text input',d:'Mô tả tự nhiên bằng tiếng Việt — AI hiểu context, phong cách, ngân sách'},
+    {ico:'🎙️',t:'Voice input',d:'Nói chuyện với AI designer — transcribed & processed real-time'},
+    {ico:'📷',t:'Photo upload',d:'Upload ảnh phòng hiện tại → AI phân tích layout và đề xuất cải tiến'},
+  ]},
+  {title:'AI Streaming Render Engine',cards:[
+    {ico:'🌊',t:'Progressive rendering',d:'Xuất hiện từng chi tiết như painting — không chờ loading màn hình trống'},
+    {ico:'🧠',t:'Context AI',d:'Claude API phân tích style, budget, không gian → prompt kỹ thuật cho 3D engine'},
+    {ico:'🎨',t:'Style transfer',d:'Match chính xác phong cách đã chọn với 200+ preset VN-specific styles'},
+  ]},
+  {title:'Interactive Element System',cards:[
+    {ico:'📍',t:'Smart hotspots',d:'AI tự detect và tag mỗi object trong render → clickable overlay'},
+    {ico:'🔍',t:'Product matching',d:'Match object với catalog NexSupply — tìm sản phẩm tương tự trong ngân sách'},
+    {ico:'✏️',t:'Edit by chat',d:'"Đổi màu sofa" → AI update render real-time mà không regenerate toàn bộ'},
+  ]},
+  {title:'BOQ Intelligence Engine',cards:[
+    {ico:'📐',t:'Auto calculation',d:'Tính toán số lượng vật liệu dựa trên diện tích và design — không manual input'},
+    {ico:'💹',t:'Real-time pricing',d:'Giá từ 200+ suppliers NexSupply — cập nhật hàng ngày theo thị trường thực tế'},
+    {ico:'🔄',t:'Substitution AI',d:'"Gợi ý thay thế tiết kiệm hơn" — AI đề xuất vật liệu tương đương rẻ hơn 20–30%'},
+  ]},
+  {title:'Action Decision Point',cards:[
+    {ico:'🎯',t:'Intent detection',d:'AI phân tích hành vi và gợi ý action phù hợp nhất (thợ vs vật liệu)'},
+    {ico:'📤',t:'Share & Earn',d:'Share design lên mạng xã hội — affiliate link tự nhúng vào — earn hoa hồng'},
+    {ico:'💾',t:'Save & Iterate',d:'Lưu version, so sánh nhiều phương án, chia sẻ với gia đình để lấy ý kiến'},
+  ]},
+  {title:'NexTalent Integration',cards:[
+    {ico:'🔗',t:'Seamless handoff',d:'Design specs tự động gửi sang NexTalent — thợ thấy chính xác cần làm gì'},
+    {ico:'💰',t:'Auto pricing',d:'BOQ → ước tính chi phí nhân công tự động dựa trên loại công việc'},
+    {ico:'📅',t:'Timeline',d:'AI đề xuất thời gian thi công và booking window phù hợp với thợ available'},
+  ]},
+  {title:'NexSupply Integration',cards:[
+    {ico:'🛒',t:'1-click cart',d:'Toàn bộ BOQ → giỏ hàng NexSupply trong 1 click — zero re-entry'},
+    {ico:'📦',t:'Delivery planning',d:'Schedule giao hàng theo từng giai đoạn thi công — đúng ngày cần'},
+    {ico:'💳',t:'B2B Credit',d:'Mua vật liệu, trả sau 60 ngày — NexFinance approve dựa trên design value'},
+  ]},
+  {title:'Revenue Attribution',cards:[
+    {ico:'💰',t:'Design commission',d:'Premium render ($50K/render cao cấp) · Monthly subscription ($99–299K)'},
+    {ico:'📊',t:'Commerce commission',d:'2–4% trên vật liệu ordered + 8–12% trên labor booked từ design'},
+    {ico:'📣',t:'Ad placement',d:'Products appear inside AI renders — advertiser pays CPM khi design được view'},
+  ]},
+];
+
+let activeStep=-1;
+function showStep(i){
+  const steps=document.querySelectorAll('.fs-bubble');
+  steps.forEach((s,j)=>s.classList.toggle('active',j===i));
+  activeStep=i;
+  const details=document.getElementById('stepDetails');
+  const grid=document.getElementById('stepGrid');
+  const d=stepData[i];
+  grid.innerHTML=d.cards.map(c=>`
+    <div class="sd-card">
+      <div class="sd-ico">${c.ico}</div>
+      <div class="sd-title">${c.t}</div>
+      <div class="sd-desc">${c.d}</div>
+    </div>`).join('');
+  details.classList.add('show');
+  showToast(`Bước ${i+1}: ${d.title}`);
+}
+
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.transform='translateX(-50%) translateY(0)';
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>{t.style.transform='translateX(-50%) translateY(100px)'},2800);
+}
+
+// Auto show step 0 details
+setTimeout(()=>showStep(0),500);
+</script>
+</body>
+</html>

@@ -37,7 +37,10 @@
       "Bash(cp \"C:/Users/Admin/Downloads/nexbuild-marketplace \\(2\\).html\" public/marketplace.html)",
       "Bash(where vercel:*)",
       "Bash(vercel --prod --yes)",
-      "Bash(vercel link:*)"
+      "Bash(vercel link:*)",
+      "Bash(cp \"C:/Users/Admin/Downloads/nexbuild-hub \\(12\\).html\" public/index.html)",
+      "Bash(cp \"C:/Users/Admin/Downloads/nexdesign-app \\(4\\).html\" public/nexdesign-app.html)",
+      "Bash(cp \"C:/Users/Admin/Downloads/nexbuild-m1-design-ai \\(1\\).html\" public/nexdesign-landing.html)"
     ]
   }
 }

@@ -413,6 +413,69 @@ tbody tr:hover td{background:var(--bg2)}
 [data-theme="dark"] thead th{background:rgba(255,255,255,.04)}
 
 
+
+/* ══ ADMIN LAYER ══ */
+#adminBar{display:none;position:fixed;top:0;left:0;right:0;z-index:10000;height:40px;background:rgba(8,4,4,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(239,68,68,.3);align-items:center;padding:0 18px;gap:10px}
+#adminBar.on{display:flex}
+.ab-logo{font-size:12px;font-weight:900;color:#EF4444;display:flex;align-items:center;gap:6px;white-space:nowrap;margin-right:8px}
+.ab-tag{font-size:9px;font-weight:600;padding:2px 7px;border-radius:5px;background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#EF4444}
+.ab-divider{width:1px;height:20px;background:rgba(255,255,255,.1);flex-shrink:0}
+.ab-nav{display:flex;gap:3px;flex:1;overflow-x:auto}
+.ab-nav::-webkit-scrollbar{display:none}
+.ab-btn{padding:4px 11px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;color:rgba(255,255,255,.6);border:none;background:transparent;transition:all .15s;font-family:'Noto Sans',sans-serif;white-space:nowrap}
+.ab-btn:hover,.ab-btn.on{background:rgba(239,68,68,.18);color:#fff}
+.ab-exit{padding:4px 12px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.12);background:transparent;font-family:'Noto Sans',sans-serif;flex-shrink:0}
+.ab-exit:hover{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.3);color:#EF4444}
+
+#adPanel{display:none;position:fixed;top:40px;left:0;right:0;bottom:0;z-index:9999;background:#080F1C;flex-direction:column;overflow:hidden}
+#adPanel.on{display:flex}
+.adp-top{height:46px;border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;padding:0 22px;gap:12px;flex-shrink:0}
+.adp-bread{font-size:12px;color:#3A4F6A;flex:1}
+.adp-bread strong{color:#EDF2FF}
+.adp-body{display:flex;flex:1;overflow:hidden}
+.adp-sb{width:220px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.06);overflow-y:auto;background:rgba(4,8,15,.98)}
+.adp-sb::-webkit-scrollbar{width:3px}.adp-sb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
+.adp-main{flex:1;overflow-y:auto;padding:22px 26px 40px;background:#04080F}
+.adp-main::-webkit-scrollbar{width:5px}.adp-main::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
+.aps-section{padding:10px 14px 3px;font-size:9px;font-weight:700;color:#3A4F6A;letter-spacing:.1em;text-transform:uppercase}
+.aps-item{display:flex;align-items:center;gap:7px;padding:7px 14px;cursor:pointer;font-size:11px;color:#3A4F6A;transition:all .15s;position:relative;user-select:none}
+.aps-item:hover{color:#8898B8;background:rgba(255,255,255,.04)}
+.aps-item.on{color:#EDF2FF;font-weight:700;background:rgba(239,68,68,.06)}
+.aps-item.on::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:#EF4444}
+
+/* shared admin components */
+.acard{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:18px;margin-bottom:14px}
+.acard-t{font-weight:800;font-size:13px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.ag2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ag3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ag4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.akpi{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:14px 16px}
+.akpi-l{font-size:10px;color:#3A4F6A;font-weight:600;margin-bottom:4px}
+.akpi-v{font-family:'Noto Sans Mono',monospace;font-size:22px;font-weight:800;line-height:1;margin-bottom:3px}
+.akpi-n{font-size:10px;color:#3A4F6A}
+.arow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.arow:last-child{border-bottom:none}
+.ai{width:100%;padding:8px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.05);color:#EDF2FF;font-size:12px;font-family:'Noto Sans',sans-serif;outline:none}
+.ai:focus{border-color:rgba(0,201,167,.4)}
+.al{font-size:9px;font-weight:700;color:#3A4F6A;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:5px}
+.apill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:7px;font-size:9px;font-weight:700;border:1px solid;white-space:nowrap}
+.ap-g{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:#22C55E}
+.ap-r{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2);color:#EF4444}
+.ap-or{background:rgba(251,146,60,.08);border-color:rgba(251,146,60,.2);color:#FB923C}
+.ap-b{background:rgba(14,165,233,.08);border-color:rgba(14,165,233,.2);color:#0EA5E9}
+.ap-gold{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.2);color:#C9A84C}
+.abtn{padding:7px 14px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Sans',sans-serif;border:none;color:#fff;display:inline-flex;align-items:center;gap:5px;transition:opacity .2s}
+.abtn:hover{opacity:.82}
+.abtn-t{background:linear-gradient(135deg,#00C9A7,#0EA5E9)}
+.abtn-r{background:linear-gradient(135deg,#EF4444,#F59E0B)}
+.abtn-g{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);color:#8898B8}
+.abtn-g:hover{border-color:rgba(0,201,167,.4);color:#00C9A7;opacity:1}
+.abtn-gold{background:linear-gradient(135deg,#C9A84C,#F59E0B)}
+.abtn-sm{padding:5px 11px;font-size:11px;border-radius:8px}
+.abtn-xs{padding:3px 9px;font-size:10px;border-radius:7px}
+.prog{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.pf{height:100%;border-radius:3px}
+
 </style>
 </head>
 <body>
@@ -1592,6 +1655,7 @@ tbody tr:hover td{background:var(--bg2)}
   <nav class="hdr-nav">
     <a class="nav-a" onclick="goTo('#problem')">Vấn đề ngành</a>
     <a class="nav-a" onclick="goTo('#how')">Cách hoạt động</a>
+    <a class="nav-a" onclick="goTo('#modules')" style="font-weight:600">Hệ sinh thái</a>
     <a class="nav-a" onclick="goTo('#pricing')">Bảng giá</a>
     <a class="nav-a" onclick="goTo('#about')">Về chúng tôi</a>
     <a class="nav-a" onclick="openMarketplace()" style="font-weight:700;color:var(--c1)">Marketplace</a>
@@ -2238,9 +2302,9 @@ tbody tr:hover td{background:var(--bg2)}
         <h4>Công ty</h4>
         <a href="#about" onclick="goTo('#about')">Về chúng tôi</a>
         <a href="nexbuild-mastermap.html" target="_blank">Bản đồ tổng thể</a>
-        <a href="mailto:invest@nexbuild.holdings">Nhà đầu tư</a>
+        <a href="/cdn-cgi/l/email-protection#b5dcdbc3d0c6c1f5dbd0cdd7c0dcd9d19bdddad9d1dcdbd2c6">Nhà đầu tư</a>
         <a href="tel:0988766686">📞 0988 766 686</a>
-        <a href="mailto:hello@nexbuild.holdings">✉️ hello@nexbuild.holdings</a>
+        <a href="/cdn-cgi/l/email-protection#7e161b1212113e101b061c0b17121a501611121a1710190d">✉️ <span class="__cf_email__" data-cfemail="345c5158585b745a514c56415d58501a5c5b58505d5a5347">[email&#160;protected]</span></a>
         <a href="https://nexbuild.holdings" target="_blank">🌐 nexbuild.holdings</a>
       </div>
     </div>
@@ -2331,14 +2395,14 @@ tbody tr:hover td{background:var(--bg2)}
   </div>
   <div class="eco-dr-divider"></div>
     <div style="margin-top:12px;padding:12px;background:var(--sur);border:1px solid var(--bdr);border-radius:10px;text-align:center">
-      <button onclick="closeEcoDrawer();openEcoSection()" style="font-size:12px;font-weight:700;color:var(--c1);background:transparent;border:none;cursor:pointer;font-family:'Noto Sans',sans-serif">Xem tổng quan tất cả →</button>
+      <button onclick="closeEcoDrawer();goTo('#modules')" style="font-size:12px;font-weight:700;color:var(--c1);background:transparent;border:none;cursor:pointer;font-family:'Noto Sans',sans-serif">Xem tổng quan tất cả →</button>
     </div>
   </div>
 </div>
 
 <div id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── DATA ──
 const ECO_DATA = {
   "m1":{name:"NexDesign AI",file:"nexdesign-app.html",model:"AI Thiết kế · Subscription SaaS",hook:"Không bao giờ xây xong rồi mới hối hận vì sai thiết kế",desc:"Hàng nghìn người mỗi năm phá đi làm lại vì thiết kế không đúng kỳ vọng. NexDesign AI cho bạn thấy kết quả trước khi bỏ một đồng thi công.",
@@ -2751,10 +2815,449 @@ function selRole(btn){
         <button onclick="doRegister()" style="width:100%;padding:12px;border-radius:11px;background:linear-gradient(135deg,#00C9A7,#0EA5E9,#6366F1,#A855F7);border:none;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans',sans-serif;margin-bottom:24px" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Tạo tài khoản miễn phí →</button>
       </div>
     </div>
-    <div style="padding:0 28px 20px;text-align:center;font-size:10px;color:var(--text3)">
-      Bằng cách tiếp tục, bạn đồng ý với <span style="color:var(--c1);cursor:pointer">Điều khoản sử dụng</span> và <span style="color:var(--c1);cursor:pointer">Chính sách bảo mật</span> của NexBuild
+    <div style="padding:0 28px 20px;text-align:center;font-size:10
+</div>
+
+<!-- ══ HUB ADMIN BAR ══ -->
+<div id="adminBar">
+  <div class="ab-logo">⚡ NexBuild Admin</div>
+  <span class="ab-tag">HUB LAYER</span>
+  <div class="ab-divider"></div>
+  <div class="ab-nav">
+    <button class="ab-btn on" onclick="apNav(this,'hub-overview')">📊 Dashboard</button>
+    <button class="ab-btn" onclick="apNav(this,'hub-content')">🖊️ Hero &amp; CTA</button>
+    <button class="ab-btn" onclick="apNav(this,'hub-eco')">🌿 Ecosystem</button>
+    <button class="ab-btn" onclick="apNav(this,'hub-press')">📰 Press &amp; Blog</button>
+    <button class="ab-btn" onclick="apNav(this,'hub-announce')">📢 Thông báo</button>
+    <button class="ab-btn" onclick="apNav(this,'hub-seo')">🔍 SEO</button>
+    <button class="ab-btn" onclick="apNav(this,'hub-analytics')">📈 Analytics</button>
+    <button class="ab-btn" onclick="apNav(this,'hub-users')">👥 Users</button>
+    <button class="ab-btn" onclick="apNav(this,'hub-investors')">💼 Nhà đầu tư</button>
+    <button class="ab-btn" onclick="apNav(this,'hub-broadcast')">✉️ Broadcast</button>
+    <button class="ab-btn" onclick="apNav(this,'hub-settings')">⚙️ Cài đặt</button>
+  </div>
+  <div class="ab-divider"></div>
+  <button class="ab-exit" onclick="adminLogout()">✕ Thoát</button>
+</div>
+
+<!-- ══ HUB ADMIN PANEL ══ -->
+<div id="adPanel">
+  <div class="adp-top">
+    <div class="adp-bread" id="adBread"><strong>Dashboard</strong> · Hub Layer</div>
+    <button class="abtn abtn-g abtn-sm" onclick="adminLogout()">✕ Thoát admin · Về Hub</button>
+  </div>
+  <div class="adp-body">
+    <div class="adp-sb" id="adSb">
+      <div class="aps-section">Tổng quan</div>
+      <div class="aps-item on" id="sbn-hub-overview" onclick="apGoPage('hub-overview')">📊 Dashboard Hub</div>
+
+      <div class="aps-section">Nội dung</div>
+      <div class="aps-item" id="sbn-hub-content" onclick="apGoPage('hub-content')">🖊️ Hero &amp; CTA</div>
+      <div class="aps-item" id="sbn-hub-eco" onclick="apGoPage('hub-eco')">🌿 Ecosystem Modules</div>
+      <div class="aps-item" id="sbn-hub-press" onclick="apGoPage('hub-press')">📰 Press &amp; Blog</div>
+      <div class="aps-item" id="sbn-hub-announce" onclick="apGoPage('hub-announce')">📢 Thông báo &amp; Banner</div>
+
+      <div class="aps-section">Marketing</div>
+      <div class="aps-item" id="sbn-hub-seo" onclick="apGoPage('hub-seo')">🔍 SEO Config</div>
+      <div class="aps-item" id="sbn-hub-analytics" onclick="apGoPage('hub-analytics')">📈 Analytics</div>
+      <div class="aps-item" id="sbn-hub-broadcast" onclick="apGoPage('hub-broadcast')">✉️ Email Broadcast</div>
+
+      <div class="aps-section">Vận hành</div>
+      <div class="aps-item" id="sbn-hub-users" onclick="apGoPage('hub-users')">👥 Users &amp; Signups</div>
+      <div class="aps-item" id="sbn-hub-investors" onclick="apGoPage('hub-investors')">💼 Nhà đầu tư</div>
+      <div class="aps-item" id="sbn-hub-settings" onclick="apGoPage('hub-settings')">⚙️ Cài đặt Hub</div>
     </div>
+    <div class="adp-main" id="adMain"></div>
   </div>
 </div>
+
 </body>
-</html>
+</html><script>
+// ══════════════════════════════════════════════════════
+// NEXBUILD HUB — ADMIN LAYER
+// Login: admin@nexbuild.holdings / nexbuild2025
+// ══════════════════════════════════════════════════════
+
+// Override doLogin để bắt admin credentials
+(function(){
+  var _orig = doLogin;
+  doLogin = function(){
+    var email = (document.getElementById('authEmail')||{}).value||'';
+    var passEl = document.querySelector('#loginForm input[type="password"]');
+    var pass = passEl ? passEl.value : '';
+    if(email.trim().toLowerCase() === 'admin@nexbuild.holdings' && pass === 'nexbuild2025'){
+      closeAuthModal();
+      adminEnter();
+      return;
+    }
+    _orig();
+  };
+})();
+
+function adminEnter(){
+  document.body.style.paddingTop = '40px';
+  document.getElementById('adminBar').classList.add('on');
+  document.getElementById('adPanel').classList.add('on');
+  apGoPage('hub-overview');
+}
+
+function adminLogout(){
+  document.body.style.paddingTop = '';
+  document.getElementById('adminBar').classList.remove('on');
+  document.getElementById('adPanel').classList.remove('on');
+}
+
+function apNav(btn, pageId){
+  document.querySelectorAll('.ab-btn').forEach(function(b){ b.classList.remove('on'); });
+  btn.classList.add('on');
+  apGoPage(pageId);
+}
+
+function apGoPage(id){
+  var page = AP_PAGES[id];
+  if(!page) return;
+  document.getElementById('adMain').innerHTML = page.html;
+  document.getElementById('adBread').innerHTML = page.bread;
+  document.querySelectorAll('.aps-item').forEach(function(el){ el.classList.remove('on'); });
+  var nav = document.getElementById('sbn-'+id);
+  if(nav) nav.classList.add('on');
+}
+
+// ══ PAGE DATA ══
+var AP_PAGES = {};
+
+AP_PAGES['hub-overview'] = {
+  bread: '<strong>Dashboard</strong> · Hub Layer',
+  html: '<div>'+
+    '<div style="font-size:18px;font-weight:900;color:#EDF2FF;margin-bottom:4px">⚡ Hub Admin Dashboard</div>'+
+    '<div style="font-size:11px;color:#3A4F6A;margin-bottom:18px">Landing page · Marketing · User acquisition</div>'+
+    '<div class="ag4" style="margin-bottom:16px">'+
+    kpiCard('👥 Visitors hôm nay','2,847','↑ +12% hôm qua','#00C9A7')+
+    kpiCard('📝 Signups hôm nay','124','↑ +34%','#22C55E')+
+    kpiCard('💌 Email captured','3,291','Tổng toàn thời gian','#0EA5E9')+
+    kpiCard('💰 Angel Round','32%','$2.1M / $6.5M','#C9A84C')+
+    '</div>'+
+    alertBox('or','⚠️','3 hạng mục cần xử lý: Hub section text cũ · 284 emails chưa gửi welcome · SEO title quá dài')+
+    '<div class="ag2">'+
+    '<div class="acard">'+
+    '<div class="acard-t">📈 Traffic 7 ngày</div>'+
+    trafficBar(['T2','T3','T4','T5','T6','T7','CN'],['1,842','2,104','1,987','2,341','2,847','1,234','892'])+
+    '</div>'+
+    '<div class="acard">'+
+    '<div class="acard-t">🌿 12 Modules — Status</div>'+
+    moduleStatus()+
+    '</div></div></div>'
+};
+
+AP_PAGES['hub-content'] = {
+  bread: '🖊️ Nội dung › <strong>Hero &amp; CTA</strong>',
+  html: '<div>'+
+    '<div style="font-size:18px;font-weight:900;color:#EDF2FF;margin-bottom:18px">🖊️ Hero Section &amp; CTA</div>'+
+    '<div class="ag2" style="margin-bottom:14px">'+
+    '<div class="acard">'+
+    '<div class="acard-t">📝 Headline</div>'+
+    inputField('Line 1 (trắng)','Xây dựng thông minh')+
+    inputField('Line 2 (gradient màu)','bắt đầu từ đây')+
+    textareaField('Subtitle','Nền tảng kết nối 5 lớp hệ sinh thái xây dựng — thợ, vật liệu, thiết kế AI, quản lý và tài chính')+
+    '<button class="abtn abtn-t abtn-sm" onclick="toast(\'✅ Lưu Hero content · Preview đang cập nhật\')">💾 Lưu &amp; Preview</button>'+
+    '</div>'+
+    '<div class="acard">'+
+    '<div class="acard-t">🔘 CTA Buttons</div>'+
+    ctaRow('CTA chính','Bắt đầu miễn phí','#signup')+
+    ctaRow('CTA phụ','Xem Marketplace','nexbuild-marketplace.html')+
+    ctaRow('Nhà đầu tư','Dành cho nhà đầu tư','mailto:invest@nexbuild.holdings')+
+    '<button class="abtn abtn-t abtn-sm" style="margin-top:6px" onclick="toast(\'✅ Lưu CTA config\')">💾 Lưu</button>'+
+    '</div></div>'+
+    '<div class="acard">'+
+    '<div class="acard-t">📊 Metrics Banner (4 chỉ số)</div>'+
+    '<div class="ag4">'+
+    metricRow('2,847+','Users đang dùng')+
+    metricRow('892M','Giá trị Escrow')+
+    metricRow('12','Hệ sinh thái')+
+    metricRow('98%','Hài lòng')+
+    '</div>'+
+    '<button class="abtn abtn-t abtn-sm" style="margin-top:10px" onclick="toast(\'✅ Cập nhật metrics banner\')">💾 Lưu</button>'+
+    '</div></div>'
+};
+
+AP_PAGES['hub-eco'] = {
+  bread: '🌿 Nội dung › <strong>Ecosystem Modules</strong>',
+  html: '<div>'+
+    '<div style="font-size:18px;font-weight:900;color:#EDF2FF;margin-bottom:6px">🌿 Ecosystem Module Manager</div>'+
+    '<div style="font-size:11px;color:#3A4F6A;margin-bottom:16px">Thứ tự hiển thị · Mô tả · Trạng thái live từng module</div>'+
+    ecoModules()+
+    '<div style="display:flex;gap:8px;margin-top:12px">'+
+    '<button class="abtn abtn-t abtn-sm" onclick="toast(\'✅ Lưu thứ tự ecosystem modules\')">💾 Lưu thứ tự</button>'+
+    '<button class="abtn abtn-g abtn-sm" onclick="toast(\'+ Module mới đang phát triển\')">+ Module mới</button>'+
+    '</div></div>'
+};
+
+AP_PAGES['hub-seo'] = {
+  bread: '🔍 Marketing › <strong>SEO Config</strong>',
+  html: '<div>'+
+    '<div style="font-size:18px;font-weight:900;color:#EDF2FF;margin-bottom:18px">🔍 SEO Configuration</div>'+
+    seoBlock('Trang chủ (/)','NexBuild Holdings — Hệ sinh thái xây dựng thông minh Việt Nam','Nền tảng xây dựng all-in-one: vật liệu D2C, tìm thợ, thiết kế AI, quản lý dự án và Escrow thông minh.','nền tảng xây dựng, tìm thợ hà nội, vật liệu xây dựng trực tuyến')+
+    seoBlock('Marketplace (/marketplace)','NexMarket — Chợ vật liệu xây dựng D2C Việt Nam','Mua vật liệu xây dựng trực tiếp từ nhà máy: xi măng, thép, gạch, sơn giá tốt nhất.','mua vật liệu xây dựng, xi măng giá rẻ, thép xây dựng')+
+    '<div class="acard">'+
+    '<div class="acard-t">⚙️ Technical SEO</div>'+
+    techSeoRows()+
+    '</div></div>'
+};
+
+AP_PAGES['hub-analytics'] = {
+  bread: '📈 Marketing › <strong>Analytics</strong>',
+  html: '<div>'+
+    '<div style="font-size:18px;font-weight:900;color:#EDF2FF;margin-bottom:18px">📈 Hub Analytics</div>'+
+    '<div class="ag4" style="margin-bottom:16px">'+
+    kpiCard('Pageviews/ngày','18,420','↑ +24%','#0EA5E9')+
+    kpiCard('Unique visitors','2,847','↑ +12%','#22C55E')+
+    kpiCard('Avg session','3m 42s','↑ +8%','#00C9A7')+
+    kpiCard('Bounce rate','42%','↓ -3%','#F59E0B')+
+    '</div>'+
+    '<div class="ag2">'+
+    trafficSourceCard()+
+    topPagesCard()+
+    '</div></div>'
+};
+
+AP_PAGES['hub-users'] = {
+  bread: '👥 Vận hành › <strong>Users &amp; Signups</strong>',
+  html: '<div>'+
+    '<div style="font-size:18px;font-weight:900;color:#EDF2FF;margin-bottom:18px">👥 User Management</div>'+
+    '<div class="ag4" style="margin-bottom:16px">'+
+    kpiCard('Tổng registered','3,291','từ Hub','#0EA5E9')+
+    kpiCard('Signups hôm nay','124','↑ +34%','#22C55E')+
+    kpiCard('Converted active','42%','Dùng marketplace','#F59E0B')+
+    kpiCard('Chờ verify email','284','Gửi reminder','#EF4444')+
+    '</div>'+
+    userTable()+
+    '</div>'
+};
+
+AP_PAGES['hub-investors'] = {
+  bread: '💼 Vận hành › <strong>Nhà đầu tư</strong>',
+  html: '<div>'+
+    '<div style="font-size:18px;font-weight:900;color:#EDF2FF;margin-bottom:18px">💼 Investor Relations</div>'+
+    '<div class="ag4" style="margin-bottom:16px">'+
+    kpiCard('Angel target','$6.5M','Đang gọi vốn','#C9A84C')+
+    kpiCard('Đã commit','$2.1M','32.3%','#22C55E')+
+    kpiCard('Investor requests','3','Mới tuần này','#F59E0B')+
+    kpiCard('Deck downloads','284','30 ngày qua','#0EA5E9')+
+    '</div>'+
+    '<div class="ag2">'+
+    investorRequests()+
+    investorDocs()+
+    '</div></div>'
+};
+
+AP_PAGES['hub-broadcast'] = {
+  bread: '✉️ Marketing › <strong>Email Broadcast</strong>',
+  html: '<div>'+
+    '<div style="font-size:18px;font-weight:900;color:#EDF2FF;margin-bottom:18px">✉️ Email Broadcast</div>'+
+    '<div class="acard">'+
+    '<div class="acard-t">✉️ Tạo campaign mới</div>'+
+    '<div class="ag2" style="margin-bottom:10px">'+
+    inputField('Subject line','')+
+    selectField('Segment',['Tất cả (3,291)','Chủ nhà (1,248)','Nhà thầu (342)','NCC (365)','Chưa active (284)'])+
+    '</div>'+
+    textareaField('Nội dung','',4)+
+    '<div style="display:flex;gap:8px;margin-top:8px">'+
+    '<button class="abtn abtn-t abtn-sm" onclick="toast(\'📧 Đang gửi đến 3,291 users...\')">📧 Gửi ngay</button>'+
+    '<button class="abtn abtn-g abtn-sm" onclick="toast(\'⏰ Lên lịch gửi\')">⏰ Lên lịch</button>'+
+    '<button class="abtn abtn-g abtn-sm" onclick="toast(\'👁 Test email gửi đến admin@nexbuild.holdings\')">👁 Test</button>'+
+    '</div></div>'+
+    campaignHistory()+
+    '</div>'
+};
+
+AP_PAGES['hub-press'] = {
+  bread: '📰 Nội dung › <strong>Press &amp; Blog</strong>',
+  html: '<div>'+
+    '<div style="font-size:18px;font-weight:900;color:#EDF2FF;margin-bottom:18px">📰 Press &amp; Blog</div>'+
+    '<div class="acard">'+
+    '<div class="acard-t">📋 Bài viết'+
+    '<button class="abtn abtn-t abtn-xs" onclick="toast(\'+ Tạo bài viết mới\')">+ Bài mới</button>'+
+    '</div>'+
+    pressRows()+
+    '</div></div>'
+};
+
+AP_PAGES['hub-announce'] = {
+  bread: '📢 Nội dung › <strong>Thông báo &amp; Banner</strong>',
+  html: '<div>'+
+    '<div style="font-size:18px;font-weight:900;color:#EDF2FF;margin-bottom:18px">📢 Announcements &amp; Banners</div>'+
+    '<div class="acard">'+
+    '<div class="acard-t">🎯 Announcement Bar</div>'+
+    '<div style="padding:10px 14px;background:linear-gradient(135deg,rgba(0,201,167,.12),rgba(14,165,233,.08));border:1px solid rgba(0,201,167,.2);border-radius:9px;margin-bottom:10px;font-size:12px;text-align:center;color:#EDF2FF">🎉 Angel Round đang mở — Tham gia cùng chúng tôi xây dựng tương lai ngành xây dựng Việt Nam →</div>'+
+    '<div style="display:flex;gap:7px">'+
+    '<input class="ai" value="🎉 Angel Round đang mở — Tham gia cùng chúng tôi xây dựng tương lai ngành xây dựng Việt Nam" style="flex:1">'+
+    '<button class="abtn abtn-t abtn-xs" onclick="toast(\'✅ Cập nhật announcement bar\')">Lưu</button>'+
+    '<button class="abtn abtn-g abtn-xs" onclick="toast(\'🚫 Ẩn announcement bar\')">Ẩn</button>'+
+    '</div></div>'+
+    announcePopups()+
+    '</div>'
+};
+
+AP_PAGES['hub-settings'] = {
+  bread: '⚙️ Vận hành › <strong>Cài đặt Hub</strong>',
+  html: '<div>'+
+    '<div style="font-size:18px;font-weight:900;color:#EDF2FF;margin-bottom:18px">⚙️ Cài đặt Hub</div>'+
+    '<div class="ag2">'+
+    '<div class="acard">'+
+    '<div class="acard-t">🌐 General</div>'+
+    inputField('Domain chính','nexbuild.holdings')+
+    inputField('Email liên hệ','hello@nexbuild.holdings')+
+    inputField('Email đầu tư','invest@nexbuild.holdings')+
+    inputField('Timezone','Asia/Ho_Chi_Minh (UTC+7)')+
+    '<button class="abtn abtn-t abtn-sm" style="margin-top:6px" onclick="toast(\'✅ Lưu cài đặt\')">💾 Lưu</button>'+
+    '</div>'+
+    '<div class="acard">'+
+    '<div class="acard-t">🔧 Feature Flags</div>'+
+    featureRows()+
+    '</div></div></div>'
+};
+
+// ══ HELPER FUNCTIONS ══
+function kpiCard(l,v,n,c){
+  return '<div class="akpi"><div class="akpi-l">'+l+'</div><div class="akpi-v" style="color:'+c+'">'+v+'</div><div class="akpi-n">'+n+'</div></div>';
+}
+function alertBox(type,ico,msg){
+  var colors={'or':'rgba(251,146,60,.06)/rgba(251,146,60,.18)','r':'rgba(239,68,68,.06)/rgba(239,68,68,.18)','b':'rgba(14,165,233,.06)/rgba(14,165,233,.18)'};
+  var c=colors[type]||colors.or; var parts=c.split('/');
+  return '<div style="padding:11px 14px;border-radius:10px;font-size:12px;line-height:1.6;margin-bottom:14px;display:flex;gap:10px;background:'+parts[0]+';border:1px solid '+parts[1]+'"><span>'+ico+'</span><span>'+msg+'</span></div>';
+}
+function inputField(label,val){
+  return '<div style="margin-bottom:10px"><label class="al">'+label+'</label><input class="ai" value="'+val+'"></div>';
+}
+function textareaField(label,val,rows){
+  rows=rows||3;
+  return '<div style="margin-bottom:10px"><label class="al">'+label+'</label><textarea class="ai" rows="'+rows+'" style="resize:none">'+val+'</textarea></div>';
+}
+function selectField(label,opts){
+  return '<div style="margin-bottom:10px"><label class="al">'+label+'</label><select class="ai" style="appearance:none">'+opts.map(function(o){return '<option>'+o+'</option>';}).join('')+'</select></div>';
+}
+function ctaRow(label,text,url){
+  return '<div style="margin-bottom:10px;padding:10px;background:rgba(255,255,255,.04);border-radius:9px"><div style="font-size:9px;font-weight:700;color:#3A4F6A;margin-bottom:6px;letter-spacing:.08em;text-transform:uppercase">'+label+'</div><div style="display:flex;gap:7px"><input class="ai" value="'+text+'" style="flex:1;font-size:11px;padding:6px 10px"><input class="ai" value="'+url+'" style="flex:1;font-size:11px;padding:6px 10px"></div></div>';
+}
+function metricRow(v,l){
+  return '<div style="display:flex;gap:7px;align-items:center"><input class="ai" value="'+v+'" style="width:80px;text-align:center;font-size:11px;padding:6px 8px"><input class="ai" value="'+l+'" style="flex:1;font-size:11px;padding:6px 8px"></div>';
+}
+function trafficBar(days,vals){
+  var max=parseInt(vals.reduce(function(a,b){return parseInt(a.replace(/,/g,''))>parseInt(b.replace(/,/g,''))?a:b;}).replace(/,/g,''));
+  return days.map(function(d,i){
+    var pct=Math.round(parseInt(vals[i].replace(/,/g,''))/max*100);
+    return '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11px"><span style="width:22px;color:#3A4F6A">'+d+'</span><div style="flex:1;height:5px;background:rgba(255,255,255,.06);border-radius:3px"><div style="width:'+pct+'%;height:100%;background:#00C9A7;border-radius:3px"></div></div><span style="font-weight:700;color:#0EA5E9;width:42px;text-align:right">'+vals[i]+'</span></div>';
+  }).join('');
+}
+function moduleStatus(){
+  var mods=[['🛒','NexMarket','Live','#22C55E'],['🎨','NexDesign AI','Live','#22C55E'],['👷','NexTalent','Live','#22C55E'],['🏭','NexSupply','Live','#22C55E'],['📊','NexERP','Live','#22C55E'],['💰','NexFinance','Live','#22C55E'],['📣','NexMedia','Beta','#F59E0B'],['🤝','NexAffiliates','Live','#22C55E'],['🎓','NexAcademy','Live','#22C55E'],['🤖','NexAgent','Dev','#FB923C'],['🔗','NexConnect','Beta','#F59E0B'],['📒','NexAccounting','Live','#22C55E']];
+  return mods.map(function(m){return '<div style="display:flex;align-items:center;gap:7px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:11px;cursor:pointer" onclick="apGoPage(\'hub-eco\')" onmouseover="this.style.background=\'rgba(255,255,255,.03)\'" onmouseout="this.style.background=\'transparent\'"><span style="width:18px;text-align:center">'+m[0]+'</span><span style="flex:1">'+m[1]+'</span><span style="font-size:9px;padding:1px 6px;border-radius:5px;font-weight:700;color:'+m[3]+';background:'+m[3]+'19">'+m[2]+'</span></div>';}).join('');
+}
+function ecoModules(){
+  var mods=[['🛒','NexMarket','Chợ vật liệu xây dựng B2C & B2B trực tiếp từ nhà máy','Live'],['🎨','NexDesign AI','Thiết kế kiến trúc + BOQ tự động bằng AI','Live'],['👷','NexTalent','Tìm thợ kỹ thuật được xác minh, booking và Escrow','Live'],['🏭','NexSupply','Kho vật liệu B2B, tín dụng 60 ngày cho nhà thầu','Live'],['📊','NexERP','Quản lý dự án xây dựng SaaS all-in-one','Live'],['💰','NexFinance','Escrow thông minh, tín dụng B2B và thanh toán tự động','Live'],['📣','NexMedia','Quảng cáo B2B ngành xây dựng chính xác theo phân khúc','Beta'],['🤝','NexAffiliates','Chương trình affiliate hoa hồng cao cho người giới thiệu','Live'],['🎓','NexAcademy','Đào tạo nghề xây dựng + chứng chỉ blockchain','Live'],['🤖','NexAgent','AI Agents tự động hóa quy trình cho toàn hệ sinh thái','Dev'],['🔗','NexConnect','API Platform kết nối đối tác và tích hợp third-party','Beta'],['📒','NexAccounting','Kế toán xây dựng tích hợp MISA, VAT & hóa đơn điện tử','Live']];
+  return mods.map(function(m,i){return '<div style="display:flex;align-items:center;gap:11px;padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;margin-bottom:7px"><span style="font-size:20px;width:28px;text-align:center">'+m[0]+'</span><div style="flex:1"><div style="font-weight:700;font-size:12px;margin-bottom:4px">'+m[1]+'</div><input class="ai" value="'+m[2]+'" style="font-size:11px;padding:5px 9px"></div><span style="padding:3px 8px;border-radius:6px;font-size:9px;font-weight:700;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:#22C55E;flex-shrink:0">'+m[3]+'</span><div style="display:flex;gap:4px;flex-shrink:0"><button onclick="toast(\'↑ '+m[1]+'\')" style="width:24px;height:24px;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#3A4F6A;cursor:pointer">↑</button><button onclick="toast(\'↓ '+m[1]+'\')" style="width:24px;height:24px;border-radius:6px;border:1px solid rgba(255,255,255,.1);background:transparent;color:#3A4F6A;cursor:pointer">↓</button></div></div>';}).join('');
+}
+function seoBlock(page,title,desc,kw){
+  var tlen=title.length; var dlen=desc.length;
+  return '<div class="acard"><div class="acard-t" style="color:#0EA5E9">📄 '+page+'</div>'+
+    '<div style="margin-bottom:8px"><label class="al">Title tag <span style="color:'+(tlen>60?'#EF4444':'#22C55E')+'">('+tlen+'/60 chars)</span></label><input class="ai" value="'+title+'"></div>'+
+    '<div style="margin-bottom:8px"><label class="al">Meta description <span style="color:'+(dlen>160?'#EF4444':'#22C55E')+'">('+dlen+'/160 chars)</span></label><textarea class="ai" rows="2" style="resize:none">'+desc+'</textarea></div>'+
+    '<div style="margin-bottom:10px"><label class="al">Keywords</label><input class="ai" value="'+kw+'"></div>'+
+    '<button class="abtn abtn-t abtn-xs" onclick="toast(\'✅ Lưu SEO: '+page+'\')">💾 Lưu</button>'+
+    '</div>';
+}
+function techSeoRows(){
+  var rows=[['Sitemap tự động','✅ Active','Cập nhật mỗi 24h'],['Schema Markup','✅ Organization + WebSite','Structured data OK'],['OG Tags (Facebook/LinkedIn)','✅ Đầy đủ','Share preview OK'],['Canonical URLs','✅ Configured','No duplicate content'],['Robots.txt','/admin → noindex','Crawl rules OK']];
+  return rows.map(function(r){return '<div class="arow"><span style="flex:1">'+r[0]+'</span><span style="color:#22C55E">'+r[1]+'</span><span style="color:#3A4F6A">'+r[2]+'</span></div>';}).join('');
+}
+function trafficSourceCard(){
+  return '<div class="acard"><div class="acard-t">🌍 Traffic nguồn</div>'+
+    [['Organic Search','38%',38,'#22C55E'],['Direct','28%',28,'#00C9A7'],['Social Media','18%',18,'#0EA5E9'],['Referral','11%',11,'#6366F1'],['Email','5%',5,'#C9A84C']].map(function(s){
+    return '<div style="margin-bottom:9px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span>'+s[0]+'</span><span style="font-weight:700;color:'+s[3]+'">'+s[1]+'</span></div><div class="prog"><div class="pf" style="width:'+s[2]+'%;background:'+s[3]+'"></div></div></div>';
+  }).join('')+'</div>';
+}
+function topPagesCard(){
+  return '<div class="acard"><div class="acard-t">📄 Top pages</div>'+
+    [['/ Trang chủ','8,421'],['/#ecosystem','3,284'],['/#pricing','2,841'],['/#how','1,924'],['/#about','1,284']].map(function(p){
+    return '<div class="arow"><span style="color:#0EA5E9;flex:1">'+p[0]+'</span><span style="color:#3A4F6A">'+p[1]+' views</span></div>';
+  }).join('')+'</div>';
+}
+function userTable(){
+  var users=[['Nguyễn Thị Mai','mai@gmail.com','Chủ nhà','2 phút','Chờ verify','#F59E0B'],['Trần Văn Hùng','hung@xd.vn','Nhà thầu','15 phút','Đã verify','#22C55E'],['CT Phú Quý','phuquy@ct.vn','Nhà thầu','1 giờ','Đã verify','#22C55E'],['Gạch Đồng Tâm','sales@dt.vn','NCC','3 giờ','Đã verify','#22C55E'],['Lê Minh Khôi','khoi@gmail.com','Thợ','2 giờ','KYC pending','#FB923C']];
+  return '<div class="acard"><div class="acard-t">📋 Signups mới nhất<button class="abtn abtn-t abtn-xs" onclick="toast(\'⬇ Export CSV signups\')">⬇ Export</button></div>'+
+    '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">'+
+    '<thead><tr>'+['Tên','Email','Role','Đăng ký','Status'].map(function(h){return '<th style="text-align:left;padding:7px 12px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#3A4F6A;border-bottom:1px solid rgba(255,255,255,.07)">'+h+'</th>';}).join('')+'</tr></thead>'+
+    '<tbody>'+users.map(function(u){return '<tr><td style="padding:8px 12px;font-weight:600">'+u[0]+'</td><td style="padding:8px 12px;color:#3A4F6A;font-family:\'Noto Sans Mono\',monospace;font-size:10px">'+u[1]+'</td><td style="padding:8px 12px"><span class="apill ap-b">'+u[2]+'</span></td><td style="padding:8px 12px;color:#3A4F6A">'+u[3]+' trước</td><td style="padding:8px 12px"><span style="padding:2px 8px;border-radius:6px;font-size:9px;font-weight:700;background:'+u[5]+'19;border:1px solid '+u[5]+'44;color:'+u[5]+'">'+u[4]+'</span></td></tr>';}).join('')+
+    '</tbody></table></div></div>';
+}
+function investorRequests(){
+  return '<div class="acard" style="background:rgba(201,168,76,.05);border-color:rgba(201,168,76,.18)">'+
+    '<div class="acard-t" style="color:#C9A84C">📋 Investor Requests mới</div>'+
+    [['Mekong Capital','invest@mekong.vc','$500K','Quan tâm Series A roadmap','2h trước'],['Angel Nguyễn Minh','nguyen@angel.vn','$50K','Founder background info','1 ngày trước'],['Vietnam Investment Group','vig@vig.com','$1M','Due diligence package','3 ngày trước']].map(function(inv){
+    return '<div style="padding:12px;background:rgba(255,255,255,.04);border-radius:9px;margin-bottom:8px">'+
+      '<div style="font-weight:700;font-size:12px;margin-bottom:2px">'+inv[0]+'</div>'+
+      '<div style="font-size:10px;color:#3A4F6A;margin-bottom:5px">'+inv[1]+' · '+inv[4]+'</div>'+
+      '<div style="font-size:11px;color:#8898B8;margin-bottom:8px">'+inv[2]+' · '+inv[3]+'</div>'+
+      '<div style="display:flex;gap:6px">'+
+      '<button class="abtn abtn-gold abtn-xs" onclick="toast(\'📧 Reply: '+inv[0]+'\')">📧 Reply</button>'+
+      '<button class="abtn abtn-g abtn-xs" onclick="toast(\'📄 Gửi deck: '+inv[0]+'\')">📄 Deck</button>'+
+      '</div></div>';
+    }).join('')+'</div>';
+}
+function investorDocs(){
+  return '<div style="display:flex;flex-direction:column;gap:12px">'+
+    '<div class="acard">'+
+    '<div class="acard-t">📊 Angel Round Progress</div>'+
+    '<div style="height:10px;background:rgba(255,255,255,.06);border-radius:5px;margin-bottom:6px"><div style="width:32%;height:100%;background:linear-gradient(90deg,#C9A84C,#F59E0B);border-radius:5px"></div></div>'+
+    '<div style="display:flex;justify-content:space-between;font-size:11px;color:#3A4F6A;margin-bottom:12px"><span>$2.1M committed</span><span>Target: $6.5M</span></div>'+
+    [['Q1 2025','$2.1M committed → 32%'],['Q2 2025','Target $2.0M thêm → 63%'],['Q3 2025','Close round → 100%']].map(function(q){return '<div style="font-size:11px;padding:7px 10px;background:rgba(255,255,255,.04);border-radius:8px;margin-bottom:5px;display:flex;justify-content:space-between"><strong>'+q[0]+'</strong><span style="color:#C9A84C">'+q[1]+'</span></div>';}).join('')+
+    '</div>'+
+    '<div class="acard">'+
+    '<div class="acard-t">📄 Materials<button class="abtn abtn-g abtn-xs" onclick="toast(\'+ Upload tài liệu\')">+ Upload</button></div>'+
+    [['Pitch Deck Q2 2025','PDF 24 slides','284 dl'],['Financial Model','Excel 5 tabs','142 dl'],['Executive Summary','PDF 2 pages','892 dl'],['Data Room (NDA req.)','Notion link','28 access']].map(function(d){return '<div class="arow" style="cursor:pointer" onclick="toast(\'Quản lý: '+d[0]+'\')"><span style="flex:1;font-weight:600">'+d[0]+'<span style="font-weight:400;color:#3A4F6A"> · '+d[1]+'</span></span><span style="color:#3A4F6A">'+d[2]+'</span></div>';}).join('')+
+    '</div></div>';
+}
+function campaignHistory(){
+  return '<div class="acard"><div class="acard-t">📋 Campaigns gần đây</div>'+
+    [['Chào mừng Q2 2025','3,291','98.2%','42%','8.4%'],['Flash Sale Tết','1,590','100%','61%','18.2%'],['Update tính năng','2,847','98.8%','38%','6.1%']].map(function(c){
+    return '<div style="padding:10px;background:rgba(255,255,255,.04);border-radius:9px;margin-bottom:7px">'+
+      '<div style="font-weight:700;font-size:12px;margin-bottom:5px">'+c[0]+'</div>'+
+      '<div style="display:flex;gap:14px;font-size:11px;color:#3A4F6A">'+
+      '<span>📤 Sent: <strong style="color:#EDF2FF">'+c[1]+'</strong></span>'+
+      '<span style="color:#22C55E">✓ '+c[2]+'</span>'+
+      '<span style="color:#0EA5E9">Open: '+c[3]+'</span>'+
+      '<span style="color:#C9A84C">CTR: '+c[4]+'</span>'+
+      '</div></div>';
+  }).join('')+'</div>';
+}
+function pressRows(){
+  return [['NexBuild nhận đầu tư Angel Round','Press','2,841 views','Published','#22C55E'],['5 xu hướng xây dựng thông minh 2025','Blog','4,120 views','Published','#22C55E'],['Hướng dẫn đặt thợ qua NexTalent','Blog','-','Draft','#F59E0B'],['Case study CT Hoàng Gia tiết kiệm 30%','Blog','-','Draft','#F59E0B']].map(function(a){
+    return '<div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.04);border-radius:9px;margin-bottom:7px;font-size:12px">'+
+      '<div style="flex:1"><strong>'+a[0]+'</strong><div style="font-size:11px;color:#3A4F6A">'+a[1]+' · '+a[2]+'</div></div>'+
+      '<span style="padding:2px 8px;border-radius:6px;font-size:9px;font-weight:700;background:'+a[4]+'19;border:1px solid '+a[4]+'44;color:'+a[4]+'">'+a[3]+'</span>'+
+      '<button class="abtn abtn-g abtn-xs" onclick="toast(\'Edit: '+a[0]+'\')">✏️</button>'+
+      '</div>';
+  }).join('');
+}
+function announcePopups(){
+  return '<div class="acard"><div class="acard-t">📋 Popup Announcements</div>'+
+    [['Angel Round Open','Gọi vốn Q1/2025','Đang hiển thị','#22C55E'],['Maintenance 22/01','Bảo trì 2-4AM','Đã kết thúc','#3A4F6A'],['Tết Holiday','Nghỉ 26/01-05/02','Draft','#F59E0B']].map(function(a){
+    return '<div style="display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,.04);border-radius:9px;margin-bottom:7px;font-size:12px">'+
+      '<div style="flex:1"><strong>'+a[0]+'</strong><div style="font-size:11px;color:#3A4F6A">'+a[1]+'</div></div>'+
+      '<span style="padding:2px 8px;border-radius:6px;font-size:9px;font-weight:700;color:'+a[3]+';background:'+a[3]+'19;border:1px solid '+a[3]+'44">'+a[2]+'</span>'+
+      '<button class="abtn abtn-g abtn-xs" onclick="toast(\'Edit: '+a[0]+'\')">✏️</button>'+
+      '</div>';
+  }).join('')+
+  '<button class="abtn abtn-g abtn-sm" style="margin-top:6px" onclick="toast(\'+ Tạo thông báo popup mới\')">+ Thêm popup</button>'+
+  '</div>';
+}
+function featureRows(){
+  return [['Announcement bar','on','#22C55E'],['Maintenance mode','off','#3A4F6A'],['Angel round banner','on','#22C55E'],['Dark mode default','on','#22C55E'],['Multi-language vi+en','on','#22C55E']].map(function(f){
+    return '<div class="arow">'+
+      '<span style="flex:1">'+f[0]+'</span>'+
+      '<span style="font-weight:700;color:'+f[2]+'">'+f[1]+'</span>'+
+      '<button class="abtn abtn-g abtn-xs" onclick="toast(\'Toggle: '+f[0]+'\')">Toggle</button>'+
+      '</div>';
+  }).join('');
+}
+</script>

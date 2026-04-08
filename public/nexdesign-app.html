@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NexDesign AI — Thiết kế &amp; BOQ thông minh</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;800;900&family=Noto+Sans+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --c1:#00C9A7;--c2:#0EA5E9;--ind:#6366F1;--vio:#A855F7;
+  --gold:#C9A84C;--green:#22C55E;--red:#EF4444;--amb:#F59E0B;
+  --grad:linear-gradient(135deg,#00C9A7,#0EA5E9,#6366F1,#A855F7);
+  --bg:#04080F;--bg1:#080F1C;--bg2:#0D1828;--bg3:#132034;
+  --text:#EDF2FF;--text2:#8898B8;--text3:#3A4F6A;
+  --bdr:rgba(255,255,255,.07);--bdr2:rgba(255,255,255,.13);
+  --sur:rgba(255,255,255,.03);--r:14px;--tr:.2s ease;--max:1140px;
+}
+html,body{height:100%;font-family:'Noto Sans',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.orb{position:fixed;border-radius:50%;filter:blur(110px);pointer-events:none;z-index:0;animation:drift 18s ease-in-out infinite alternate;opacity:.2}
+.o1{width:700px;height:700px;background:#00C9A7;top:-20%;left:-15%}
+.o2{width:500px;height:500px;background:#6366F1;bottom:-15%;right:-10%;animation-delay:-9s}
+.o3{width:380px;height:380px;background:#0EA5E9;top:30%;right:15%;opacity:.1;animation-delay:-5s}
+@keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(30px,-40px)}}
+
+/* HEADER */
+.hdr{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:rgba(4,8,15,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 36px;gap:24px}
+.hdr-brand{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0}
+.hdr-ico{width:36px;height:36px;border-radius:10px;background:rgba(0,201,167,.1);border:1px solid rgba(0,201,167,.2);display:flex;align-items:center;justify-content:center;font-size:18px}
+.hdr-name{font-size:15px;font-weight:800}
+.hdr-sub{font-size:9px;color:var(--text3);font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.hdr-tabs{display:flex;gap:2px;flex:1;justify-content:center}
+.tab{height:34px;padding:0 16px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;border:none;background:transparent;color:var(--text3);transition:all var(--tr);font-family:'Noto Sans',sans-serif;display:flex;align-items:center;gap:5px}
+.tab:hover{color:var(--text2);background:rgba(255,255,255,.05)}
+.tab.on{background:rgba(0,201,167,.09);border:1px solid rgba(0,201,167,.2);color:var(--c1)}
+.hdr-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.hbtn{height:32px;padding:0 14px;border-radius:9px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Noto Sans',sans-serif;border:1px solid var(--bdr2);background:transparent;color:var(--text2);transition:all var(--tr)}
+.hbtn:hover{border-color:var(--c1);color:var(--c1)}
+.hbtn-pro{background:linear-gradient(135deg,#C9A84C,#F59E0B);border:none;color:#fff}
+.hbtn-login{border-color:var(--c1);color:var(--c1)}
+.atab{background:transparent;color:var(--text3)}.atab.on{background:var(--bg);color:var(--c1)}
+.rbtn{height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--bdr);background:var(--bg2);color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;font-family:'Noto Sans',sans-serif;transition:all .2s}
+.rbtn.on{border-color:var(--c1);background:rgba(0,201,167,.1);color:var(--c1)}
+.quota-pill{display:flex;align-items:center;gap:7px;padding:0 12px;height:32px;border-radius:9px;border:1px solid var(--bdr);font-size:11px;color:var(--text3)}
+.qbar{width:52px;height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.qfill{height:100%;border-radius:2px;background:var(--c1)}
+
+/* MAIN */
+.main{padding-top:58px;min-height:100vh;position:relative;z-index:1}
+.pg{display:none}.pg.on{display:block}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 36px}
+
+/* STUDIO HERO */
+.hero{padding:54px 0 38px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:5px 16px;border-radius:20px;background:rgba(0,201,167,.07);border:1px solid rgba(0,201,167,.18);font-size:11px;font-weight:700;color:var(--c1);margin-bottom:22px;letter-spacing:.05em}
+.hb-dot{width:6px;height:6px;border-radius:50%;background:var(--c1);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero-t{font-size:clamp(34px,4.8vw,60px);font-weight:900;line-height:1.07;margin-bottom:16px}
+.gr{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-s{font-size:15px;color:var(--text2);line-height:1.75;max-width:580px;margin:0 auto}
+
+/* INPUT CARD */
+.input-card{background:rgba(255,255,255,.025);border:1px solid rgba(0,201,167,.16);border-radius:22px;padding:30px 34px;margin-bottom:24px;position:relative;overflow:hidden}
+.input-card::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad)}
+.ic-grid{display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start}
+.ic-lbl{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.ic-lbl::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--c1);display:inline-block}
+.pta{width:100%;min-height:120px;padding:14px 16px;border-radius:13px;border:1px solid var(--bdr2);background:rgba(255,255,255,.04);color:var(--text);font-size:14px;line-height:1.7;font-family:'Noto Sans',sans-serif;resize:none;outline:none;transition:border-color var(--tr)}
+.pta:focus{border-color:rgba(0,201,167,.38);background:rgba(0,201,167,.025)}
+.pta::placeholder{color:var(--text3)}
+.pt-tools{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.pt{height:30px;padding:0 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--bdr);background:rgba(255,255,255,.03);color:var(--text3);transition:all var(--tr);font-family:'Noto Sans',sans-serif}
+.pt:hover,.pt.on{border-color:var(--c1);background:rgba(0,201,167,.07);color:var(--c1)}
+
+/* RIGHT PANEL */
+.rp{display:flex;flex-direction:column;gap:14px}
+.rp-lbl{font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.09em;text-transform:uppercase;margin-bottom:7px}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
+.sc{border-radius:10px;border:1px solid var(--bdr);background:var(--sur);cursor:pointer;transition:all var(--tr);overflow:hidden}
+.sc:hover{border-color:var(--bdr2)}
+.sc.on{border-color:rgba(0,201,167,.38);background:rgba(0,201,167,.06)}
+.sc-img{height:50px;display:flex;align-items:center;justify-content:center;font-size:22px;position:relative}
+.sc-ck{position:absolute;top:4px;right:4px;width:14px;height:14px;border-radius:50%;background:var(--c1);font-size:8px;display:none;align-items:center;justify-content:center;color:#fff;font-weight:800}
+.sc.on .sc-ck{display:flex}
+.sc-lbl{font-size:10px;font-weight:600;text-align:center;padding:5px 0;color:var(--text3)}
+.sc.on .sc-lbl{color:var(--c1)}
+.gbtn{width:100%;height:50px;border-radius:13px;background:var(--grad);border:none;color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:'Noto Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity var(--tr);letter-spacing:.02em}
+.gbtn:hover{opacity:.87}
+
+/* CANVAS */
+.canvas{background:rgba(255,255,255,.02);border:1px solid var(--bdr);border-radius:22px;overflow:hidden;margin-bottom:24px;min-height:480px;display:flex;flex-direction:column}
+.cv-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:70px 24px;text-align:center;gap:14px}
+.cv-empty-ico{font-size:54px;opacity:.35}
+.cv-empty-t{font-size:19px;font-weight:700;color:var(--text2)}
+.cv-empty-s{font-size:13px;color:var(--text3);line-height:1.65;max-width:420px}
+.cv-loading{display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:60px}
+.cv-loading.on{display:flex}
+.ld-bar{width:340px;height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;position:relative}
+.ld-bar::after{content:"";position:absolute;top:0;left:-60%;width:48%;height:100%;background:var(--grad);border-radius:2px;animation:lda 1.5s ease infinite}
+@keyframes lda{0%{left:-60%}100%{left:110%}}
+.ld-steps{display:flex;flex-direction:column;gap:9px;width:340px}
+.ld-d{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--text3)}
+.ld-d.done{color:var(--c1)}.ld-d.active{color:var(--text2)}
+.ld-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.ld-d.active .ld-dot{animation:pulse 1s infinite}
+
+/* RESULTS */
+.cv-result{display:none}.cv-result.on{display:block}
+.rtabs{display:flex;gap:6px;padding:16px 22px;border-bottom:1px solid var(--bdr);flex-wrap:wrap}
+.rt{height:30px;padding:0 14px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--bdr);background:transparent;color:var(--text3);transition:all var(--tr);font-family:'Noto Sans',sans-serif}
+.rt:hover{border-color:var(--bdr2);color:var(--text2)}
+.rt.on{border-color:rgba(0,201,167,.3);background:rgba(0,201,167,.07);color:var(--c1)}
+.rarea{padding:22px}
+.r4g{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rcard{border-radius:14px;border:2px solid transparent;overflow:hidden;cursor:pointer;transition:all .24s}
+.rcard:hover{transform:translateY(-3px);box-shadow:0 14px 42px rgba(0,0,0,.38)}
+.rcard.sel{border-color:var(--c1)}
+.rframe{height:210px;display:flex;align-items:center;justify-content:center;font-size:48px;opacity:.8}
+.rinfo{padding:13px 16px;background:var(--bg2);display:flex;align-items:center;justify-content:space-between}
+.rname{font-size:12px;font-weight:700}
+.racts{display:flex;gap:6px}
+.cbtn{height:26px;padding:0 10px;border-radius:7px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid var(--bdr2);background:transparent;color:var(--text2);transition:all var(--tr);font-family:'Noto Sans',sans-serif}
+.cbtn:hover{border-color:var(--c1);color:var(--c1)}
+.rsg{display:none}.rsg.on{display:block}
+.rsf{height:400px;display:flex;align-items:center;justify-content:center;font-size:64px;border-radius:16px;margin-bottom:18px;opacity:.85}
+.rsacts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:6px}
+.rsa{height:42px;padding:0 22px;border-radius:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Noto Sans',sans-serif;display:flex;align-items:center;gap:7px;transition:opacity var(--tr);border:none}
+.rsa-p{background:var(--grad);color:#fff}.rsa-p:hover{opacity:.85}
+.rsa-s{background:transparent;border:1px solid var(--bdr2);color:var(--text2)}.rsa-s:hover{border-color:var(--c1);color:var(--c1)}
+
+/* BOQ PANEL */
+.boq-panel{display:none}.boq-panel.on{display:block}
+.bwrap{background:rgba(255,255,255,.02);border:1px solid var(--bdr);border-radius:22px;overflow:hidden;margin-bottom:24px}
+.bhdr{padding:18px 26px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px;flex-wrap:wrap;gap:8px}
+.btitle{font-size:15px;font-weight:800;flex-shrink:0}
+.bbody{padding:22px 26px}
+.btbl{width:100%;border-collapse:collapse;font-size:13px}
+.btbl th{text-align:left;padding:8px 12px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--bdr);font-weight:700}
+.btbl td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.04)}
+.btbl tr:last-child td{border-bottom:none}
+.btbl tr:hover td{background:rgba(255,255,255,.025)}
+.bcat td{padding:6px 12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);background:rgba(255,255,255,.02)}
+.bfoot{display:flex;justify-content:space-between;align-items:center;padding:18px 26px;border-top:1px solid var(--bdr);background:rgba(0,201,167,.03)}
+.bsum{font-size:11px;color:var(--text3)}
+.bsum strong{font-size:22px;color:var(--c1);font-family:'Noto Sans Mono',monospace;font-weight:800;display:block;margin-top:2px}
+
+/* FEATURES */
+.fg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
+.fc{background:var(--sur);border:1px solid var(--bdr);border-radius:18px;padding:28px;cursor:pointer;transition:all .24s;position:relative;overflow:hidden}
+.fc:hover{transform:translateY(-4px);border-color:var(--bdr2);background:rgba(255,255,255,.05)}
+.fc::before{content:"";position:absolute;top:0;left:0;right:0;height:2px}
+.c1::before{background:linear-gradient(90deg,#00C9A7,#0EA5E9)}
+.c2::before{background:linear-gradient(90deg,#0EA5E9,#6366F1)}
+.c3::before{background:linear-gradient(90deg,#6366F1,#A855F7)}
+.c4::before{background:linear-gradient(90deg,#A855F7,#C9A84C)}
+.c5::before{background:linear-gradient(90deg,#22C55E,#00C9A7)}
+.c6::before{background:linear-gradient(90deg,#F59E0B,#EF4444)}
+.fc-ico{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:18px}
+.fc-name{font-size:17px;font-weight:800;margin-bottom:8px}
+.fc-desc{font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:16px}
+.fc-tags{display:flex;gap:5px;flex-wrap:wrap}
+.fc-tag{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:700;border:1px solid}
+
+/* HISTORY */
+.hg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px}
+.hc{background:var(--sur);border:1px solid var(--bdr);border-radius:16px;overflow:hidden;cursor:pointer;transition:all .24s}
+.hc:hover{transform:translateY(-3px);border-color:var(--bdr2)}
+.hcimg{height:166px;display:flex;align-items:center;justify-content:center;font-size:44px;opacity:.75}
+.hcinfo{padding:14px 16px}
+.hcname{font-size:14px;font-weight:700;margin-bottom:4px}
+.hcmeta{font-size:11px;color:var(--text3)}
+.hcacts{padding:12px 16px;border-top:1px solid var(--bdr);display:flex;gap:7px}
+
+/* BOQ PAGE */
+.bpg{display:flex;flex-direction:column;gap:13px;margin-top:28px}
+.be{background:var(--sur);border:1px solid var(--bdr);border-radius:16px;overflow:hidden}
+.beh{padding:16px 22px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--bdr)}
+.bet{font-size:14px;font-weight:700;flex:1;min-width:200px}
+.beb{padding:16px 22px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+/* PRICING */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin:38px 0 56px}
+.plan{background:var(--sur);border:1px solid var(--bdr);border-radius:22px;padding:34px;position:relative;transition:all .24s}
+.plan:hover{transform:translateY(-4px)}
+.plan.pop{border-color:rgba(0,201,167,.28);background:rgba(0,201,167,.04)}
+.pbadge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:4px 16px;border-radius:20px;background:var(--grad);font-size:11px;font-weight:800;color:#fff}
+.pname{font-size:22px;font-weight:900;margin-bottom:8px}
+.pprice{font-size:38px;font-weight:800;font-family:'Noto Sans Mono',monospace;line-height:1;margin-bottom:4px;color:var(--c1)}
+.psub{font-size:12px;color:var(--text3);margin-bottom:26px}
+.pfeat{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:28px}
+.pfeat li{font-size:13px;color:var(--text2);display:flex;gap:9px;align-items:flex-start}
+.pfeat li::before{content:"✓";color:var(--c1);font-weight:700;flex-shrink:0;margin-top:1px}
+.pfeat li.no::before{content:"—";color:var(--text3)}
+.pfeat li.no{color:var(--text3)}
+.pbtn{width:100%;height:46px;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans',sans-serif;border:1px solid var(--bdr2);background:transparent;color:var(--text2);transition:all var(--tr)}
+.pbtn:hover{border-color:var(--c1);color:var(--c1)}
+.plan.pop .pbtn{background:var(--grad);border:none;color:#fff}
+
+/* PAGE HEADER */
+.phdr{padding:46px 0 30px;border-bottom:1px solid var(--bdr);margin-bottom:0}
+.phdr-t{font-size:28px;font-weight:900;margin-bottom:6px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.phdr-s{font-size:14px;color:var(--text2)}
+
+/* PILLS */
+.pill{display:inline-flex;align-items:center;padding:2px 9px;border-radius:7px;font-size:10px;font-weight:700;border:1px solid}
+.p-t{background:rgba(0,201,167,.08);border-color:rgba(0,201,167,.2);color:var(--c1)}
+.p-g{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:var(--green)}
+.p-or{background:rgba(251,146,60,.08);border-color:rgba(251,146,60,.2);color:var(--amb)}
+.p-gold{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.2);color:var(--gold)}
+.p-b{background:rgba(14,165,233,.08);border-color:rgba(14,165,233,.2);color:var(--c2)}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(4,8,15,.97);border:1px solid rgba(0,201,167,.25);border-radius:12px;padding:10px 22px;font-size:12px;font-weight:600;color:var(--c1);z-index:9999;pointer-events:none;transition:transform .3s cubic-bezier(.34,1.2,.64,1);white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="orb o1"></div>
+<div class="orb o2"></div>
+<div class="orb o3"></div>
+
+<header class="hdr">
+  <div class="hdr-brand" onclick="goBack()">
+    <div class="hdr-ico">🎨</div>
+    <div><div class="hdr-name">NexDesign AI</div><div class="hdr-sub">NEXBUILD ECOSYSTEM</div></div>
+  </div>
+  <div class="hdr-tabs">
+    <button class="tab on" onclick="setPage('studio',this)">✨ AI Studio</button>
+    <button class="tab" onclick="setPage('features',this)">⚡ Tính năng</button>
+    <button class="tab" onclick="setPage('boq-saved',this)">📋 BOQ đã lưu</button>
+    <button class="tab" onclick="setPage('history',this)">🗂️ Lịch sử</button>
+    <button class="tab" onclick="setPage('pricing',this)">👑 Bảng giá</button>
+  </div>
+  <div class="hdr-right">
+    <div class="quota-pill">
+      <span>3 renders</span>
+      <div class="qbar"><div class="qfill" style="width:100%"></div></div>
+      <span style="color:var(--c1);font-weight:700">Free</span>
+    </div>
+    <button class="hbtn hbtn-pro" onclick="setPage('pricing',document.querySelectorAll('.tab')[4])">👑 Nâng cấp Pro</button>
+    <button class="hbtn" onclick="goBack()">← Về Hub</button>
+    <button class="hbtn hbtn-login" id="authBtn" onclick="openAuthModal()">🔐 Đăng nhập</button>
+    <div id="userInfo" style="display:none;align-items:center;gap:8px">
+      <div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--c1),var(--c2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700" id="userAvatar">U</div>
+      <span style="font-size:11px;font-weight:600" id="userName"></span>
+      <button class="hbtn" style="font-size:10px;padding:0 8px;height:26px" onclick="doLogout()">Thoát</button>
+    </div>
+  </div>
+</header>
+
+<!-- AUTH MODAL -->
+<div id="authModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);align-items:center;justify-content:center">
+  <div style="width:420px;max-width:92vw;background:var(--bg1);border:1px solid var(--bdr2);border-radius:18px;padding:32px;position:relative">
+    <button onclick="closeAuthModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer">&times;</button>
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-size:24px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent">NexDesign AI</div>
+      <p style="color:var(--text3);font-size:12px;margin-top:4px">Đăng nhập để lưu thiết kế & sử dụng AI</p>
+    </div>
+    <div style="display:flex;gap:2px;margin-bottom:20px;background:var(--bg2);border-radius:9px;padding:3px" id="authTabs">
+      <button class="atab on" id="tabLogin" onclick="switchAuthTab('login')" style="flex:1;height:34px;border-radius:7px;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:'Noto Sans',sans-serif;transition:all .2s">Đăng nhập</button>
+      <button class="atab" id="tabReg" onclick="switchAuthTab('register')" style="flex:1;height:34px;border-radius:7px;border:none;font-size:12px;font-weight:600;cursor:pointer;font-family:'Noto Sans',sans-serif;transition:all .2s">Đăng ký</button>
+    </div>
+    <!-- LOGIN -->
+    <div id="loginForm">
+      <label style="font-size:11px;color:var(--text2);font-weight:600;display:block;margin-bottom:4px">Email hoặc SĐT</label>
+      <input id="authEmail" type="text" placeholder="email@domain.com hoặc 09xx" style="width:100%;height:42px;background:var(--bg2);border:1px solid var(--bdr);border-radius:9px;padding:0 14px;color:var(--text);font-size:13px;font-family:'Noto Sans',sans-serif;margin-bottom:12px;outline:none">
+      <label style="font-size:11px;color:var(--text2);font-weight:600;display:block;margin-bottom:4px">Mật khẩu</label>
+      <input id="authPass" type="password" placeholder="••••••••" style="width:100%;height:42px;background:var(--bg2);border:1px solid var(--bdr);border-radius:9px;padding:0 14px;color:var(--text);font-size:13px;font-family:'Noto Sans',sans-serif;margin-bottom:6px;outline:none">
+      <div style="text-align:right;margin-bottom:16px"><a href="#" style="font-size:11px;color:var(--c1);text-decoration:none" onclick="toast('Link đặt lại mật khẩu đã gửi qua email')">Quên mật khẩu?</a></div>
+      <button onclick="doLogin()" style="width:100%;height:44px;border-radius:9px;border:none;background:var(--grad);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans',sans-serif;margin-bottom:16px">Đăng nhập</button>
+      <div style="display:flex;gap:8px">
+        <button onclick="toast('Tích hợp Google OAuth Q3/2025')" style="flex:1;height:38px;border-radius:9px;border:1px solid var(--bdr);background:var(--bg2);color:var(--text2);font-size:11px;cursor:pointer;font-family:'Noto Sans',sans-serif">Google</button>
+        <button onclick="toast('Tích hợp Zalo Q3/2025')" style="flex:1;height:38px;border-radius:9px;border:1px solid var(--bdr);background:var(--bg2);color:var(--text2);font-size:11px;cursor:pointer;font-family:'Noto Sans',sans-serif">Zalo</button>
+      </div>
+    </div>
+    <!-- REGISTER -->
+    <div id="regForm" style="display:none">
+      <label style="font-size:11px;color:var(--text2);font-weight:600;display:block;margin-bottom:4px">Họ và tên</label>
+      <input id="regName" type="text" placeholder="Nguyễn Văn A" style="width:100%;height:42px;background:var(--bg2);border:1px solid var(--bdr);border-radius:9px;padding:0 14px;color:var(--text);font-size:13px;font-family:'Noto Sans',sans-serif;margin-bottom:12px;outline:none">
+      <label style="font-size:11px;color:var(--text2);font-weight:600;display:block;margin-bottom:4px">Email</label>
+      <input id="regEmail" type="email" placeholder="email@domain.com" style="width:100%;height:42px;background:var(--bg2);border:1px solid var(--bdr);border-radius:9px;padding:0 14px;color:var(--text);font-size:13px;font-family:'Noto Sans',sans-serif;margin-bottom:12px;outline:none">
+      <label style="font-size:11px;color:var(--text2);font-weight:600;display:block;margin-bottom:4px">Số điện thoại</label>
+      <input id="regPhone" type="text" placeholder="09xx xxx xxx" style="width:100%;height:42px;background:var(--bg2);border:1px solid var(--bdr);border-radius:9px;padding:0 14px;color:var(--text);font-size:13px;font-family:'Noto Sans',sans-serif;margin-bottom:12px;outline:none">
+      <label style="font-size:11px;color:var(--text2);font-weight:600;display:block;margin-bottom:4px">Vai trò</label>
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap" id="roleSelect">
+        <button class="rbtn on" data-role="buyer" onclick="selAuthRole(this)">Chủ nhà / CĐT</button>
+        <button class="rbtn" data-role="worker" onclick="selAuthRole(this)">Thợ kỹ thuật</button>
+        <button class="rbtn" data-role="contractor" onclick="selAuthRole(this)">Nhà thầu</button>
+        <button class="rbtn" data-role="supplier" onclick="selAuthRole(this)">Nhà cung cấp</button>
+      </div>
+      <label style="font-size:11px;color:var(--text2);font-weight:600;display:block;margin-bottom:4px">Mật khẩu</label>
+      <input id="regPass" type="password" placeholder="Tối thiểu 8 ký tự" style="width:100%;height:42px;background:var(--bg2);border:1px solid var(--bdr);border-radius:9px;padding:0 14px;color:var(--text);font-size:13px;font-family:'Noto Sans',sans-serif;margin-bottom:16px;outline:none">
+      <button onclick="doRegister()" style="width:100%;height:44px;border-radius:9px;border:none;background:var(--grad);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans',sans-serif">Tạo tài khoản miễn phí →</button>
+    </div>
+    <p style="text-align:center;font-size:10px;color:var(--text3);margin-top:16px">Bằng việc đăng ký, bạn đồng ý với <a href="#" style="color:var(--c1);text-decoration:none">Điều khoản</a> & <a href="#" style="color:var(--c1);text-decoration:none">Chính sách bảo mật</a></p>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ══ STUDIO ══ -->
+<div class="pg on" id="pg-studio">
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-badge"><div class="hb-dot"></div>AI v2.4 · Đang hoạt động</div>
+    <h1 class="hero-t">Thiết kế không gian bằng<br><span class="gr">ngôn ngữ tự nhiên</span></h1>
+    <p class="hero-s">Mô tả phòng bạn muốn — AI tạo ra 4 phương án hoàn chỉnh, BOQ tự động và link mua vật liệu ngay từ NexMarket.</p>
+  </div>
+
+  <div class="input-card">
+    <div class="ic-grid">
+      <div>
+        <div class="ic-lbl">Mô tả không gian của bạn</div>
+        <textarea class="pta" id="promptTxt" placeholder="VD: Phòng khách 30m² phong cách Scandinavian, tông màu trắng be và gỗ sáng, sofa góc xám nhạt, thảm len tròn, kệ sách gỗ walnut, cây monstera lớn, ánh sáng vàng ấm từ đèn Edison...&#10;&#10;Mô tả càng chi tiết, kết quả càng chính xác và sát với ý tưởng của bạn."></textarea>
+        <div class="pt-tools">
+          <button class="pt on" id="btnBoq" onclick="this.classList.toggle('on')">📋 BOQ tự động</button>
+          <button class="pt on" id="btnShop" onclick="this.classList.toggle('on')">🛍️ Link mua hàng</button>
+          <button class="pt" onclick="toggleVoice()">🎙️ Nói thay gõ</button>
+          <button class="pt" onclick="toast('📸 Upload ảnh phòng hiện tại để AI cải thiện')">📸 Upload ảnh</button>
+          <button class="pt" onclick="toast('📐 BIM — Tính năng Pro. Nâng cấp để sử dụng')">📐 BIM (Pro)</button>
+          <button class="pt" onclick="toast('🔄 Tạo thêm phương án với style khác')">🔄 Thêm phương án</button>
+        </div>
+      </div>
+      <div class="rp">
+        <div>
+          <div class="rp-lbl">Phong cách thiết kế</div>
+          <div class="sg">
+            <div class="sc on" onclick="selStyle(this)"><div class="sc-img" style="background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(14,165,233,.06))">🏠<div class="sc-ck">✓</div></div><div class="sc-lbl">Hiện đại</div></div>
+            <div class="sc" onclick="selStyle(this)"><div class="sc-img" style="background:linear-gradient(135deg,rgba(245,158,11,.07),rgba(201,168,76,.04))">🛋️<div class="sc-ck">✓</div></div><div class="sc-lbl">Scandinavian</div></div>
+            <div class="sc" onclick="selStyle(this)"><div class="sc-img" style="background:linear-gradient(135deg,rgba(168,85,247,.07),rgba(99,102,241,.04))">🎋<div class="sc-ck">✓</div></div><div class="sc-lbl">Japandi</div></div>
+            <div class="sc" onclick="selStyle(this)"><div class="sc-img" style="background:linear-gradient(135deg,rgba(251,146,60,.07),rgba(239,68,68,.04))">🔩<div class="sc-ck">✓</div></div><div class="sc-lbl">Industrial</div></div>
+            <div class="sc" onclick="selStyle(this)"><div class="sc-img" style="background:linear-gradient(135deg,rgba(201,168,76,.07),rgba(245,158,11,.04))">🏺<div class="sc-ck">✓</div></div><div class="sc-lbl">Mediterranean</div></div>
+            <div class="sc" onclick="selStyle(this)"><div class="sc-img" style="background:linear-gradient(135deg,rgba(34,197,94,.07),rgba(0,201,167,.04))">🌿<div class="sc-ck">✓</div></div><div class="sc-lbl">Biophilic</div></div>
+          </div>
+        </div>
+        <button class="gbtn" onclick="startGenerate()">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1L9.4 5.8L14.5 7.5L9.4 9.2L7.5 14L5.6 9.2L0.5 7.5L5.6 5.8L7.5 1Z" fill="white"/></svg>
+          Tạo thiết kế AI
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="canvas">
+    <div class="cv-empty" id="cvEmpty">
+      <div class="cv-empty-ico">🎨</div>
+      <div class="cv-empty-t">Mô tả không gian và nhấn "Tạo thiết kế AI"</div>
+      <div class="cv-empty-s">AI sẽ sinh ra 4 phương án thiết kế hoàn chỉnh với BOQ tự động và danh sách vật liệu có thể mua ngay từ NexMarket</div>
+    </div>
+    <div class="cv-loading" id="cvLoading">
+      <div style="text-align:center">
+        <div style="font-size:16px;font-weight:700;color:var(--text2);margin-bottom:5px">AI đang phân tích &amp; tạo thiết kế...</div>
+        <div style="font-size:12px;color:var(--text3)">Thường mất 15–30 giây</div>
+      </div>
+      <div class="ld-bar"></div>
+      <div class="ld-steps">
+        <div class="ld-d done" id="ld1"><div class="ld-dot"></div>Phân tích mô tả &amp; phong cách</div>
+        <div class="ld-d active" id="ld2"><div class="ld-dot"></div>Tạo bố cục không gian 3D</div>
+        <div class="ld-d" id="ld3"><div class="ld-dot"></div>Render 4 phương án màu &amp; vật liệu</div>
+        <div class="ld-d" id="ld4"><div class="ld-dot"></div>Tính toán BOQ &amp; chi phí ước tính</div>
+        <div class="ld-d" id="ld5"><div class="ld-dot"></div>Match sản phẩm từ NexMarket</div>
+      </div>
+    </div>
+    <div class="cv-result" id="cvResult">
+      <div class="rtabs">
+        <button class="rt on" onclick="showGrid();setRT(this)">⊞ 4 phương án</button>
+        <button class="rt" onclick="showSingle(0);setRT(this)">A — Hiện đại</button>
+        <button class="rt" onclick="showSingle(1);setRT(this)">B — Scandinavian</button>
+        <button class="rt" onclick="showSingle(2);setRT(this)">C — Japandi</button>
+        <button class="rt" onclick="showSingle(3);setRT(this)">D — Industrial</button>
+      </div>
+      <div class="rarea">
+        <div class="r4g" id="renderGrid">
+          <div class="rcard sel" onclick="showSingle(0)">
+            <div class="rframe" style="background:linear-gradient(135deg,#0a1e2e,#0d2a40,#082a20)">🏠</div>
+            <div class="rinfo"><span class="rname">A — Hiện đại</span><div class="racts"><button class="cbtn" onclick="event.stopPropagation();toast('⬇ Tải A — Hiện đại')">⬇</button><button class="cbtn" onclick="event.stopPropagation();showBOQ()">📋 BOQ</button><button class="cbtn" style="color:var(--gold)" onclick="event.stopPropagation();toast('🛒 Mua vật liệu phương án A')">🛒</button></div></div>
+          </div>
+          <div class="rcard" onclick="showSingle(1)">
+            <div class="rframe" style="background:linear-gradient(135deg,#1a1505,#2a2008,#181008)">🛋️</div>
+            <div class="rinfo"><span class="rname">B — Scandinavian</span><div class="racts"><button class="cbtn" onclick="event.stopPropagation();toast('⬇ Tải B — Scandinavian')">⬇</button><button class="cbtn" onclick="event.stopPropagation();showBOQ()">📋 BOQ</button><button class="cbtn" style="color:var(--gold)" onclick="event.stopPropagation();toast('🛒 Mua vật liệu B')">🛒</button></div></div>
+          </div>
+          <div class="rcard" onclick="showSingle(2)">
+            <div class="rframe" style="background:linear-gradient(135deg,#0a0a1a,#101028,#050518)">🎋</div>
+            <div class="rinfo"><span class="rname">C — Japandi</span><div class="racts"><button class="cbtn" onclick="event.stopPropagation();toast('⬇ Tải C — Japandi')">⬇</button><button class="cbtn" onclick="event.stopPropagation();showBOQ()">📋 BOQ</button><button class="cbtn" style="color:var(--gold)" onclick="event.stopPropagation();toast('🛒 Mua vật liệu C')">🛒</button></div></div>
+          </div>
+          <div class="rcard" onclick="showSingle(3)">
+            <div class="rframe" style="background:linear-gradient(135deg,#1a0f04,#281804,#180c04)">🔩</div>
+            <div class="rinfo"><span class="rname">D — Industrial</span><div class="racts"><button class="cbtn" onclick="event.stopPropagation();toast('⬇ Tải D — Industrial')">⬇</button><button class="cbtn" onclick="event.stopPropagation();showBOQ()">📋 BOQ</button><button class="cbtn" style="color:var(--gold)" onclick="event.stopPropagation();toast('🛒 Mua vật liệu D')">🛒</button></div></div>
+          </div>
+        </div>
+        <div class="rsg" id="rs0"><div class="rsf" style="background:linear-gradient(135deg,#0a1e2e,#0d2a40,#082a20)">🏠</div><div style="text-align:center;margin-bottom:16px"><div style="font-size:17px;font-weight:800;margin-bottom:5px">Phương án A — Hiện đại tối giản</div><div style="font-size:13px;color:var(--text3)">Tông trắng · Gỗ nhẹ · Ánh sáng tự nhiên · Sofa modular xám</div></div><div class="rsacts"><button class="rsa rsa-p" onclick="toast('⬇ Đang tải thiết kế HD...')">⬇ Tải thiết kế HD</button><button class="rsa rsa-s" onclick="showBOQ()">📋 Xem BOQ</button><button class="rsa rsa-s" onclick="toast('🛒 Mở NexMarket — vật liệu phương án A')">🛒 Mua vật liệu</button><button class="rsa rsa-s" onclick="toast('↗ Chia sẻ link phương án A')">↗ Chia sẻ</button></div></div>
+        <div class="rsg" id="rs1"><div class="rsf" style="background:linear-gradient(135deg,#1a1505,#2a2008,#181008)">🛋️</div><div style="text-align:center;margin-bottom:16px"><div style="font-size:17px;font-weight:800;margin-bottom:5px">Phương án B — Scandinavian</div><div style="font-size:13px;color:var(--text3)">Gỗ pine tự nhiên · Vải linen · Cây xanh · Thảm len Beni Ourain</div></div><div class="rsacts"><button class="rsa rsa-p" onclick="toast('⬇ Đang tải thiết kế HD...')">⬇ Tải thiết kế HD</button><button class="rsa rsa-s" onclick="showBOQ()">📋 Xem BOQ</button><button class="rsa rsa-s" onclick="toast('🛒 Mở NexMarket — vật liệu phương án B')">🛒 Mua vật liệu</button><button class="rsa rsa-s" onclick="toast('↗ Chia sẻ')">↗ Chia sẻ</button></div></div>
+        <div class="rsg" id="rs2"><div class="rsf" style="background:linear-gradient(135deg,#0a0a1a,#101028,#050518)">🎋</div><div style="text-align:center;margin-bottom:16px"><div style="font-size:17px;font-weight:800;margin-bottom:5px">Phương án C — Japandi</div><div style="font-size:13px;color:var(--text3)">Wabi-sabi · Gỗ tối · Đất nung · Khoảng trống thiền định</div></div><div class="rsacts"><button class="rsa rsa-p" onclick="toast('⬇ Đang tải thiết kế HD...')">⬇ Tải thiết kế HD</button><button class="rsa rsa-s" onclick="showBOQ()">📋 Xem BOQ</button><button class="rsa rsa-s" onclick="toast('🛒 Mở NexMarket — Japandi materials')">🛒 Mua vật liệu</button><button class="rsa rsa-s" onclick="toast('↗ Chia sẻ')">↗ Chia sẻ</button></div></div>
+        <div class="rsg" id="rs3"><div class="rsf" style="background:linear-gradient(135deg,#1a0f04,#281804,#180c04)">🔩</div><div style="text-align:center;margin-bottom:16px"><div style="font-size:17px;font-weight:800;margin-bottom:5px">Phương án D — Industrial</div><div style="font-size:13px;color:var(--text3)">Bê tông · Thép · Da nâu · Đèn Edison · Exposed brick</div></div><div class="rsacts"><button class="rsa rsa-p" onclick="toast('⬇ Đang tải thiết kế HD...')">⬇ Tải thiết kế HD</button><button class="rsa rsa-s" onclick="showBOQ()">📋 Xem BOQ</button><button class="rsa rsa-s" onclick="toast('🛒 Mở NexMarket — Industrial materials')">🛒 Mua vật liệu</button><button class="rsa rsa-s" onclick="toast('↗ Chia sẻ')">↗ Chia sẻ</button></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="boq-panel" id="boqPanel">
+    <div class="bwrap">
+      <div class="bhdr">
+        <div class="btitle">📋 BOQ tự động</div>
+        <span class="pill p-t">Phòng khách 30m²</span>
+        <span class="pill p-g">✓ AI generated</span>
+        <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap">
+          <button class="cbtn" onclick="toast('⬇ Tải BOQ Excel')">⬇ Excel</button>
+          <button class="cbtn" onclick="toast('⬇ Tải BOQ PDF')">⬇ PDF</button>
+          <button class="cbtn" style="color:var(--gold)" onclick="toast('🛒 Thêm tất cả vào giỏ NexMarket')">🛒 Mua tất cả</button>
+          <button class="cbtn" onclick="document.getElementById('boqPanel').classList.remove('on')">✕ Đóng</button>
+        </div>
+      </div>
+      <div class="bbody">
+        <table class="btbl">
+          <thead><tr><th>Hạng mục</th><th>Sản phẩm</th><th>ĐVT</th><th>SL</th><th>Đơn giá</th><th>Thành tiền</th><th>Mua ngay</th></tr></thead>
+          <tbody>
+            <tr class="bcat"><td colspan="7">🪵 Sàn &amp; Tường</td></tr>
+            <tr><td>Sàn gỗ</td><td>Sàn gỗ công nghiệp An Cường 12mm</td><td>m²</td><td>30</td><td style="font-family:'Noto Sans Mono',monospace">285,000đ</td><td style="font-family:'Noto Sans Mono',monospace;color:var(--c1);font-weight:700">8,550,000đ</td><td><button class="cbtn" style="color:var(--gold)" onclick="toast('🛒 Xem sàn gỗ An Cường trên NexMarket')">Mua →</button></td></tr>
+            <tr><td>Sơn tường</td><td>Dulux Weathershield 5L · Trắng ngà</td><td>lon</td><td>4</td><td style="font-family:'Noto Sans Mono',monospace">485,000đ</td><td style="font-family:'Noto Sans Mono',monospace;color:var(--c1);font-weight:700">1,940,000đ</td><td><button class="cbtn" style="color:var(--gold)" onclick="toast('🛒 Xem sơn Dulux trên NexMarket')">Mua →</button></td></tr>
+            <tr class="bcat"><td colspan="7">💡 Ánh sáng &amp; Điện</td></tr>
+            <tr><td>Đèn trần</td><td>Philips LED Panel 18W · 4000K</td><td>bộ</td><td>4</td><td style="font-family:'Noto Sans Mono',monospace">285,000đ</td><td style="font-family:'Noto Sans Mono',monospace;color:var(--c1);font-weight:700">1,140,000đ</td><td><button class="cbtn" style="color:var(--gold)" onclick="toast('🛒 Xem đèn Philips')">Mua →</button></td></tr>
+            <tr><td>Ổ cắm</td><td>Schneider Electric Vivace · Đơn</td><td>cái</td><td>8</td><td style="font-family:'Noto Sans Mono',monospace">85,000đ</td><td style="font-family:'Noto Sans Mono',monospace;color:var(--c1);font-weight:700">680,000đ</td><td><button class="cbtn" style="color:var(--gold)" onclick="toast('🛒 Xem Schneider')">Mua →</button></td></tr>
+            <tr class="bcat"><td colspan="7">🪟 Cửa &amp; Kính</td></tr>
+            <tr><td>Cửa sổ</td><td>Kính cường lực Low-E 8mm</td><td>m²</td><td>6</td><td style="font-family:'Noto Sans Mono',monospace">520,000đ</td><td style="font-family:'Noto Sans Mono',monospace;color:var(--c1);font-weight:700">3,120,000đ</td><td><button class="cbtn" style="color:var(--gold)" onclick="toast('🛒 Xem kính')">Mua →</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="bfoot">
+        <div class="bsum">Tổng 5 hạng mục · VAT 10% included<br><strong>15,430,000đ</strong></div>
+        <button class="rsa rsa-p" onclick="toast('🛒 Thêm toàn bộ BOQ vào giỏ NexMarket — 15.43M')">🛒 Mua tất cả từ NexMarket</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ FEATURES ══ -->
+<div class="pg" id="pg-features">
+<div class="wrap">
+  <div class="hero" style="padding-bottom:32px">
+    <div class="hero-badge"><div class="hb-dot"></div>12 tính năng AI</div>
+    <h2 class="hero-t" style="font-size:clamp(28px,4vw,50px)">Mọi thứ bạn cần để<br><span class="gr">thiết kế &amp; thi công</span></h2>
+    <p class="hero-s">Từ ý tưởng đến công trình hoàn thiện — NexDesign AI xử lý cả quy trình</p>
+  </div>
+  <div class="fg">
+    <div class="fc c1" onclick="setPage('studio',document.querySelector('.tab'))"><div class="fc-ico" style="background:rgba(0,201,167,.1);border:1px solid rgba(0,201,167,.2)">✨</div><div class="fc-name">AI Design Studio</div><div class="fc-desc">Mô tả bằng tiếng Việt, AI tạo ra 4 phương án thiết kế 3D hoàn chỉnh trong 30 giây — không cần kỹ năng thiết kế.</div><div class="fc-tags"><span class="fc-tag p-t">Realtime</span><span class="fc-tag p-g">4 phương án</span></div></div>
+    <div class="fc c2"><div class="fc-ico" style="background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.2)">📋</div><div class="fc-name">BOQ Tự động</div><div class="fc-desc">AI phân tích thiết kế và tạo bảng dự toán vật liệu chính xác với giá thị trường realtime từ NexMarket D2C.</div><div class="fc-tags"><span class="fc-tag p-b">Auto-calc</span><span class="fc-tag p-g">Giá realtime</span></div></div>
+    <div class="fc c3"><div class="fc-ico" style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2)">🛍️</div><div class="fc-name">Shoppable Design</div><div class="fc-desc">Click vào bất kỳ vật liệu nào trong thiết kế để mua ngay trên NexMarket với giá tốt nhất từ NCC D2C trực tiếp.</div><div class="fc-tags"><span class="fc-tag" style="background:rgba(99,102,241,.08);border-color:rgba(99,102,241,.2);color:var(--ind)">1-click buy</span><span class="fc-tag p-t">NexMarket</span></div></div>
+    <div class="fc c4"><div class="fc-ico" style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2)">🎙️</div><div class="fc-name">Voice to Design</div><div class="fc-desc">Nói mô tả phòng bằng tiếng Việt tự nhiên, AI chuyển thành thiết kế ngay lập tức. Không cần gõ phím.</div><div class="fc-tags"><span class="fc-tag" style="background:rgba(168,85,247,.08);border-color:rgba(168,85,247,.2);color:var(--vio)">Tiếng Việt</span></div></div>
+    <div class="fc c5"><div class="fc-ico" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2)">📐</div><div class="fc-name">BIM Integration</div><div class="fc-desc">Upload file Revit, AutoCAD, SketchUp — AI phân tích và tối ưu không gian theo bản vẽ thực tế. Tính năng Pro.</div><div class="fc-tags"><span class="fc-tag p-gold">Pro only</span><span class="fc-tag p-g">Revit · CAD</span></div></div>
+    <div class="fc c6"><div class="fc-ico" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2)">🔄</div><div class="fc-name">Style Transfer</div><div class="fc-desc">Upload ảnh phòng hiện tại, chọn phong cách mới — AI giữ nguyên layout và thay đổi toàn bộ vật liệu nội thất.</div><div class="fc-tags"><span class="fc-tag p-or">Upload ảnh</span></div></div>
+  </div>
+  <div class="fg">
+    <div class="fc c2"><div class="fc-ico" style="background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.2)">🏗️</div><div class="fc-name">Construction BOQ</div><div class="fc-desc">BOQ kết cấu, hoàn thiện thô, MEP theo diện tích và tiêu chuẩn TCVN. Không chỉ nội thất — cả công trình.</div><div class="fc-tags"><span class="fc-tag p-b">TCVN</span><span class="fc-tag p-g">Kết cấu · MEP</span></div></div>
+    <div class="fc c3"><div class="fc-ico" style="background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2)">🤝</div><div class="fc-name">Kết nối Thợ &amp; Nhà thầu</div><div class="fc-desc">Từ BOQ, AI gợi ý thợ phù hợp từ NexTalent và nhà thầu từ NexBuild với kinh nghiệm tương ứng dự án.</div><div class="fc-tags"><span class="fc-tag p-t">NexTalent</span><span class="fc-tag" style="background:rgba(99,102,241,.08);border-color:rgba(99,102,241,.2);color:var(--ind)">AI match</span></div></div>
+    <div class="fc c4"><div class="fc-ico" style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2)">☁️</div><div class="fc-name">Cloud Workspace</div><div class="fc-desc">Lưu không giới hạn thiết kế và BOQ. Chia sẻ với khách hàng bằng link. Collab realtime với đội dự án.</div><div class="fc-tags"><span class="fc-tag p-g">Unlimited</span><span class="fc-tag p-b">Collab</span></div></div>
+    <div class="fc c5"><div class="fc-ico" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2)">🔗</div><div class="fc-name">NexERP Connect</div><div class="fc-desc">Xuất BOQ thẳng vào NexERP để theo dõi tiến độ, quản lý đơn hàng và tự động đối chiếu hóa đơn.</div><div class="fc-tags"><span class="fc-tag p-t">NexERP</span><span class="fc-tag p-g">Auto-sync</span></div></div>
+    <div class="fc c6"><div class="fc-ico" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2)">🌍</div><div class="fc-name">Multi-language AI</div><div class="fc-desc">Hỗ trợ Tiếng Việt, English, 中文, 日本語. AI hiểu ngữ cảnh văn hóa thiết kế địa phương cho từng thị trường.</div><div class="fc-tags"><span class="fc-tag p-or">4 ngôn ngữ</span></div></div>
+    <div class="fc c1"><div class="fc-ico" style="background:rgba(0,201,167,.1);border:1px solid rgba(0,201,167,.2)">🏅</div><div class="fc-name">NXToken Rewards</div><div class="fc-desc">Kiếm NXT Token mỗi khi hoàn thành dự án, review vật liệu hoặc chia sẻ thiết kế. Dùng để mở tính năng Pro.</div><div class="fc-tags"><span class="fc-tag p-gold">⬡ NXT Token</span><span class="fc-tag p-t">Earn &amp; spend</span></div></div>
+  </div>
+  <div style="padding-bottom:52px"></div>
+</div>
+</div>
+
+<!-- ══ BOQ SAVED ══ -->
+<div class="pg" id="pg-boq-saved">
+<div class="wrap">
+  <div class="phdr">
+    <div class="phdr-t">📋 BOQ đã lưu <span class="pill p-t">3 BOQ</span><div style="margin-left:auto"><button class="rsa rsa-p" style="height:38px;font-size:12px" onclick="setPage('studio',document.querySelector('.tab'))">+ Tạo BOQ mới</button></div></div>
+    <div class="phdr-s">Bảng dự toán vật liệu được AI tạo tự động — chỉnh sửa và xuất file bất kỳ lúc nào</div>
+  </div>
+  <div class="bpg">
+    <div class="be"><div class="beh"><div class="bet">🏠 Phòng khách hiện đại 30m²</div><span class="pill p-t">15,430,000đ</span><span class="pill p-g">✓ Completed</span><div style="margin-left:auto;font-size:11px;color:var(--text3)">15/01 · 5 hạng mục</div></div><div class="beb"><div style="font-size:13px;color:var(--text2);flex:1">Sàn gỗ An Cường · Sơn Dulux · Đèn Philips · Kính cường lực · Ổ cắm Schneider</div><div style="display:flex;gap:7px;flex-wrap:wrap"><button class="cbtn" onclick="toast('📋 Xem BOQ chi tiết')">Xem chi tiết</button><button class="cbtn" onclick="toast('✏️ Chỉnh sửa BOQ')">✏️ Sửa</button><button class="cbtn" onclick="toast('⬇ Tải Excel')">⬇ Excel</button><button class="cbtn" style="color:var(--gold)" onclick="toast('🛒 Mua tất cả từ NexMarket')">🛒 Mua ngay</button></div></div></div>
+    <div class="be"><div class="beh"><div class="bet">🛋️ Phòng ngủ Scandinavian 20m²</div><span class="pill p-t">28,650,000đ</span><span class="pill p-or">⚙ Draft</span><div style="margin-left:auto;font-size:11px;color:var(--text3)">10/01 · 8 hạng mục</div></div><div class="beb"><div style="font-size:13px;color:var(--text2);flex:1">Sàn vinyl · Sơn Benjamin Moore · Rèm linen · Đèn IKEA · Gạch WC Đồng Tâm</div><div style="display:flex;gap:7px;flex-wrap:wrap"><button class="cbtn" onclick="toast('📋 Xem BOQ')">Xem chi tiết</button><button class="cbtn" onclick="toast('✏️ Sửa')">✏️ Sửa</button><button class="cbtn" onclick="toast('⬇ Excel')">⬇ Excel</button><button class="cbtn" style="color:var(--gold)" onclick="toast('🛒 Mua')">🛒 Mua</button></div></div></div>
+    <div class="be"><div class="beh"><div class="bet">🏗️ Biệt thự hoàn thiện thô 200m²</div><span class="pill p-t">284,000,000đ</span><span class="pill p-g">✓ Approved</span><div style="margin-left:auto;font-size:11px;color:var(--text3)">05/01 · 24 hạng mục</div></div><div class="beb"><div style="font-size:13px;color:var(--text2);flex:1">Xi măng PCB40 · Thép CB240 · Gạch đặc · Cát vàng · Đá mi · Sơn Jotun...</div><div style="display:flex;gap:7px;flex-wrap:wrap"><button class="cbtn" onclick="toast('📋 Xem 24 hạng mục')">Xem chi tiết</button><button class="cbtn" onclick="toast('✏️ Sửa')">✏️ Sửa</button><button class="cbtn" onclick="toast('⬇ Excel')">⬇ Excel</button><button class="cbtn" style="color:var(--gold)" onclick="toast('🛒 B2B order từ NexSupply')">🛒 B2B order</button></div></div></div>
+  </div>
+</div>
+</div>
+
+<!-- ══ HISTORY ══ -->
+<div class="pg" id="pg-history">
+<div class="wrap">
+  <div class="phdr">
+    <div class="phdr-t">🗂️ Lịch sử thiết kế <span class="pill p-t">12 thiết kế</span><div style="margin-left:auto;display:flex;gap:8px"><button class="cbtn" onclick="toast('Mới nhất ▾')">Mới nhất ▾</button><button class="cbtn" onclick="toast('⬇ Xuất tất cả')">⬇ Xuất</button></div></div>
+    <div class="phdr-s">12 thiết kế đã tạo · Lưu trữ 90 ngày với tài khoản Free · <span style="color:var(--c1)">Nâng cấp Pro để lưu mãi mãi →</span></div>
+  </div>
+  <div class="hg">
+    <div class="hc"><div class="hcimg" style="background:linear-gradient(135deg,#0a1e2e,#0d2a40)">🏠</div><div class="hcinfo"><div class="hcname">Phòng khách Scandinavian 30m²</div><div class="hcmeta">15/01 · Phương án B · BOQ 15.4M</div></div><div class="hcacts"><button class="cbtn" onclick="toast('Mở lại thiết kế này')">Mở lại</button><button class="cbtn" onclick="toast('Xem BOQ')">📋 BOQ</button><button class="cbtn" onclick="toast('↗ Chia sẻ link')">↗</button></div></div>
+    <div class="hc"><div class="hcimg" style="background:linear-gradient(135deg,#0a0a1a,#181828)">🛋️</div><div class="hcinfo"><div class="hcname">Phòng ngủ master Japandi 20m²</div><div class="hcmeta">10/01 · Phương án C · BOQ 28.6M</div></div><div class="hcacts"><button class="cbtn" onclick="toast('Mở lại')">Mở lại</button><button class="cbtn" onclick="toast('Xem BOQ')">📋 BOQ</button><button class="cbtn" onclick="toast('↗ Chia sẻ')">↗</button></div></div>
+    <div class="hc"><div class="hcimg" style="background:linear-gradient(135deg,#1a0f04,#281c08)">🍳</div><div class="hcinfo"><div class="hcname">Bếp mở hiện đại 15m²</div><div class="hcmeta">08/01 · Phương án A · BOQ 42M</div></div><div class="hcacts"><button class="cbtn" onclick="toast('Mở lại')">Mở lại</button><button class="cbtn" onclick="toast('Xem BOQ')">📋 BOQ</button><button class="cbtn" onclick="toast('↗ Chia sẻ')">↗</button></div></div>
+    <div class="hc"><div class="hcimg" style="background:linear-gradient(135deg,#0a1a0a,#102010)">🛁</div><div class="hcinfo"><div class="hcname">Phòng tắm spa 8m²</div><div class="hcmeta">05/01 · Phương án D · BOQ 18M</div></div><div class="hcacts"><button class="cbtn" onclick="toast('Mở lại')">Mở lại</button><button class="cbtn" onclick="toast('Xem BOQ')">📋 BOQ</button><button class="cbtn" onclick="toast('↗ Chia sẻ')">↗</button></div></div>
+    <div class="hc"><div class="hcimg" style="background:linear-gradient(135deg,#1a1005,#281808)">🏢</div><div class="hcinfo"><div class="hcname">Văn phòng Biophilic 50m²</div><div class="hcmeta">03/01 · Phương án B · BOQ 68M</div></div><div class="hcacts"><button class="cbtn" onclick="toast('Mở lại')">Mở lại</button><button class="cbtn" onclick="toast('Xem BOQ')">📋 BOQ</button><button class="cbtn" onclick="toast('↗ Chia sẻ')">↗</button></div></div>
+    <div class="hc"><div class="hcimg" style="background:linear-gradient(135deg,#0a050f,#14081e)">🏡</div><div class="hcinfo"><div class="hcname">Biệt thự sân vườn 350m²</div><div class="hcmeta">01/01 · Nhiều phương án · BOQ 2.4B</div></div><div class="hcacts"><button class="cbtn" onclick="toast('Mở lại')">Mở lại</button><button class="cbtn" onclick="toast('Xem BOQ')">📋 BOQ</button><button class="cbtn" onclick="toast('↗ Chia sẻ')">↗</button></div></div>
+  </div>
+  <div style="padding-bottom:52px"></div>
+</div>
+</div>
+
+<!-- ══ PRICING ══ -->
+<div class="pg" id="pg-pricing">
+<div class="wrap">
+  <div class="hero" style="padding-bottom:0">
+    <div class="hero-badge"><div class="hb-dot"></div>Bắt đầu miễn phí · Nâng cấp bất cứ lúc nào</div>
+    <h2 class="hero-t" style="font-size:clamp(28px,4vw,50px)">Chọn gói phù hợp<br><span class="gr">với nhu cầu của bạn</span></h2>
+  </div>
+  <div class="pgrid">
+    <div class="plan"><div class="pname">Free</div><div class="pprice">0đ</div><div class="psub">Mãi mãi miễn phí</div><ul class="pfeat"><li>3 renders / tháng</li><li>4 phương án mỗi thiết kế</li><li>BOQ tự động cơ bản</li><li>Lưu trữ 90 ngày</li><li class="no">BIM / CAD upload</li><li class="no">Style Transfer từ ảnh</li><li class="no">Collab realtime</li><li class="no">API access</li></ul><button class="pbtn" onclick="toast('Bạn đang dùng gói Free')">Đang sử dụng</button></div>
+    <div class="plan pop"><div class="pbadge">✨ Phổ biến nhất</div><div class="pname">Pro</div><div class="pprice">299K</div><div class="psub">/ tháng · Hủy bất cứ lúc nào</div><ul class="pfeat"><li>Unlimited renders</li><li>4 phương án mỗi thiết kế</li><li>BOQ tự động + giá realtime NexMarket</li><li>Lưu trữ không giới hạn</li><li>BIM / CAD upload (Revit, AutoCAD)</li><li>Style Transfer từ ảnh thực</li><li>Collab với 5 thành viên</li><li class="no">API access</li></ul><button class="pbtn" onclick="toast('✅ Nâng cấp Pro 299K/tháng — Chuyển thanh toán...')">Nâng cấp Pro ngay →</button></div>
+    <div class="plan"><div class="pname">Enterprise</div><div class="pprice" style="font-size:30px;margin-top:8px">Thỏa<br>thuận</div><div class="psub">Liên hệ để nhận báo giá</div><ul class="pfeat"><li>Unlimited · Không giới hạn</li><li>Custom AI model training</li><li>BOQ theo tiêu chuẩn nội bộ</li><li>White-label embed vào website</li><li>BIM full suite · IFC export</li><li>Collab không giới hạn</li><li>API access + webhook</li><li>SLA 99.9% + support 24/7</li></ul><button class="pbtn" onclick="toast('📧 Liên hệ: hello@nexbuild.holdings')">Liên hệ tư vấn</button></div>
+  </div>
+</div>
+</div>
+
+</div>
+<div id="toast"></div>
+
+<script>
+function setPage(id,tabEl){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  if(tabEl){
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+    tabEl.classList.add('on');
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goBack(){if(document.referrer)window.history.back();else window.location.href='nexbuild-hub.html';}
+function selStyle(el){el.closest('.sg').querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));el.classList.add('on');}
+function toggleVoice(){if(!('webkitSpeechRecognition' in window)){toast('🎙️ Dùng Chrome để nhập bằng giọng nói');return;}const r=new webkitSpeechRecognition();r.lang='vi-VN';r.onstart=()=>toast('🎙️ Đang nghe...');r.onresult=e=>{document.getElementById('promptTxt').value=e.results[0][0].transcript;toast('✅ Đã ghi nhận!')};r.onerror=()=>toast('❌ Không nhận được — Thử lại');r.start();}
+/* AUTH */
+const API_BASE='';
+let currentUser=null;
+let selectedRole='buyer';
+
+function openAuthModal(){document.getElementById('authModal').style.display='flex';}
+function closeAuthModal(){document.getElementById('authModal').style.display='none';}
+function switchAuthTab(tab){
+  document.getElementById('loginForm').style.display=tab==='login'?'block':'none';
+  document.getElementById('regForm').style.display=tab==='register'?'block':'none';
+  document.getElementById('tabLogin').className='atab'+(tab==='login'?' on':'');
+  document.getElementById('tabReg').className='atab'+(tab==='register'?' on':'');
+}
+function selAuthRole(btn){
+  document.querySelectorAll('.rbtn').forEach(b=>{b.classList.remove('on');});
+  btn.classList.add('on');selectedRole=btn.dataset.role;
+}
+function doLogin(){
+  const email=document.getElementById('authEmail').value.trim();
+  const pass=document.getElementById('authPass').value;
+  if(!email){toast('Vui lòng nhập email hoặc SĐT');return;}
+  if(!pass){toast('Vui lòng nhập mật khẩu');return;}
+  // Call API
+  fetch(API_BASE+'/api/v1/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email_or_phone:email,password:pass})})
+  .then(r=>r.json()).then(data=>{
+    if(data.access_token){
+      currentUser=data.user;localStorage.setItem('nxd_token',data.access_token);localStorage.setItem('nxd_user',JSON.stringify(data.user));
+      updateAuthUI();closeAuthModal();toast('Đăng nhập thành công!');loadQuota();
+    } else { toast(data.detail||'Sai email hoặc mật khẩu'); }
+  }).catch(()=>{
+    // Fallback demo mode
+    currentUser={full_name:email.split('@')[0],email:email,role:'buyer',plan:'free'};
+    localStorage.setItem('nxd_user',JSON.stringify(currentUser));
+    updateAuthUI();closeAuthModal();toast('Đăng nhập thành công (demo)');
+  });
+}
+function doRegister(){
+  const name=document.getElementById('regName').value.trim();
+  const email=document.getElementById('regEmail').value.trim();
+  const phone=document.getElementById('regPhone').value.trim();
+  const pass=document.getElementById('regPass').value;
+  if(!name||!email){toast('Vui lòng điền đầy đủ thông tin');return;}
+  if(pass.length<8){toast('Mật khẩu tối thiểu 8 ký tự');return;}
+  fetch(API_BASE+'/api/v1/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({full_name:name,email:email,phone:phone||null,password:pass,role:selectedRole})})
+  .then(r=>r.json()).then(data=>{
+    if(data.ok){toast('Đăng ký thành công! Đăng nhập ngay.');switchAuthTab('login');}
+    else{toast(data.detail||'Lỗi đăng ký');}
+  }).catch(()=>{toast('Đăng ký thành công (demo)! Đăng nhập ngay.');switchAuthTab('login');});
+}
+function doLogout(){
+  currentUser=null;localStorage.removeItem('nxd_token');localStorage.removeItem('nxd_user');
+  document.getElementById('authBtn').style.display='';
+  document.getElementById('userInfo').style.display='none';
+  updateQuotaUI(3,'free');toast('Đã đăng xuất');
+}
+function updateAuthUI(){
+  if(!currentUser)return;
+  document.getElementById('authBtn').style.display='none';
+  document.getElementById('userInfo').style.display='flex';
+  document.getElementById('userName').textContent=currentUser.full_name;
+  document.getElementById('userAvatar').textContent=currentUser.full_name.charAt(0).toUpperCase();
+}
+function loadQuota(){
+  const token=localStorage.getItem('nxd_token');
+  if(!token){updateQuotaUI(3,'free');return;}
+  fetch(API_BASE+'/api/v1/design/quota',{headers:{'Authorization':'Bearer '+token}})
+  .then(r=>r.json()).then(data=>{updateQuotaUI(data.remaining,data.plan);})
+  .catch(()=>updateQuotaUI(3,'free'));
+}
+function updateQuotaUI(remaining,plan){
+  const pill=document.querySelector('.quota-pill');
+  if(!pill)return;
+  const pct=plan==='pro'?100:Math.round((remaining/3)*100);
+  pill.innerHTML='<span>'+remaining+' renders</span><div class="qbar"><div class="qfill" style="width:'+pct+'%"></div></div><span style="color:var(--'+(plan==='pro'?'gold':'c1')+');font-weight:700">'+(plan==='pro'?'Pro':'Free')+'</span>';
+}
+// Auto-login from localStorage
+(function(){
+  const saved=localStorage.getItem('nxd_user');
+  if(saved){try{currentUser=JSON.parse(saved);updateAuthUI();}catch(e){}}
+})();
+
+let gt;
+function startGenerate(){
+  const p=document.getElementById('promptTxt').value.trim();
+  if(!p){toast('Vui lòng mô tả không gian trước!');return;}
+  document.getElementById('cvEmpty').style.display='none';
+  document.getElementById('cvLoading').classList.add('on');
+  document.getElementById('cvResult').classList.remove('on');
+  document.getElementById('boqPanel').classList.remove('on');
+  const steps=['ld1','ld2','ld3','ld4','ld5'];
+  steps.forEach(id=>{document.getElementById(id).className='ld-d';});
+  let cur=0;
+  function tick(){
+    if(cur>0)document.getElementById(steps[cur-1]).className='ld-d done';
+    if(cur<steps.length){document.getElementById(steps[cur]).className='ld-d active';cur++;gt=setTimeout(tick,1300+Math.random()*500);}
+    else setTimeout(()=>{document.getElementById('cvLoading').classList.remove('on');document.getElementById('cvResult').classList.add('on');showGrid();if(document.getElementById('btnBoq').classList.contains('on'))showBOQ();toast('✅ 4 phương án thiết kế đã sẵn sàng!');},500);
+  }
+  tick();
+}
+function showGrid(){document.getElementById('renderGrid').style.display='grid';document.querySelectorAll('.rsg').forEach(r=>r.classList.remove('on'));document.querySelectorAll('.rcard').forEach(r=>r.classList.remove('sel'));}
+function showSingle(i){document.getElementById('renderGrid').style.display='none';document.querySelectorAll('.rsg').forEach(r=>r.classList.remove('on'));document.getElementById('rs'+i).classList.add('on');document.querySelectorAll('.rcard').forEach((r,j)=>r.classList.toggle('sel',j===i));}
+function setRT(btn){document.querySelectorAll('.rt').forEach(r=>r.classList.remove('on'));btn.classList.add('on');}
+function showBOQ(){document.getElementById('boqPanel').classList.add('on');setTimeout(()=>document.getElementById('boqPanel').scrollIntoView({behavior:'smooth',block:'nearest'}),100);}
+let tt;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.transform='translateX(-50%) translateY(0)';clearTimeout(tt);tt=setTimeout(()=>el.style.transform='translateX(-50%) translateY(80px)',3000);}
+</script>
+</body>
+</html>

@@ -4,7 +4,9 @@
   "outputDirectory": "public",
   "rewrites": [
     { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/marketplace", "destination": "/marketplace.html" }
+    { "source": "/marketplace", "destination": "/marketplace.html" },
+    { "source": "/nexdesign", "destination": "/nexdesign-app.html" },
+    { "source": "/nexdesign-ai", "destination": "/nexdesign-landing.html" }
   ],
   "headers": [
     {
