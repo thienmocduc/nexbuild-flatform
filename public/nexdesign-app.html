@@ -503,7 +503,7 @@ html,body{height:100%;font-family:'Noto Sans',sans-serif;background:var(--bg);co
   </div>
   <div class="pgrid">
     <div class="plan"><div class="pname">Free</div><div class="pprice">0đ</div><div class="psub">Mãi mãi miễn phí</div><ul class="pfeat"><li>3 renders / tháng</li><li>4 phương án mỗi thiết kế</li><li>BOQ tự động cơ bản</li><li>Lưu trữ 90 ngày</li><li class="no">BIM / CAD upload</li><li class="no">Style Transfer từ ảnh</li><li class="no">Collab realtime</li><li class="no">API access</li></ul><button class="pbtn" onclick="toast('Bạn đang dùng gói Free')">Đang sử dụng</button></div>
-    <div class="plan pop"><div class="pbadge">✨ Phổ biến nhất</div><div class="pname">Pro</div><div class="pprice">299K</div><div class="psub">/ tháng · Hủy bất cứ lúc nào</div><ul class="pfeat"><li>Unlimited renders</li><li>4 phương án mỗi thiết kế</li><li>BOQ tự động + giá realtime NexMarket</li><li>Lưu trữ không giới hạn</li><li>BIM / CAD upload (Revit, AutoCAD)</li><li>Style Transfer từ ảnh thực</li><li>Collab với 5 thành viên</li><li class="no">API access</li></ul><button class="pbtn" onclick="toast('✅ Nâng cấp Pro 299K/tháng — Chuyển thanh toán...')">Nâng cấp Pro ngay →</button></div>
+    <div class="plan pop"><div class="pbadge">✨ Phổ biến nhất</div><div class="pname">Pro</div><div class="pprice">$19</div><div class="psub">/ tháng · ~475K VND · Hủy bất cứ lúc nào</div><ul class="pfeat"><li>Unlimited renders</li><li>4 phương án mỗi thiết kế</li><li>BOQ tự động + giá realtime NexMarket</li><li>Lưu trữ không giới hạn</li><li>BIM / CAD upload (Revit, AutoCAD)</li><li>Style Transfer từ ảnh thực</li><li>Collab với 5 thành viên</li><li class="no">API access</li></ul><button class="pbtn" onclick="toast('✅ Nâng cấp Pro 299K/tháng — Chuyển thanh toán...')">Nâng cấp Pro ngay →</button></div>
     <div class="plan"><div class="pname">Enterprise</div><div class="pprice" style="font-size:30px;margin-top:8px">Thỏa<br>thuận</div><div class="psub">Liên hệ để nhận báo giá</div><ul class="pfeat"><li>Unlimited · Không giới hạn</li><li>Custom AI model training</li><li>BOQ theo tiêu chuẩn nội bộ</li><li>White-label embed vào website</li><li>BIM full suite · IFC export</li><li>Collab không giới hạn</li><li>API access + webhook</li><li>SLA 99.9% + support 24/7</li></ul><button class="pbtn" onclick="toast('📧 Liên hệ: hello@nexbuild.holdings')">Liên hệ tư vấn</button></div>
   </div>
 </div>
@@ -542,11 +542,29 @@ function selAuthRole(btn){
   document.querySelectorAll('.rbtn').forEach(b=>{b.classList.remove('on');});
   btn.classList.add('on');selectedRole=btn.dataset.role;
 }
+// Demo accounts (production se dung API that)
+const DEMO_ACCOUNTS={
+  'doanhnhancaotuan@gmail.com':{password:'Tuan6868@',full_name:'Thiên Mộc Đức',role:'admin',plan:'pro'},
+  'admin@nexbuild.holdings':{password:'nexbuild2025',full_name:'NexBuild Admin',role:'admin',plan:'enterprise'},
+  'demo@nexbuild.vn':{password:'demo1234',full_name:'Demo User',role:'buyer',plan:'free'},
+};
 function doLogin(){
   const email=document.getElementById('authEmail').value.trim();
   const pass=document.getElementById('authPass').value;
   if(!email){toast('Vui lòng nhập email hoặc SĐT');return;}
   if(!pass){toast('Vui lòng nhập mật khẩu');return;}
+  // Check demo accounts first
+  const demo=DEMO_ACCOUNTS[email.toLowerCase()];
+  if(demo){
+    if(pass!==demo.password){toast('Sai mật khẩu');return;}
+    currentUser={full_name:demo.full_name,email:email,role:demo.role,plan:demo.plan};
+    localStorage.setItem('nxd_token','demo_'+Date.now());
+    localStorage.setItem('nxd_user',JSON.stringify(currentUser));
+    updateAuthUI();closeAuthModal();
+    updateQuotaUI(demo.plan==='pro'?999:3,demo.plan);
+    toast('Chào mừng '+demo.full_name+'!');
+    return;
+  }
   // Call API
   fetch(API_BASE+'/api/v1/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email_or_phone:email,password:pass})})
   .then(r=>r.json()).then(data=>{
@@ -555,10 +573,7 @@ function doLogin(){
       updateAuthUI();closeAuthModal();toast('Đăng nhập thành công!');loadQuota();
     } else { toast(data.detail||'Sai email hoặc mật khẩu'); }
   }).catch(()=>{
-    // Fallback demo mode
-    currentUser={full_name:email.split('@')[0],email:email,role:'buyer',plan:'free'};
-    localStorage.setItem('nxd_user',JSON.stringify(currentUser));
-    updateAuthUI();closeAuthModal();toast('Đăng nhập thành công (demo)');
+    toast('Sai email hoặc mật khẩu. Thử: demo@nexbuild.vn / demo1234');
   });
 }
 function doRegister(){
