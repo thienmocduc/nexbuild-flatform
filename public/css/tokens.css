@@ -1,0 +1,134 @@
+/* === NexBuild Design Tokens — Single Source of Truth ===
+   Spec: PHASE1-SPEC-v2.md Section 3
+   Usage: hub.html → data-page="hub"
+          dashboard.html, marketplace.html → data-page="app"
+*/
+
+/* ─── SHARED BRAND ──────────────────────────────────── */
+:root {
+  --c1: #00C9A7;
+  --c2: #0EA5E9;
+  --indigo: #6366F1;
+  --violet: #A855F7;
+  --gold: #C9A84C;
+  --red: #EF4444;
+  --green: #22C55E;
+  --amber: #F59E0B;
+  --orange: #FB923C;
+  --grad: linear-gradient(135deg, #00C9A7, #0EA5E9, #6366F1, #A855F7);
+
+  --font: "Noto Sans", sans-serif;
+  --mono: "Noto Sans Mono", monospace;
+  --tr: .22s cubic-bezier(.4, 0, .2, 1);
+}
+
+/* ─── HUB DARK ──────────────────────────────────────── */
+[data-page="hub"][data-theme="dark"] {
+  --bg: #04080F;
+  --bg2: #080F1C;
+  --bg3: #0D1828;
+  --bg4: #132034;
+  --text: #EDF2FF;
+  --text2: #8898B8;
+  --text3: #3A4F6A;
+  --bdr: rgba(255,255,255,.07);
+  --sur: rgba(255,255,255,.04);
+  --r: 14px;
+  --orb-op: .35;
+}
+
+/* ─── HUB LIGHT ─────────────────────────────────────── */
+[data-page="hub"][data-theme="light"] {
+  --bg: #F8F9FF;
+  --bg2: #FFFFFF;
+  --bg3: #EFF1FF;
+  --bg4: #E4E7FF;
+  --text: #0A1020;
+  --text2: #2A3A55;
+  --text3: #6A7A95;
+  --bdr: rgba(99,102,241,.12);
+  --sur: rgba(255,255,255,.7);
+  --r: 14px;
+  --orb-op: .18;
+}
+
+/* ─── APP DARK (Dashboard + Marketplace) ────────────── */
+[data-page="app"][data-theme="dark"] {
+  --bg: #030609;
+  --bg2: #050A14;
+  --bg3: #080E1C;
+  --bg4: #0B1424;
+  --text: #F2F7FF;
+  --text2: #B0C8E4;
+  --text3: #5A7898;
+  --bdr: rgba(255,255,255,.08);
+  --bdr2: rgba(255,255,255,.14);
+  --sur: rgba(8,14,30,.96);
+  --sur2: rgba(12,22,45,.98);
+  --sb: rgba(4,7,16,.97);
+  --r: 12px;
+  --orb-op: .28;
+}
+
+/* ─── APP LIGHT (Dashboard + Marketplace) ───────────── */
+[data-page="app"][data-theme="light"] {
+  --bg: #EEF2FF;
+  --bg2: #F8F9FF;
+  --bg3: #E4E9FF;
+  --bg4: #DDE4FF;
+  --text: #0A1020;
+  --text2: #2A3A58;
+  --text3: #5A7898;
+  --bdr: rgba(80,100,200,.1);
+  --bdr2: rgba(80,100,200,.2);
+  --sur: rgba(255,255,255,.97);
+  --sur2: #fff;
+  --sb: rgba(248,250,255,.98);
+  --r: 12px;
+  --orb-op: .07;
+}
+
+/* ─── SHARED UTILITIES ──────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--c1); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px; border-radius: var(--r); border: none;
+  font: 600 14px var(--font); cursor: pointer;
+  transition: var(--tr);
+}
+.btn-primary { background: var(--grad); color: #fff; }
+.btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+.btn-outline {
+  background: transparent; border: 1px solid var(--bdr); color: var(--text);
+}
+.btn-outline:hover { border-color: var(--c1); color: var(--c1); }
+
+.pill {
+  display: inline-block; padding: 4px 10px; border-radius: 20px;
+  font-size: 12px; font-weight: 500;
+  background: var(--bg3); color: var(--text2);
+}
+
+.card {
+  background: var(--bg2); border: 1px solid var(--bdr);
+  border-radius: var(--r); padding: 20px;
+  transition: var(--tr);
+}
+.card:hover { border-color: var(--c1); transform: translateY(-2px); }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--text3); border-radius: 3px; }

@@ -1,0 +1,31 @@
+/* === Toast Notifications — Shared === */
+
+#toast-container {
+  position: fixed; top: 20px; right: 20px; z-index: 99999;
+  display: flex; flex-direction: column; gap: 8px;
+}
+
+.toast {
+  padding: 12px 20px; border-radius: var(--r, 12px);
+  font: 500 13px var(--font, sans-serif);
+  color: #fff; background: var(--bg3, #1a1a2e);
+  border: 1px solid var(--bdr, rgba(255,255,255,.1));
+  box-shadow: 0 8px 32px rgba(0,0,0,.3);
+  animation: toast-in .3s ease-out, toast-out .3s ease-in 3s forwards;
+  max-width: 380px;
+}
+
+.toast.success { border-left: 4px solid var(--green, #22C55E); }
+.toast.error { border-left: 4px solid var(--red, #EF4444); }
+.toast.warning { border-left: 4px solid var(--amber, #F59E0B); }
+.toast.info { border-left: 4px solid var(--c2, #0EA5E9); }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(100%); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toast-out {
+  from { opacity: 1; }
+  to { opacity: 0; transform: translateX(100%); }
+}

@@ -4,273 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>NexDesign AI — AI Thiết kế không gian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700;900&family=Noto+Sans+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--c1:#00C9A7;--c2:#0EA5E9;--ind:#6366F1;--vio:#A855F7;--gold:#C9A84C;--green:#22C55E;--red:#EF4444;--amb:#F59E0B;--orange:#FB923C;--grad:linear-gradient(135deg,#00C9A7,#0EA5E9,#6366F1,#A855F7)}
-[data-theme="dark"]{--bg:#030609;--bg2:#050A14;--bg3:#080E1C;--text:#F2F7FF;--text2:#B0C8E4;--text3:#5A7898;--bdr:rgba(255,255,255,.08);--bdr2:rgba(255,255,255,.15);--sur:rgba(8,14,30,.94);--sur2:rgba(12,20,42,.97);--sb:rgba(4,7,16,.96);--card:rgba(6,11,24,.95)}
-[data-theme="light"]{--bg:#EEF2FF;--bg2:#F8F9FF;--bg3:#E4E9FF;--text:#0A1020;--text2:#304060;--text3:#6888AA;--bdr:rgba(80,100,200,.1);--bdr2:rgba(80,100,200,.2);--sur:rgba(255,255,255,.95);--sur2:#fff;--sb:rgba(248,250,255,.97);--card:rgba(255,255,255,.92)}
-html,body{height:100%;font-family:"Noto Sans",sans-serif;background:var(--bg);color:var(--text);overflow:hidden}
-.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;animation:drift 14s ease-in-out infinite alternate;opacity:.3}
-.o1{width:800px;height:800px;background:#00C9A7;top:-20%;left:-15%;animation-delay:0s}
-.o2{width:600px;height:600px;background:#0EA5E9;top:20%;right:-15%;animation-delay:-4s}
-.o3{width:500px;height:500px;background:#6366F1;bottom:-15%;left:25%;animation-delay:-8s}
-.o4{width:400px;height:400px;background:#A855F7;top:40%;left:50%;animation-delay:-11s}
-@keyframes drift{0%{transform:translate(0,0) scale(1)}40%{transform:translate(30px,-40px) scale(1.08)}70%{transform:translate(-20px,28px) scale(.93)}100%{transform:translate(14px,20px) scale(1.05)}}
-[data-theme="light"] .orb{opacity:.08}
-
-#app{display:flex;height:100vh;overflow:hidden;position:relative;z-index:1}
-
-/* ── SIDEBAR ── */
-#sb{width:220px;flex-shrink:0;height:100vh;background:var(--sb);border-right:1px solid var(--bdr);display:flex;flex-direction:column;overflow-y:auto;z-index:10}
-#sb::-webkit-scrollbar{width:3px}#sb::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px}
-.sb-head{padding:16px 14px 12px;border-bottom:1px solid var(--bdr)}
-.sb-brand{display:flex;align-items:center;gap:9px;margin-bottom:10px}
-.sb-brand-ico{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,rgba(0,201,167,.25),rgba(14,165,233,.15));border:1px solid rgba(0,201,167,.35);display:flex;align-items:center;justify-content:center;font-size:16px}
-.sb-brand-t{font-size:13px;font-weight:900;background:linear-gradient(135deg,#00C9A7,#0EA5E9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.sb-brand-s{font-size:9px;color:var(--text3);font-weight:600;letter-spacing:.1em;text-transform:uppercase}
-.sb-back{width:100%;padding:7px 11px;border-radius:8px;border:1px solid var(--bdr);background:transparent;color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;font-family:"Noto Sans",sans-serif;display:flex;align-items:center;gap:6px;transition:all .2s}
-.sb-back:hover{border-color:var(--c1);color:var(--c1)}
-.sb-sec{padding:12px 14px 4px;font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.12em;text-transform:uppercase}
-.si{display:flex;align-items:center;gap:8px;padding:8px 12px;margin:1px 6px;border-radius:9px;cursor:pointer;transition:all .2s;font-size:12px;font-weight:500;color:var(--text3);border:1px solid transparent}
-.si:hover{background:rgba(255,255,255,.05);color:var(--text2)}
-.si.on{background:linear-gradient(135deg,rgba(0,201,167,.12),rgba(14,165,233,.07));border-color:rgba(0,201,167,.22);color:var(--c1);font-weight:700}
-.si-ic{width:24px;height:24px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.si.on .si-ic{background:rgba(0,201,167,.12)}
-.si-b{margin-left:auto;font-size:9px;font-weight:700;padding:1px 6px;border-radius:7px;background:rgba(0,201,167,.12);color:var(--c1);font-family:"Noto Sans Mono",monospace}
-.si-div{height:1px;background:var(--bdr);margin:6px 12px}
-.plan-box{margin:10px;border-radius:10px;background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(245,158,11,.06));border:1px solid rgba(201,168,76,.2);padding:12px}
-.plan-lbl{font-size:9px;font-weight:700;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
-.plan-free-bar{height:4px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden;margin-bottom:5px}
-.plan-free-fill{height:100%;background:linear-gradient(90deg,var(--c1),var(--c2));width:33.3%;border-radius:2px}
-.plan-free-txt{font-size:10px;color:var(--text3);margin-bottom:8px}
-.plan-up{width:100%;padding:7px;border-radius:8px;background:linear-gradient(135deg,#C9A84C,#F59E0B);border:none;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:"Noto Sans",sans-serif}
-.rbtn{height:32px;padding:0 12px;border-radius:8px;border:1px solid var(--bdr);background:var(--bg3);color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;font-family:"Noto Sans",sans-serif;transition:all .2s}
-.rbtn.on{border-color:var(--c1);background:rgba(0,201,167,.1);color:var(--c1)}
-
-/* ── TOPBAR ── */
-.topbar{height:50px;background:var(--sb);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:10px;padding:0 18px;flex-shrink:0}
-.tb-bpath{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3)}
-.tb-bpath span{color:var(--text2)}
-.tb-bpath .sep{opacity:.4}
-.tb-acts{margin-left:auto;display:flex;gap:6px;align-items:center}
-.tba{height:30px;padding:0 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;font-family:"Noto Sans",sans-serif;transition:all .2s;display:flex;align-items:center;gap:5px;white-space:nowrap}
-.tba-g{background:transparent;border:1px solid var(--bdr2);color:var(--text2)}.tba-g:hover{border-color:var(--c1);color:var(--c1)}
-.tba-p{background:var(--grad);border:none;color:#fff}.tba-p:hover{opacity:.88}
-.tba-ic{width:30px;height:30px;border-radius:8px;border:1px solid var(--bdr);background:transparent;color:var(--text2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;transition:all .2s}
-.tba-ic:hover{border-color:var(--c1);color:var(--c1)}
-
-/* ── MAIN AREA ── */
-#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.pg{flex:1;overflow-y:auto;display:none}
-.pg.on{display:flex;flex-direction:column}
-.pg::-webkit-scrollbar{width:5px}.pg::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
-
-/* ── STUDIO LAYOUT ── */
-.studio{display:grid;grid-template-columns:340px 1fr 300px;height:calc(100vh - 50px);overflow:hidden}
-
-/* LEFT PANEL — INPUT */
-.panel-l{background:var(--sb);border-right:1px solid var(--bdr);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
-.panel-l::-webkit-scrollbar{width:3px}.panel-l::-webkit-scrollbar-thumb{background:rgba(255,255,255,.06);border-radius:2px}
-.pl-sec{padding:14px 16px;border-bottom:1px solid var(--bdr)}
-.pl-lbl{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px;display:flex;align-items:center;gap:6px}
-.pl-lbl-dot{width:6px;height:6px;border-radius:50%}
-.prompt-box{background:rgba(255,255,255,.04);border:1px solid var(--bdr);border-radius:11px;padding:12px;margin-bottom:10px;transition:all .25s}
-.prompt-box:focus-within{border-color:rgba(0,201,167,.4);background:rgba(0,201,167,.04)}
-textarea{width:100%;background:transparent;border:none;outline:none;color:var(--text);font-size:13px;font-family:"Noto Sans",sans-serif;resize:none;line-height:1.7}
-textarea::placeholder{color:var(--text3)}
-.prompt-tools{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px solid var(--bdr)}
-.pt{height:26px;padding:0 10px;border-radius:7px;background:rgba(255,255,255,.04);border:1px solid var(--bdr);color:var(--text3);font-size:10px;font-weight:600;cursor:pointer;font-family:"Noto Sans",sans-serif;display:flex;align-items:center;gap:4px;transition:all .2s}
-.pt:hover,.pt.on{border-color:rgba(0,201,167,.35);color:var(--c1);background:rgba(0,201,167,.07)}
-.gen-btn{width:100%;padding:11px;border-radius:10px;background:linear-gradient(135deg,#00C9A7,#0EA5E9);border:none;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:"Noto Sans",sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s}
-.gen-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,201,167,.3)}
-
-/* STYLE CHIPS */
-.style-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.sc{border-radius:10px;border:1px solid var(--bdr);cursor:pointer;overflow:hidden;transition:all .22s;position:relative}
-.sc:hover{border-color:var(--c1);transform:scale(1.02)}
-.sc.on{border-color:var(--c1);box-shadow:0 0 0 2px rgba(0,201,167,.2)}
-.sc-img{height:52px;display:flex;align-items:center;justify-content:center;font-size:22px;position:relative}
-.sc-lbl{font-size:10px;font-weight:700;text-align:center;padding:5px 4px;color:var(--text3)}
-.sc.on .sc-lbl{color:var(--c1)}
-.sc-ck{position:absolute;top:4px;right:4px;width:14px;height:14px;border-radius:50%;background:var(--c1);color:#fff;font-size:8px;display:none;align-items:center;justify-content:center}
-.sc.on .sc-ck{display:flex}
-
-/* SETTINGS */
-.rng{display:flex;align-items:center;gap:8px;margin-bottom:8px}
-.rng-l{font-size:11px;color:var(--text2);width:70px;flex-shrink:0}
-input[type=range]{flex:1;accent-color:var(--c1);cursor:pointer}
-.rng-v{font-family:"Noto Sans Mono",monospace;font-size:10px;color:var(--c1);width:38px;text-align:right;flex-shrink:0}
-.tgl-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
-.tgl-l{font-size:11px;color:var(--text2)}
-.tgl{width:34px;height:18px;border-radius:9px;background:rgba(255,255,255,.1);cursor:pointer;position:relative;transition:all .3s;flex-shrink:0;border:none}
-.tgl.on{background:var(--c1)}
-.tgl::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:all .25s}
-.tgl.on::after{left:18px}
-.chips{display:flex;gap:4px;flex-wrap:wrap}
-.chip{padding:4px 10px;border-radius:14px;border:1px solid var(--bdr);background:transparent;color:var(--text3);font-size:10px;font-weight:600;cursor:pointer;transition:all .2s;font-family:"Noto Sans",sans-serif}
-.chip.on{background:rgba(0,201,167,.1);border-color:rgba(0,201,167,.3);color:var(--c1)}
-
-/* CENTER CANVAS */
-.canvas{background:var(--bg2);display:flex;flex-direction:column;overflow:hidden;position:relative}
-.cv-toolbar{height:42px;background:var(--sb);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:6px;padding:0 14px;flex-shrink:0}
-.cv-tb-lbl{font-size:12px;font-weight:700;color:var(--text2);flex:1}
-.cv-btn{height:28px;padding:0 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid var(--bdr);color:var(--text2);font-size:10px;font-weight:600;cursor:pointer;font-family:"Noto Sans",sans-serif;display:flex;align-items:center;gap:5px;transition:all .2s}
-.cv-btn:hover{border-color:var(--c1);color:var(--c1)}
-.cv-btn.active{background:rgba(0,201,167,.1);border-color:rgba(0,201,167,.3);color:var(--c1)}
-
-/* RENDER STATES */
-.cv-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text3);text-align:center;padding:40px}
-.cv-empty-ico{font-size:56px;margin-bottom:16px;opacity:.5}
-.cv-empty-t{font-size:15px;font-weight:700;margin-bottom:8px;color:var(--text2)}
-.cv-empty-s{font-size:12px;line-height:1.7;max-width:260px}
-
-.cv-loading{flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px}
-.cv-loading.on{display:flex}
-.spinner{width:48px;height:48px;border:3px solid rgba(0,201,167,.2);border-top-color:var(--c1);border-radius:50%;animation:spin 1s linear infinite;margin-bottom:20px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.ld-t{font-size:14px;font-weight:700;color:var(--text2);margin-bottom:6px}
-.ld-s{font-size:12px;color:var(--text3);margin-bottom:20px}
-.ld-bar{width:280px;height:4px;border-radius:2px;background:rgba(255,255,255,.08);overflow:hidden;margin-bottom:8px}
-.ld-fill{height:100%;background:linear-gradient(90deg,var(--c1),var(--c2));border-radius:2px;width:0%;transition:width .5s ease}
-.ld-steps-row{display:flex;gap:0;width:280px;position:relative;margin-top:16px}
-.ld-steps-row::before{content:"";position:absolute;top:9px;left:0;right:0;height:2px;background:var(--bdr)}
-.ld-st{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;position:relative;z-index:1}
-.ld-dot{width:18px;height:18px;border-radius:50%;background:var(--bg2);border:2px solid var(--bdr);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;transition:all .3s}
-.ld-dot.done{background:var(--c1);border-color:var(--c1);color:#fff}
-.ld-dot.act{background:rgba(0,201,167,.15);border-color:var(--c1);color:var(--c1);animation:pulse 1.2s ease infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,201,167,.35)}50%{box-shadow:0 0 0 6px rgba(0,201,167,0)}}
-.ld-sl{font-size:9px;color:var(--text3);font-weight:600}
-
-.cv-result{flex:1;display:none;flex-direction:column;overflow:hidden}
-.cv-result.on{display:flex}
-
-/* RENDER GRID */
-.render-tabs{display:flex;gap:6px;padding:10px 14px;background:var(--sb);border-bottom:1px solid var(--bdr);flex-shrink:0}
-.rt{height:26px;padding:0 12px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--bdr);background:transparent;color:var(--text3);font-family:"Noto Sans",sans-serif;transition:all .2s}
-.rt.on{background:rgba(0,201,167,.1);border-color:rgba(0,201,167,.3);color:var(--c1);font-weight:700}
-.render-area{flex:1;overflow-y:auto;padding:14px}
-.render-area::-webkit-scrollbar{width:4px}.render-area::-webkit-scrollbar-thumb{background:rgba(255,255,255,.06);border-radius:2px}
-
-.r4grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.rcard{border-radius:12px;border:1px solid var(--bdr);overflow:hidden;cursor:pointer;transition:all .25s;position:relative}
-.rcard:hover{border-color:rgba(0,201,167,.35);transform:translateY(-2px)}
-.rcard.sel{border-color:var(--c1);box-shadow:0 0 0 2px rgba(0,201,167,.2)}
-.rframe{height:170px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.rf-label{position:absolute;bottom:8px;left:8px;right:8px;background:rgba(0,0,0,.65);border-radius:6px;padding:6px 8px;font-size:10px;font-weight:700;color:#fff;backdrop-filter:blur(4px)}
-.rf-sel{position:absolute;top:8px;left:8px;background:var(--c1);color:#fff;font-size:9px;font-weight:800;padding:2px 8px;border-radius:6px}
-.rf-opts{position:absolute;top:8px;right:8px;display:flex;gap:4px;opacity:0;transition:opacity .2s}
-.rcard:hover .rf-opts{opacity:1}
-.rf-opt{width:26px;height:26px;border-radius:6px;background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
-.rmeta{padding:8px 10px;background:var(--sur)}
-.rmeta-t{font-size:11px;font-weight:700;color:var(--text);margin-bottom:2px}
-.rmeta-s{font-size:10px;color:var(--text3)}
-
-/* SINGLE RENDER VIEW */
-.single-render{display:none;flex-direction:column;gap:0;height:100%}
-.single-render.on{display:flex}
-.sr-frame{flex:1;position:relative;overflow:hidden;min-height:0}
-.sr-toolbar{display:flex;align-items:center;gap:6px;padding:8px 12px;background:rgba(0,0,0,.4);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.08)}
-.sr-info{font-size:11px;color:rgba(255,255,255,.8);font-weight:600}
-.sr-tools{margin-left:auto;display:flex;gap:5px}
-.sr-t{height:26px;padding:0 10px;border-radius:7px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:10px;font-weight:600;cursor:pointer;font-family:"Noto Sans",sans-serif;display:flex;align-items:center;gap:4px}
-.sr-t:hover{background:rgba(255,255,255,.2)}
-.sr-canvas{flex:1;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
-
-/* SHOPPABLE HOTSPOTS */
-.hotspot{position:absolute;width:28px;height:28px;border-radius:50%;background:rgba(0,201,167,.9);border:2px solid #fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700;animation:hpulse 2s ease infinite;box-shadow:0 0 0 0 rgba(0,201,167,.4);transition:transform .2s}
-.hotspot:hover{transform:scale(1.2)}
-@keyframes hpulse{0%,100%{box-shadow:0 0 0 0 rgba(0,201,167,.5)}60%{box-shadow:0 0 0 10px rgba(0,201,167,0)}}
-.hp-tip{position:absolute;background:rgba(3,6,14,.95);border:1px solid rgba(0,201,167,.3);border-radius:10px;padding:10px 12px;font-size:11px;color:var(--text);min-width:160px;pointer-events:none;z-index:10;backdrop-filter:blur(10px)}
-.hp-tip-name{font-weight:700;margin-bottom:3px}
-.hp-tip-price{color:var(--c1);font-weight:700;font-family:"Noto Sans Mono",monospace;font-size:12px;margin-bottom:6px}
-.hp-tip-btn{width:100%;padding:5px;border-radius:6px;background:linear-gradient(135deg,var(--c1),var(--c2));border:none;color:#fff;font-size:10px;font-weight:700;cursor:pointer;font-family:"Noto Sans",sans-serif}
-
-/* RIGHT PANEL — DETAILS */
-.panel-r{background:var(--sb);border-left:1px solid var(--bdr);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
-.panel-r::-webkit-scrollbar{width:3px}.panel-r::-webkit-scrollbar-thumb{background:rgba(255,255,255,.06);border-radius:2px}
-.pr-sec{padding:12px 14px;border-bottom:1px solid var(--bdr)}
-.pr-lbl{font-size:9px;font-weight:700;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
-
-/* BOQ in right panel */
-.boq-item{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04)}
-.boq-item:last-child{border-bottom:none}
-.bi-cat{font-size:11px;color:var(--text2)}
-.bi-mat{font-size:10px;color:var(--text3);margin-top:1px}
-.bi-price{font-family:"Noto Sans Mono",monospace;font-size:12px;font-weight:700;color:var(--c1);white-space:nowrap;margin-left:8px}
-.boq-total-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--bdr);margin-top:4px}
-.boq-total-l{font-size:11px;font-weight:700;color:var(--text2)}
-.boq-total-v{font-family:"Noto Sans Mono",monospace;font-size:17px;font-weight:800;color:var(--c1)}
-.boq-act-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
-.bab{padding:8px;border-radius:9px;font-size:11px;font-weight:700;cursor:pointer;font-family:"Noto Sans",sans-serif;border:none;color:#fff;text-align:center;transition:opacity .2s}
-.bab:hover{opacity:.85}
-.bab-g{background:transparent;border:1px solid var(--bdr2);color:var(--text2)}
-.bab-g:hover{border-color:var(--c1);color:var(--c1)}
-
-/* VARIANTS / MATERIALS */
-.var-row{display:flex;align-items:center;gap:7px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:all .2s;border-radius:6px;padding:6px}
-.var-row:hover{background:rgba(255,255,255,.04)}
-.var-row.on{background:rgba(0,201,167,.07)}
-.var-swatch{width:28px;height:28px;border-radius:7px;flex-shrink:0;border:1px solid rgba(255,255,255,.1)}
-.var-info{flex:1}
-.var-name{font-size:11px;font-weight:600;color:var(--text)}
-.var-price{font-size:10px;color:var(--text3)}
-.var-sel{width:16px;height:16px;border-radius:50%;border:2px solid var(--bdr);flex-shrink:0;transition:all .2s}
-.var-row.on .var-sel{background:var(--c1);border-color:var(--c1)}
-
-/* HISTORY PAGE */
-.hist-page{padding:18px;overflow-y:auto;flex:1}
-.hist-page::-webkit-scrollbar{width:5px}
-.hist-filter{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
-.hf{height:28px;padding:0 12px;border-radius:8px;border:1px solid var(--bdr);background:transparent;color:var(--text3);font-size:11px;font-weight:600;cursor:pointer;font-family:"Noto Sans",sans-serif;transition:all .2s}
-.hf.on,.hf:hover{border-color:var(--c1);color:var(--c1);background:rgba(0,201,167,.07)}
-.hist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-.hcard{border-radius:12px;border:1px solid var(--bdr);overflow:hidden;cursor:pointer;transition:all .25s;background:var(--sur)}
-.hcard:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(0,0,0,.35);border-color:var(--bdr2)}
-.hc-thumb{height:110px;display:flex;align-items:center;justify-content:center;font-size:36px;position:relative;overflow:hidden}
-.hc-body{padding:10px 11px}
-.hc-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;line-height:1.3}
-.hc-date{font-size:10px;color:var(--text3);margin-bottom:6px}
-.hc-tags{display:flex;gap:4px;flex-wrap:wrap}
-.htag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:6px;border:1px solid}
-.htag-t{background:rgba(0,201,167,.08);border-color:rgba(0,201,167,.2);color:var(--c1)}
-.htag-b{background:rgba(14,165,233,.08);border-color:rgba(14,165,233,.2);color:var(--c2)}
-.htag-g{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:var(--green)}
-.hc-acts{display:flex;gap:5px;margin-top:8px}
-.hca{flex:1;padding:5px;border-radius:7px;font-size:10px;font-weight:600;cursor:pointer;border:none;font-family:"Noto Sans",sans-serif;text-align:center}
-
-/* BOQ PAGE */
-.boq-page{padding:18px;overflow-y:auto;flex:1}
-.boq-page::-webkit-scrollbar{width:5px}
-.boq-entry{background:var(--sur);border:1px solid var(--bdr);border-radius:13px;padding:16px;margin-bottom:12px}
-.be-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.be-title{font-size:13px;font-weight:800;flex:1}
-.be-total{font-family:"Noto Sans Mono",monospace;font-size:15px;font-weight:800;color:var(--c1)}
-table{width:100%;border-collapse:collapse;font-size:11px}
-th{padding:7px 9px;text-align:left;font-size:9px;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--bdr);font-weight:700;background:rgba(255,255,255,.03)}
-td{padding:8px 9px;border-bottom:1px solid rgba(255,255,255,.04);color:var(--text)}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,.03)}
-.td-stat{display:inline-flex;padding:2px 7px;border-radius:6px;font-size:9px;font-weight:700;border:1px solid}
-.be-acts{display:flex;gap:6px;margin-top:12px;padding-top:10px;border-top:1px solid var(--bdr)}
-.bea{flex:1;padding:7px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;border:none;color:#fff;font-family:"Noto Sans",sans-serif;transition:opacity .2s;text-align:center}
-.bea:hover{opacity:.85}
-.bea-g{background:transparent;border:1px solid var(--bdr2);color:var(--text2)}.bea-g:hover{border-color:var(--c1);color:var(--c1)}
-
-/* PILL */
-.pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:8px;font-size:9px;font-weight:700;border:1px solid}
-.p-t{background:rgba(0,201,167,.08);border-color:rgba(0,201,167,.2);color:var(--c1)}
-.p-b{background:rgba(14,165,233,.08);border-color:rgba(14,165,233,.2);color:var(--c2)}
-.p-g{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:var(--green)}
-.p-gold{background:rgba(201,168,76,.08);border-color:rgba(201,168,76,.2);color:var(--gold)}
-.p-r{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2);color:var(--red)}
-
-/* TOAST */
-#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:rgba(3,6,9,.97);border:1px solid rgba(0,201,167,.3);border-radius:10px;padding:8px 16px;font-size:12px;font-weight:600;color:var(--c1);transition:transform .3s cubic-bezier(.34,1.2,.64,1);z-index:9999;pointer-events:none;white-space:nowrap}
-
-/* ACTIVE HOTSPOT TIP */
-.tip-hidden{display:none}
-</style>
+<link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/orbs.css">
+<link rel="stylesheet" href="/css/toast.css">
+<link rel="stylesheet" href="/css/nexdesign-app.css">
 </head>
 <body>
 <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="orb o4"></div>
@@ -895,33 +636,15 @@ const ldSteps=[
   {t:'Hoàn tất! Đang tải kết quả...',s:'Chuẩn bị hiển thị và phân tích Shoppable',pct:92},
 ];
 let ldIdx=0,fillPct=0,fillTimer=null;
-// ── FAL.AI CONFIG ──
-const FAL_KEY='bac1480a-018c-494c-aa82-250cd1ea739f:74c87e82df1c4206e5b6845ff322951c';
-const STYLE_PROMPTS={
-  'Hiện đại':'modern minimalist interior design, clean lines, neutral tones with bold accents',
-  'Scandinavian':'scandinavian interior design, warm wood, white walls, natural light, cozy textiles',
-  'Tối giản':'minimalist japanese interior, clean, uncluttered, natural materials, zen aesthetic',
-  'Tân cổ điển':'neoclassical interior design, elegant moldings, marble, chandelier, luxurious',
-  'Wabi-Sabi':'wabi-sabi interior design, imperfect beauty, natural textures, earthy tones',
-  'Japandi':'japandi interior design, japanese meets scandinavian, neutral, wood, minimal',
-  'Industrial':'industrial loft interior, exposed brick, metal pipes, concrete, edison bulbs',
-  'Đông Dương':'indochine interior design, vietnamese colonial, tropical wood, ceramic, rattan'
+// ── DESIGN API CONFIG (server-side — NO API KEY in client) ──
+const STYLE_MAP={
+  'Hiện đại':'modern','Scandinavian':'scandinavian','Tối giản':'japandi',
+  'Tân cổ điển':'modern','Wabi-Sabi':'japandi','Japandi':'japandi',
+  'Industrial':'industrial','Đông Dương':'mediterranean'
 };
-const VARIANT_STYLES=['modern luxury','scandinavian warm','japandi zen','industrial raw'];
 const VARIANT_LABELS=['A — Hiện đại','B — Scandinavian','C — Japandi','D — Industrial'];
 let generatedImages=[];
-
-async function callFalAI(prompt){
-  try{
-    const resp=await fetch('https://fal.run/fal-ai/flux/schnell',{
-      method:'POST',
-      headers:{'Authorization':'Key '+FAL_KEY,'Content-Type':'application/json'},
-      body:JSON.stringify({prompt:prompt,image_size:'landscape_16_9',num_inference_steps:4})
-    });
-    const data=await resp.json();
-    return data.images?.[0]?.url||null;
-  }catch(e){console.error('Fal.ai error:',e);return null;}
-}
+let lastDesignResult=null; // Store full result with scene_3d for 3D editor
 
 function startGenerate(){
   const p=document.getElementById('promptTxt').value.trim();
@@ -942,17 +665,14 @@ function startGenerate(){
   // Get selected style
   const selStyleEl=document.querySelector('.sc.on .sc-lbl');
   const selStyle=selStyleEl?selStyleEl.textContent:'Hiện đại';
-  const styleEn=STYLE_PROMPTS[selStyle]||STYLE_PROMPTS['Hiện đại'];
+  const styleKey=STYLE_MAP[selStyle]||'modern';
   // Read slider values
-  const area=document.getElementById('rv1')?.textContent||'30m²';
+  const area=parseInt(document.getElementById('rv1')?.textContent)||30;
   const height=document.getElementById('rv2')?.textContent||'3.2m';
-  const budget=document.getElementById('rv3')?.textContent||'80M';
+  const budget=parseInt(document.getElementById('rv3')?.textContent)||80;
   // Read active room type chips
   const activeChips=Array.from(document.querySelectorAll('.chip.on')).map(c=>c.textContent).join(', ');
-  const roomContext=activeChips?', loại phòng: '+activeChips:'';
-  // Generate 4 variants in parallel via Fal.ai
-  const basePrompt='professional interior design photograph, 8k, photorealistic, beautiful lighting, '+styleEn+', '+p+', '+area+' room'+roomContext+', high ceiling '+height;
-  const promises=VARIANT_STYLES.map((vs,i)=>callFalAI(basePrompt+', '+vs+' style, architectural digest quality'));
+  // Progress animation
   let stepIdx=0;
   ldTimer=setInterval(()=>{
     stepIdx++;
@@ -961,14 +681,34 @@ function startGenerate(){
     document.getElementById('ld'+stepIdx).classList.add('done');
     document.getElementById('ld'+(stepIdx+1))?.classList.add('act');
     applyLdStep(stepIdx);
-  },3000);
-  Promise.all(promises).then(imgs=>{
-    generatedImages=imgs;
+  },4000);
+  // Call backend API (Gemini + Fal.ai server-side)
+  apiFetch('/design/generate',{
+    method:'POST',
+    body:JSON.stringify({
+      prompt:p,
+      style:styleKey,
+      room_type:activeChips||'phòng khách',
+      area_m2:area,
+      budget_million:budget,
+      auto_boq:true
+    })
+  }).then(result=>{
     clearInterval(ldTimer);clearInterval(fillTimer);
-    showResult();
+    if(result && !result.error && result.variants){
+      lastDesignResult=result;
+      generatedImages=result.variants.map(v=>v.image_url||null);
+      showResult(result);
+    } else {
+      toast(result?.detail||result?.message||'Lỗi tạo thiết kế','error');
+      document.getElementById('cvLoading').classList.remove('on');
+      document.getElementById('cvEmpty').style.display='';
+    }
   }).catch(()=>{
     clearInterval(ldTimer);clearInterval(fillTimer);
-    showResult();
+    document.getElementById('cvLoading').classList.remove('on');
+    document.getElementById('cvEmpty').style.display='';
+    toast('Lỗi kết nối server','error');
   });
 }
 function applyLdStep(i){
@@ -1035,35 +775,57 @@ function showResult(){
   },500);
 }
 
-// ── VOICE ──
+// ── VOICE (Web Speech API — real) ──
 let voiceOn=false;
+let recognition=null;
 function toggleVoice(){
+  const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SpeechRecognition){toast('Trình duyệt không hỗ trợ nhận giọng nói. Hãy dùng Chrome.','warning');return;}
   voiceOn=!voiceOn;
   document.getElementById('btnVoice').classList.toggle('on',voiceOn);
   document.getElementById('btnVoice').textContent=voiceOn?'🔴 Đang nghe...':'🎙️ Nói';
   if(voiceOn){
     toast('Đang nghe... Hãy mô tả không gian của bạn');
-    setTimeout(()=>{
-      if(voiceOn){
-        voiceOn=false;
-        document.getElementById('btnVoice').classList.remove('on');
-        document.getElementById('btnVoice').textContent='🎙️ Nói';
-        document.getElementById('promptTxt').value='Phòng khách 30m² phong cách Scandinavian, tông màu trắng be, sofa xám nhạt, kệ gỗ walnut, cây monstera lớn, ánh sáng vàng ấm';
-        toast('✓ Đã nhận giọng nói xong');
+    recognition=new SpeechRecognition();
+    recognition.lang='vi-VN';
+    recognition.interimResults=true;
+    recognition.continuous=false;
+    recognition.maxAlternatives=1;
+    recognition.onresult=function(event){
+      let transcript='';
+      for(let i=0;i<event.results.length;i++){
+        transcript+=event.results[i][0].transcript;
       }
-    },2800);
+      document.getElementById('promptTxt').value=transcript;
+    };
+    recognition.onend=function(){
+      voiceOn=false;
+      document.getElementById('btnVoice').classList.remove('on');
+      document.getElementById('btnVoice').textContent='🎙️ Nói';
+      const txt=document.getElementById('promptTxt').value.trim();
+      if(txt)toast('Đã nhận: '+txt.substring(0,50)+'...','success');
+    };
+    recognition.onerror=function(e){
+      voiceOn=false;
+      document.getElementById('btnVoice').classList.remove('on');
+      document.getElementById('btnVoice').textContent='🎙️ Nói';
+      if(e.error==='not-allowed')toast('Vui lòng cho phép microphone','error');
+      else toast('Lỗi nhận giọng: '+e.error,'error');
+    };
+    recognition.start();
+  } else {
+    if(recognition)recognition.stop();
   }
 }
 
-// ── AUTH ──
-const DEMO_ACCOUNTS={
-  'doanhnhancaotuan@gmail.com':{password:'Tuan6868@',full_name:'Thiên Mộc Đức',role:'admin',plan:'pro'},
-  'admin@nexbuild.holdings':{password:'nexbuild2025',full_name:'NexBuild Admin',role:'admin',plan:'enterprise'},
-  'demo@nexbuild.vn':{password:'demo1234',full_name:'Demo User',role:'buyer',plan:'free'},
-};
+// ── AUTH (uses common.js AUTH — NO hardcoded credentials) ──
 let currentUser=null;
 let selectedRole='buyer';
-function openAuthModal(){document.getElementById('authModal').style.display='flex';}
+function openAuthModal(){
+  // Delegate to common.js auth modal
+  if(typeof showAuthModal==='function'){showAuthModal(function(){updateAuthUI();});return;}
+  document.getElementById('authModal').style.display='flex';
+}
 function closeAuthModal(){document.getElementById('authModal').style.display='none';}
 function switchAuthTab(tab){
   document.getElementById('loginForm').style.display=tab==='login'?'block':'none';
@@ -1075,21 +837,24 @@ function switchAuthTab(tab){
   tr.style.color=tab==='register'?'var(--c1)':'var(--text3)';
 }
 function selAuthRole(btn){document.querySelectorAll('.rbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');selectedRole=btn.dataset.role;}
-function doLogin(){
+async function doLogin(){
   const email=document.getElementById('authEmail').value.trim();
   const pass=document.getElementById('authPass').value;
   if(!email){toast('Vui lòng nhập email hoặc SĐT');return;}
   if(!pass){toast('Vui lòng nhập mật khẩu');return;}
-  const demo=DEMO_ACCOUNTS[email.toLowerCase()];
-  if(demo){
-    if(pass!==demo.password){toast('Sai mật khẩu');return;}
-    currentUser={full_name:demo.full_name,email:email,role:demo.role,plan:demo.plan};
-    localStorage.setItem('nxd_token','demo_'+Date.now());
-    localStorage.setItem('nxd_user',JSON.stringify(currentUser));
-    updateAuthUI();closeAuthModal();
-    toast('Chào mừng '+demo.full_name+'!');return;
+  // Use real backend API via common.js AUTH
+  if(typeof AUTH!=='undefined'&&AUTH.login){
+    const result=await AUTH.login(email,pass);
+    if(result.ok){
+      currentUser={full_name:result.user.full_name,email:result.user.email,role:result.user.role,plan:result.user.plan};
+      updateAuthUI();closeAuthModal();
+      toast('Chào mừng '+currentUser.full_name+'!');
+    } else {
+      toast(result.error||'Sai email hoặc mật khẩu');
+    }
+  } else {
+    toast('Lỗi hệ thống — vui lòng tải lại trang');
   }
-  toast('Sai email hoặc mật khẩu. Thử: demo@nexbuild.vn / demo1234');
 }
 function doRegister(){
   const name=document.getElementById('regName').value.trim();
@@ -1152,6 +917,254 @@ function updatePlanBox(remaining, plan){
 
 // ── INIT ──
 document.getElementById('histGrid').innerHTML = buildHist(HIST_DATA);
+</script>
+
+<!-- ── Common JS ── -->
+<script src="/js/common.js"></script>
+<!-- Three.js + 3D Room Builder: LAZY LOADED on demand -->
+<script>
+// ── Lazy load helper ──
+function loadScript(src) {
+  return new Promise(function(resolve, reject) {
+    if (document.querySelector('script[src="' + src + '"]')) { resolve(); return; }
+    var s = document.createElement('script');
+    s.src = src; s.onload = resolve; s.onerror = reject;
+    document.head.appendChild(s);
+  });
+}
+
+var _3dLoaded = false;
+function load3DScripts() {
+  if (_3dLoaded) return Promise.resolve();
+  return loadScript('https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.min.js')
+    .then(function() {
+      return Promise.all([
+        loadScript('https://cdn.jsdelivr.net/npm/three@0.162.0/examples/js/controls/OrbitControls.js'),
+        loadScript('https://cdn.jsdelivr.net/npm/three@0.162.0/examples/js/controls/TransformControls.js')
+      ]);
+    })
+    .then(function() { return loadScript('/js/three-room-builder/furniture-library.js'); })
+    .then(function() { return loadScript('/js/three-room-builder/room-builder.js'); })
+    .then(function() { _3dLoaded = true; });
+}
+
+// ── NexDesign API + 3D Builder Integration ──
+
+let roomBuilder = null;
+let is3DMode = false;
+
+// Override old auth with common.js AUTH
+AUTH.on('auth:ready', function() {
+  if (AUTH.isLoggedIn) {
+    currentUser = { email: AUTH.user.email, name: AUTH.user.full_name, plan: AUTH.user.plan, role: AUTH.user.role };
+    updateAuthUI();
+    // Load real design history
+    loadDesignHistory();
+    // Load quota
+    loadDesignQuota();
+  }
+});
+
+async function loadDesignHistory() {
+  try {
+    const resp = await apiFetch('/design/history?limit=12');
+    if (resp && resp.items && resp.items.length > 0) {
+      const histData = resp.items.map(function(d) {
+        return {
+          id: d.id,
+          title: d.prompt ? d.prompt.substring(0, 40) : 'Thiết kế',
+          style: d.style || 'modern',
+          area: d.area_m2 ? d.area_m2 + 'm²' : '30m²',
+          time: timeAgo(d.created_at),
+          total: d.boq_total ? formatVND(d.boq_total) : '',
+          img: null
+        };
+      });
+      // Update history grid if function exists
+      if (typeof buildHist === 'function') {
+        document.getElementById('histGrid').innerHTML = buildHist(histData);
+      }
+    }
+  } catch(e) {}
+}
+
+async function loadDesignQuota() {
+  try {
+    const resp = await apiFetch('/design/quota');
+    if (resp && resp.remaining !== undefined) {
+      const quotaEl = document.querySelector('[data-design-quota]');
+      if (quotaEl) {
+        if (resp.limit === -1) quotaEl.textContent = 'Pro ∞';
+        else quotaEl.textContent = resp.remaining + '/' + resp.limit + ' còn lại';
+      }
+    }
+  } catch(e) {}
+}
+
+// ── 3D BUILDER ──
+function open3DEditor() {
+  if (!lastDesignResult) { toast('Hãy tạo thiết kế trước!'); return; }
+
+  toast('Đang tải 3D Editor...', 'info');
+  load3DScripts().then(function() { _open3DEditorInner(); }).catch(function(e) { toast('Lỗi tải 3D Editor: ' + e, 'error'); });
+}
+
+function _open3DEditorInner() {
+  is3DMode = true;
+  const canvas = document.getElementById('srCanvas') || document.getElementById('cvResult');
+  if (!canvas) return;
+
+  // Create 3D container if not exists
+  let container = document.getElementById('threejs-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'threejs-container';
+    container.style.cssText = 'width:100%;height:100%;min-height:500px;position:relative;border-radius:12px;overflow:hidden;background:#1a1a2e';
+    canvas.parentNode.insertBefore(container, canvas);
+    canvas.style.display = 'none';
+  }
+
+  // Create toolbar
+  let toolbar = document.getElementById('threejs-toolbar');
+  if (!toolbar) {
+    toolbar = document.createElement('div');
+    toolbar.id = 'threejs-toolbar';
+    toolbar.style.cssText = 'display:flex;gap:6px;padding:8px;background:rgba(0,0,0,.4);border-radius:8px;position:absolute;top:10px;left:10px;z-index:10;flex-wrap:wrap';
+    toolbar.innerHTML = `
+      <button onclick="roomBuilder.setCameraPreset('perspective')" style="padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;font-size:11px;cursor:pointer">🎥 Phối cảnh</button>
+      <button onclick="roomBuilder.setCameraPreset('top')" style="padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;font-size:11px;cursor:pointer">⬆ Trên</button>
+      <button onclick="roomBuilder.setCameraPreset('front')" style="padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;font-size:11px;cursor:pointer">▶ Trước</button>
+      <button onclick="roomBuilder.toggleGrid()" style="padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;font-size:11px;cursor:pointer"># Grid</button>
+      <button onclick="roomBuilder.undo()" style="padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;font-size:11px;cursor:pointer">↩ Undo</button>
+      <button onclick="exportScreenshot3D()" style="padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(0,201,167,.2);color:#00C9A7;font-size:11px;cursor:pointer;font-weight:700">📸 Screenshot</button>
+      <button onclick="save3DScene()" style="padding:5px 10px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(14,165,233,.2);color:#0EA5E9;font-size:11px;cursor:pointer;font-weight:700">💾 Lưu</button>
+      <button onclick="close3DEditor()" style="padding:5px 10px;border-radius:6px;border:1px solid rgba(239,68,68,.3);background:rgba(239,68,68,.1);color:#EF4444;font-size:11px;cursor:pointer">✕ Đóng 3D</button>
+    `;
+    container.appendChild(toolbar);
+  }
+
+  // Create furniture panel
+  let furniturePanel = document.getElementById('threejs-furniture');
+  if (!furniturePanel) {
+    furniturePanel = document.createElement('div');
+    furniturePanel.id = 'threejs-furniture';
+    furniturePanel.style.cssText = 'position:absolute;right:10px;top:10px;bottom:10px;width:200px;background:rgba(0,0,0,.6);border-radius:8px;padding:10px;overflow-y:auto;z-index:10';
+    let html = '<div style="font-size:11px;font-weight:700;color:#00C9A7;margin-bottom:8px">🛋 Kéo thả nội thất</div>';
+    Object.keys(FURNITURE_CATEGORIES).forEach(function(cat) {
+      const items = FURNITURE_CATALOG.filter(f => f.category === cat);
+      html += '<div style="font-size:10px;font-weight:600;color:#8898B8;margin:8px 0 4px;text-transform:uppercase">' + FURNITURE_CATEGORIES[cat].icon + ' ' + FURNITURE_CATEGORIES[cat].label + '</div>';
+      items.forEach(function(item) {
+        html += '<div onclick="placeFromPanel(\'' + item.id + '\')" style="padding:6px 8px;margin:2px 0;border-radius:6px;background:rgba(255,255,255,.06);cursor:pointer;font-size:11px;color:#E0E0E0;transition:all .2s" onmouseover="this.style.background=\'rgba(0,201,167,.15)\'" onmouseout="this.style.background=\'rgba(255,255,255,.06)\'">' + item.name + '<span style="float:right;font-size:9px;color:#5A7898">' + (item.dimensions.width + 'x' + item.dimensions.depth) + 'm</span></div>';
+      });
+    });
+    furniturePanel.innerHTML = html;
+    container.appendChild(furniturePanel);
+  }
+
+  // Initialize Three.js
+  if (!roomBuilder) {
+    const renderArea = document.createElement('div');
+    renderArea.style.cssText = 'width:100%;height:100%;position:absolute;inset:0';
+    container.insertBefore(renderArea, container.firstChild);
+    roomBuilder = new RoomBuilder(renderArea);
+
+    // Callback when furniture changes — update BOQ
+    roomBuilder.onFurnitureChange = function() {
+      updateBOQFrom3D();
+    };
+  }
+
+  // Load scene data from last design result
+  const sceneData = lastDesignResult.scene_3d || (lastDesignResult.ai_response && lastDesignResult.ai_response.scene_3d);
+  if (sceneData) {
+    roomBuilder.loadScene(sceneData);
+  } else {
+    // Build default room from area
+    const area = parseInt(document.getElementById('rv1')?.textContent) || 30;
+    const w = Math.round(Math.sqrt(area * 1.2) * 10) / 10;
+    const d = Math.round(area / w * 10) / 10;
+    roomBuilder.buildRoom(w, d, 2.8);
+  }
+
+  toast('3D Editor mở! Click nội thất bên phải để đặt vào phòng.', 'info');
+}
+
+function close3DEditor() {
+  is3DMode = false;
+  const container = document.getElementById('threejs-container');
+  if (container) container.style.display = 'none';
+  const canvas = document.getElementById('srCanvas') || document.getElementById('cvResult');
+  if (canvas) canvas.style.display = '';
+}
+
+function placeFromPanel(itemId) {
+  if (!roomBuilder) return;
+  const item = FURNITURE_CATALOG.find(f => f.id === itemId);
+  if (!item) return;
+  const colors = MATERIAL_COLORS[item.category === 'decor' ? 'organic' : 'wood'] || ['#888888'];
+  item._color = colors[Math.floor(Math.random() * colors.length)];
+  roomBuilder.startPlacing(item, item._color);
+  toast('Click vào sàn để đặt ' + item.name, 'info');
+}
+
+function exportScreenshot3D() {
+  if (!roomBuilder) return;
+  const dataUrl = roomBuilder.exportScreenshot();
+  const link = document.createElement('a');
+  link.href = dataUrl;
+  link.download = 'nexdesign-3d-' + Date.now() + '.png';
+  link.click();
+  toast('Đã xuất screenshot!', 'success');
+}
+
+async function save3DScene() {
+  if (!roomBuilder || !lastDesignResult?.design_id) { toast('Chưa có thiết kế để lưu'); return; }
+  const sceneData = roomBuilder.exportSceneData();
+  try {
+    const resp = await apiFetch('/design/' + lastDesignResult.design_id + '/save-3d', {
+      method: 'POST',
+      body: JSON.stringify(sceneData),
+    });
+    if (resp && resp.ok) toast('Đã lưu scene 3D!', 'success');
+    else toast('Lỗi lưu: ' + (resp?.detail || ''), 'error');
+  } catch(e) { toast('Lỗi kết nối', 'error'); }
+}
+
+function updateBOQFrom3D() {
+  if (!roomBuilder) return;
+  const boq = roomBuilder.getBOQFromScene();
+  // Update BOQ panel in right sidebar
+  const boqContainer = document.querySelector('[data-boq-list]') || document.getElementById('boqList');
+  if (boqContainer && boq.items.length) {
+    boqContainer.innerHTML = boq.items.map(function(item) {
+      return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:11px">' +
+        '<span>' + item.name + '</span>' +
+        '<span style="font-weight:600">' + formatVND(item.total_price) + '</span></div>';
+    }).join('');
+  }
+  const totalEl = document.querySelector('[data-boq-total]');
+  if (totalEl) totalEl.textContent = formatVND(boq.total);
+}
+
+// Add "Edit 3D" button to result view
+const _origShowResult = window.showResult;
+window.showResult = function(apiResult) {
+  if (_origShowResult) _origShowResult.call(window);
+  // Inject 3D button after results render
+  setTimeout(function() {
+    if (!document.getElementById('btn-open-3d')) {
+      const shopBtn = document.getElementById('shopBtn');
+      if (shopBtn) {
+        const btn3d = document.createElement('button');
+        btn3d.id = 'btn-open-3d';
+        btn3d.onclick = open3DEditor;
+        btn3d.style.cssText = 'display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:10px;background:linear-gradient(135deg,#6366F1,#A855F7);border:none;color:#fff;font-size:13px;font-weight:700;cursor:pointer;margin-left:8px;font-family:"Noto Sans",sans-serif';
+        btn3d.innerHTML = '🎲 Chỉnh sửa 3D';
+        shopBtn.parentNode.insertBefore(btn3d, shopBtn.nextSibling);
+      }
+    }
+  }, 500);
+};
 </script>
 </body>
 </html>
