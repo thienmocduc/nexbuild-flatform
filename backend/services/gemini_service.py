@@ -10,7 +10,8 @@ from typing import Optional
 import httpx
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-GEMINI_MODEL = "gemini-2.0-flash"
+# Use `gemini-flash-latest` (auto-tracks latest stable). gemini-2.0-flash is deprecated for new users.
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-flash-latest")
 GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 
 # Vietnamese construction materials database for BOQ pricing

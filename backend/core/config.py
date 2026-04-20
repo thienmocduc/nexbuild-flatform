@@ -52,7 +52,7 @@ class Settings(BaseSettings):
 
     # Gemini AI
     GEMINI_API_KEY: str = ""
-    GEMINI_MODEL: str = "gemini-2.0-flash"
+    GEMINI_MODEL: str = "gemini-flash-latest"
 
     # Fal.ai (image generation — server-side only, NEVER expose to client)
     FAL_API_KEY: str = ""
