@@ -9,10 +9,8 @@
   "rewrites": [
     { "source": "/api/v1/:path*", "destination": "https://c-users-admin-documents-nexbuild-os-flatform-production.up.railway.app/api/v1/:path*" },
     { "source": "/health", "destination": "https://c-users-admin-documents-nexbuild-os-flatform-production.up.railway.app/health" },
-    { "source": "/dashboard", "destination": "/dashboard.html" },
-    { "source": "/marketplace", "destination": "/marketplace.html" },
-    { "source": "/nexdesign", "destination": "/nexdesign-app.html" },
-    { "source": "/nexdesign-ai", "destination": "/nexdesign-landing.html" }
+    { "source": "/nexdesign", "destination": "/nexdesign-app" },
+    { "source": "/nexdesign-ai", "destination": "/nexdesign-landing" }
   ],
   "redirects": [
     { "source": "/nexdesign-app.html", "destination": "/nexdesign", "permanent": true },
