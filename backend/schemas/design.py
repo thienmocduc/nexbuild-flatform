@@ -1,18 +1,32 @@
 """Design AI request/response schemas."""
-from typing import Optional
-from uuid import UUID
+from typing import Any, Literal, Optional
 
 from pydantic import BaseModel, Field
 
 
 class GenerateRequest(BaseModel):
     prompt: str = Field(..., min_length=10, max_length=2000)
-    style: str = Field("modern", pattern=r"^(modern|scandinavian|japandi|industrial|mediterranean|biophilic)$")
+    # Style: relaxed pattern — Vietnamese styles (indochine, tropical_modern, wabi_sabi, neo_classical) added
+    style: str = Field(
+        "modern",
+        pattern=r"^(modern|scandinavian|japandi|industrial|mediterranean|biophilic|indochine|tropical_modern|wabi_sabi|neo_classical)$",
+    )
     room_type: Optional[str] = None
-    area_m2: Optional[float] = Field(None, ge=5, le=500)
+    # area_m2: expanded to 10000 to accommodate architecture (large villa, commercial)
+    area_m2: Optional[float] = Field(None, ge=5, le=10000)
     budget_million: Optional[float] = Field(None, ge=0)
     auto_boq: bool = True
     shoppable: bool = True
+
+    # NEW — Multi-discipline support
+    discipline: Literal["interior", "architecture", "structural"] = "interior"
+    location_province: Optional[str] = Field(
+        None, description="VN province for sun path / climate / wind zone"
+    )
+    floors: Optional[int] = Field(None, ge=1, le=50, description="Number of floors (architecture/structural)")
+    soil_type: Optional[str] = Field(
+        None, description="Soil description for foundation design (structural)"
+    )
 
 
 class DesignVariant(BaseModel):
@@ -37,13 +51,22 @@ class BOQItemResponse(BaseModel):
 
 
 class GenerateResponse(BaseModel):
+    """Generic response — agent-specific data lives under `agent_output`.
+
+    Backward-compatible: legacy `variants` + `boq_items` fields preserved
+    when discipline=interior.
+    """
     design_id: str
     status: str
-    variants: list[DesignVariant]
-    boq_items: list[BOQItemResponse]
-    boq_total: int
-    prompt_enhanced: str
-    message: str
+    discipline: str = "interior"
+    # Legacy interior fields (kept for backward compatibility)
+    variants: list[DesignVariant] = []
+    boq_items: list[BOQItemResponse] = []
+    boq_total: int = 0
+    prompt_enhanced: str = ""
+    message: str = ""
+    # NEW — full agent output (for architecture/structural with custom shape)
+    agent_output: Optional[dict[str, Any]] = None
 
 
 class DesignHistoryItem(BaseModel):
@@ -52,6 +75,7 @@ class DesignHistoryItem(BaseModel):
     style: Optional[str] = None
     room_type: Optional[str] = None
     area_m2: Optional[float] = None
+    discipline: str = "interior"
     status: str
     created_at: str
     variant_count: int = 0

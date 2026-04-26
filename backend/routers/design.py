@@ -35,6 +35,11 @@ async def generate(
         budget_million=req.budget_million,
         auto_boq=req.auto_boq,
         db=db,
+        # Multi-discipline kwargs (default to interior for backward compat)
+        discipline=req.discipline,
+        location_province=req.location_province,
+        floors=req.floors,
+        soil_type=req.soil_type,
     )
 
     if result.get("error"):
