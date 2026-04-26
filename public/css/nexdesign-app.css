@@ -373,3 +373,41 @@ tr:hover td      { background: rgba(255,255,255,.03); }
 .bea:hover { opacity: .85; }
 .bea-g    { background: transparent; border: 1px solid var(--bdr2); color: var(--text2); }
 .bea-g:hover { border-color: var(--c1); color: var(--c1); }
+
+/* ─── DISCIPLINE TABS (Interior / Architecture / Structural) ─── */
+.discipline-sec   { padding-bottom: 14px; border-bottom: 1px solid var(--bdr); margin-bottom: 14px; }
+.discipline-tabs  { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 8px; }
+.dtab             { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 6px; background: var(--bg3); border: 1px solid var(--bdr); border-radius: 10px; cursor: pointer; transition: border-color .2s, background .2s; font-family: "Noto Sans",sans-serif; }
+.dtab:hover       { border-color: var(--c1); }
+.dtab.on          { background: linear-gradient(135deg,rgba(0,201,167,.12),rgba(14,165,233,.08)); border-color: var(--c1); box-shadow: 0 0 0 1px rgba(0,201,167,.4); }
+.dtab-ico         { font-size: 20px; line-height: 1; }
+.dtab-lbl         { font-size: 10px; font-weight: 600; color: var(--text2); letter-spacing: .3px; }
+.dtab.on .dtab-lbl{ color: var(--c1); }
+
+.adv-fields       { background: var(--bg3); border-radius: 8px; padding: 10px; }
+.adv-row          { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+.adv-row:last-child { margin-bottom: 0; }
+.adv-lbl          { font-size: 11px; font-weight: 600; color: var(--text2); flex-shrink: 0; }
+.adv-input        { flex: 1; padding: 6px 8px; background: var(--bg2); border: 1px solid var(--bdr); border-radius: 6px; color: var(--text); font-family: "Noto Sans",sans-serif; font-size: 11px; }
+.adv-input:focus  { outline: none; border-color: var(--c1); }
+
+/* ─── ARCHITECTURE GRID ─── */
+.arch-grid        { grid-template-columns: 1fr 1fr 1fr !important; }
+.arch-card .rframe{ min-height: 260px; }
+
+/* ─── STRUCTURAL SUMMARY ─── */
+.struct-summary   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; padding: 14px; height: 100%; overflow-y: auto; }
+.struct-card      { background: var(--bg3); border: 1px solid var(--bdr); border-radius: 12px; padding: 14px; }
+.sc-hdr           { font-size: 12px; font-weight: 700; color: var(--c1); margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--bdr); }
+.sc-row           { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; padding: 6px 0; font-size: 11px; }
+.sc-row span      { color: var(--text2); flex-shrink: 0; }
+.sc-row b         { color: var(--text); text-align: right; font-weight: 600; }
+
+@media (max-width: 768px) {
+  .struct-summary { grid-template-columns: 1fr; }
+  .arch-grid      { grid-template-columns: 1fr !important; }
+  .discipline-tabs{ grid-template-columns: 1fr 1fr 1fr; }
+  .dtab           { padding: 8px 4px; }
+  .dtab-ico       { font-size: 16px; }
+  .dtab-lbl       { font-size: 9px; }
+}

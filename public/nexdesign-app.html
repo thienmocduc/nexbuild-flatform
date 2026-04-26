@@ -79,6 +79,52 @@
 
       <!-- LEFT: INPUT PANEL -->
       <div class="panel-l">
+        <!-- ── DISCIPLINE SELECTOR ── -->
+        <div class="pl-sec discipline-sec">
+          <div class="pl-lbl"><div class="pl-lbl-dot" style="background:var(--gold)"></div>Lĩnh vực thiết kế</div>
+          <div class="discipline-tabs">
+            <button class="dtab on" data-discipline="interior" onclick="selDiscipline(this)">
+              <span class="dtab-ico">🏠</span><span class="dtab-lbl">Nội thất</span>
+            </button>
+            <button class="dtab" data-discipline="architecture" onclick="selDiscipline(this)">
+              <span class="dtab-ico">🏛️</span><span class="dtab-lbl">Kiến trúc</span>
+            </button>
+            <button class="dtab" data-discipline="structural" onclick="selDiscipline(this)">
+              <span class="dtab-ico">🏗️</span><span class="dtab-lbl">Kết cấu</span>
+            </button>
+          </div>
+          <!-- Architecture/Structural extra fields (hidden by default for interior) -->
+          <div class="adv-fields" id="advFields" style="display:none;margin-top:10px;display:none">
+            <div class="adv-row">
+              <label class="adv-lbl">Tỉnh / Thành</label>
+              <select id="locProv" class="adv-input">
+                <option value="HCM">TP HCM</option>
+                <option value="Hà Nội">Hà Nội</option>
+                <option value="Đà Nẵng">Đà Nẵng</option>
+                <option value="Hải Phòng">Hải Phòng</option>
+                <option value="Cần Thơ">Cần Thơ</option>
+                <option value="Nha Trang">Nha Trang</option>
+                <option value="Huế">Huế</option>
+                <option value="Đà Lạt">Đà Lạt</option>
+              </select>
+            </div>
+            <div class="adv-row">
+              <label class="adv-lbl">Số tầng</label>
+              <input type="number" id="numFloors" class="adv-input" value="2" min="1" max="50">
+            </div>
+            <div class="adv-row" id="soilRow" style="display:none">
+              <label class="adv-lbl">Loại đất</label>
+              <select id="soilType" class="adv-input">
+                <option value="Đất sét pha cứng R0=1.8 kG/cm²">Đất sét pha cứng (tốt)</option>
+                <option value="Đất sét pha trung bình R0=1.2 kG/cm²">Đất sét pha trung bình</option>
+                <option value="Đất cát pha bùn R0=0.8 kG/cm²">Đất cát pha bùn (yếu)</option>
+                <option value="Đất bùn R0=0.5 kG/cm²">Đất bùn (rất yếu)</option>
+                <option value="Đất tốt có lớp đá R0=2.5 kG/cm²">Đất tốt có lớp đá</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         <div class="pl-sec">
           <div class="pl-lbl"><div class="pl-lbl-dot" style="background:var(--c1)"></div>Mô tả không gian</div>
           <div class="prompt-box">
@@ -639,12 +685,38 @@ let ldIdx=0,fillPct=0,fillTimer=null;
 // ── DESIGN API CONFIG (server-side — NO API KEY in client) ──
 const STYLE_MAP={
   'Hiện đại':'modern','Scandinavian':'scandinavian','Tối giản':'japandi',
-  'Tân cổ điển':'modern','Wabi-Sabi':'japandi','Japandi':'japandi',
-  'Industrial':'industrial','Đông Dương':'mediterranean'
+  'Tân cổ điển':'neo_classical','Wabi-Sabi':'wabi_sabi','Japandi':'japandi',
+  'Industrial':'industrial','Đông Dương':'indochine'
 };
 const VARIANT_LABELS=['A — Hiện đại','B — Scandinavian','C — Japandi','D — Industrial'];
 let generatedImages=[];
 let lastDesignResult=null; // Store full result with scene_3d for 3D editor
+let currentDiscipline='interior'; // 'interior' | 'architecture' | 'structural'
+
+// ── DISCIPLINE TABS ──
+function selDiscipline(el){
+  document.querySelectorAll('.dtab').forEach(d=>d.classList.remove('on'));
+  el.classList.add('on');
+  currentDiscipline=el.dataset.discipline;
+  const adv=document.getElementById('advFields');
+  const soilRow=document.getElementById('soilRow');
+  if(currentDiscipline==='interior'){
+    adv.style.display='none';
+    soilRow.style.display='none';
+  } else {
+    adv.style.display='block';
+    soilRow.style.display=(currentDiscipline==='structural')?'block':'none';
+  }
+  // Update placeholder + suggested templates
+  const txt=document.getElementById('promptTxt');
+  if(currentDiscipline==='architecture'){
+    txt.placeholder='VD: Biệt thự 3 tầng tropical modern 200m²/tầng, có sân trong, mặt tiền hướng Nam, view ra hồ, sử dụng vật liệu địa phương, mái dốc 30°...';
+  } else if(currentDiscipline==='structural'){
+    txt.placeholder='VD: Nhà phố 4 tầng BTCT đổ tại chỗ, sàn 100m²/tầng, tường gạch 220, đất sét pha cứng, vùng gió IIA HCM, không có động đất...';
+  } else {
+    txt.placeholder='VD: Phòng khách 30m² phong cách Scandinavian, tông màu trắng be và gỗ sáng, sofa góc xám nhạt, thảm len tròn, kệ sách gỗ walnut, cây monstera lớn, ánh sáng vàng ấm từ đèn Edison...';
+  }
+}
 
 function startGenerate(){
   const p=document.getElementById('promptTxt').value.trim();
@@ -682,23 +754,42 @@ function startGenerate(){
     document.getElementById('ld'+(stepIdx+1))?.classList.add('act');
     applyLdStep(stepIdx);
   },4000);
-  // Call backend API (Gemini + Fal.ai server-side)
+  // Build payload — multi-discipline aware
+  const payload={
+    prompt:p,
+    style:styleKey,
+    room_type:activeChips||'phòng khách',
+    area_m2:area,
+    budget_million:budget,
+    auto_boq:true,
+    discipline:currentDiscipline
+  };
+  if(currentDiscipline!=='interior'){
+    payload.location_province=document.getElementById('locProv')?.value||'HCM';
+    payload.floors=parseInt(document.getElementById('numFloors')?.value)||2;
+  }
+  if(currentDiscipline==='structural'){
+    payload.soil_type=document.getElementById('soilType')?.value||'';
+  }
+
+  // Call backend API
   apiFetch('/design/generate',{
     method:'POST',
-    body:JSON.stringify({
-      prompt:p,
-      style:styleKey,
-      room_type:activeChips||'phòng khách',
-      area_m2:area,
-      budget_million:budget,
-      auto_boq:true
-    })
+    body:JSON.stringify(payload)
   }).then(result=>{
     clearInterval(ldTimer);clearInterval(fillTimer);
-    if(result && !result.error && result.variants){
+    if(result && !result.error){
       lastDesignResult=result;
-      generatedImages=result.variants.map(v=>v.image_url||null);
-      showResult(result);
+      const variants=result.variants||[];
+      generatedImages=variants.map(v=>v.image_url||null);
+      // Dispatch to right renderer
+      if(currentDiscipline==='architecture'){
+        showArchitectureResult(result);
+      } else if(currentDiscipline==='structural'){
+        showStructuralResult(result);
+      } else {
+        showResult(result);
+      }
     } else {
       toast(result?.detail||result?.message||'Lỗi tạo thiết kế','error');
       document.getElementById('cvLoading').classList.remove('on');
@@ -710,6 +801,138 @@ function startGenerate(){
     document.getElementById('cvEmpty').style.display='';
     toast('Lỗi kết nối server','error');
   });
+}
+
+// ── ARCHITECTURE RENDERER ──
+function showArchitectureResult(result){
+  document.getElementById('ldFill').style.width='100%';
+  document.getElementById('ldPct').textContent='100%';
+  [1,2,3,4,5].forEach(i=>document.getElementById('ld'+i).classList.add('done'));
+  setTimeout(()=>{
+    document.getElementById('cvLoading').classList.remove('on');
+    document.getElementById('cvResult').classList.add('on');
+    document.getElementById('cv-title').textContent='Phương án kiến trúc · '+(result.agent_output?.site_analysis?.city||'')+ ' · TCVN compliant';
+    document.getElementById('shopBtn').style.display='none';
+
+    const ao=result.agent_output||{};
+    const concepts=ao.concept_variants||[];
+    const site=ao.site_analysis||{};
+    const cost=ao.estimated_cost||{};
+    const fmt=(n)=>n?n.toLocaleString('vi-VN')+' VND':'—';
+
+    // Render 3 concepts in grid
+    const grid=document.getElementById('renderGrid');
+    if(grid){
+      grid.innerHTML='<div class="r4grid arch-grid">'+
+        concepts.map((c,i)=>{
+          const grad=['#0a1e2e,#082a20','#1a1408,#2a1a08','#0a180a,#0d2510'][i%3];
+          return '<div class="rcard arch-card">'+
+            '<div class="rframe" style="background:linear-gradient(135deg,'+grad+')">'+
+              '<div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;text-align:center">'+
+                '<div style="font-size:42px">🏛️</div>'+
+                '<div style="font-size:13px;font-weight:700;color:#fff">'+(c.concept_name||'')+'</div>'+
+                '<div style="font-size:10px;color:rgba(255,255,255,.7);max-width:90%">'+(c.parti_diagram||'')+'</div>'+
+              '</div>'+
+              '<div class="rf-label">'+(c.concept_name||'').substring(0,40)+'</div>'+
+            '</div>'+
+            '<div class="rmeta">'+
+              '<div class="rmeta-t">'+(c.concept_name||'')+'</div>'+
+              '<div class="rmeta-s">'+(c.facade_description||'').substring(0,80)+'</div>'+
+            '</div>'+
+          '</div>';
+        }).join('')+
+      '</div>';
+    }
+    // Render BOQ panel with site_analysis + cost + TCVN refs
+    const boqEl=document.getElementById('boqContent');
+    if(boqEl){
+      boqEl.innerHTML=
+        '<div class="boq-item"><div><div class="bi-cat">📍 Phân tích địa điểm</div><div class="bi-mat">'+(site.city||'')+' · '+(site.climate_zone_name||'')+'</div></div><div class="bi-price">'+(site.latitude||'?')+'°N</div></div>'+
+        '<div class="boq-item"><div><div class="bi-cat">☀️ Sun path</div><div class="bi-mat">'+(site.sun_path_summary||'').substring(0,100)+'</div></div></div>'+
+        '<div class="boq-item"><div><div class="bi-cat">💨 Gió</div><div class="bi-mat">'+(site.wind_summary||'')+'</div></div></div>'+
+        (concepts.flatMap((c,i)=>(c.facade_materials||[]).slice(0,3).map(m=>
+          '<div class="boq-item"><div><div class="bi-cat">'+String.fromCharCode(65+i)+' · '+(m.item||'')+'</div><div class="bi-mat">'+(m.qty||'')+' '+(m.qty_unit||'')+'</div></div><div class="bi-price">'+fmt(m.unit_price*((m.qty||0)))+'</div></div>'
+        )).join(''))+
+        '<div class="boq-item" style="border-top:2px solid var(--c1);margin-top:8px;padding-top:12px"><div><div class="bi-cat" style="color:var(--c1)">💰 Tổng dự toán xây dựng</div><div class="bi-mat">'+(cost.finish_level||'')+' · '+(cost.cost_per_m2_vnd||0).toLocaleString('vi-VN')+' VND/m²</div></div><div class="bi-price" style="color:var(--c1);font-size:13px">'+fmt(cost.cost_typical_vnd)+'</div></div>'+
+        '<div style="margin-top:10px;padding:8px;background:rgba(0,201,167,.06);border-radius:6px;font-size:10px;color:var(--text2)">'+
+          '<div style="font-weight:700;margin-bottom:4px;color:var(--c1)">📋 TCVN áp dụng</div>'+
+          (ao.tcvn_references_applied||[]).map(t=>'<div>• <strong>'+(t.code||'')+'</strong> — '+(t.use||'')+'</div>').join('')+
+        '</div>';
+    }
+  },300);
+}
+
+// ── STRUCTURAL RENDERER ──
+function showStructuralResult(result){
+  document.getElementById('ldFill').style.width='100%';
+  document.getElementById('ldPct').textContent='100%';
+  [1,2,3,4,5].forEach(i=>document.getElementById('ld'+i).classList.add('done'));
+  setTimeout(()=>{
+    document.getElementById('cvLoading').classList.remove('on');
+    document.getElementById('cvResult').classList.add('on');
+    document.getElementById('cv-title').textContent='Phương án kết cấu BTCT · TCVN 5574/2737 compliant';
+    document.getElementById('shopBtn').style.display='none';
+
+    const ao=result.agent_output||{};
+    const sys=ao.structural_system||{};
+    const load=ao.load_analysis||{};
+    const fnd=ao.foundation_design||{};
+    const fr=ao.framing||{};
+    const sc=ao.safety_check||{};
+    const fmt=(n)=>n?n.toLocaleString('vi-VN')+' VND':'—';
+
+    // Render structural summary in grid area
+    const grid=document.getElementById('renderGrid');
+    if(grid){
+      grid.innerHTML='<div class="struct-summary">'+
+        '<div class="struct-card">'+
+          '<div class="sc-hdr">🏗️ Hệ kết cấu</div>'+
+          '<div class="sc-row"><span>Loại</span><b>'+(sys.type||'?')+'</b></div>'+
+          '<div class="sc-row"><span>Bê tông cột</span><b>'+(sys.concrete_grade_column||'?')+'</b></div>'+
+          '<div class="sc-row"><span>Bê tông dầm-sàn</span><b>'+(sys.concrete_grade_beam_slab||'?')+'</b></div>'+
+          '<div class="sc-row"><span>Bê tông móng</span><b>'+(sys.concrete_grade_foundation||'?')+'</b></div>'+
+          '<div class="sc-row"><span>Cốt thép chính</span><b>'+(sys.rebar_grade_main||'?')+'</b></div>'+
+        '</div>'+
+        '<div class="struct-card">'+
+          '<div class="sc-hdr">⚖️ Tải trọng (TCVN 2737)</div>'+
+          '<div class="sc-row"><span>Tĩnh tải DL</span><b>'+(load.dead_load_kn_m2||'?')+' kN/m²</b></div>'+
+          '<div class="sc-row"><span>Hoạt tải LL</span><b>'+(load.live_load_kn_m2||'?')+' kN/m²</b></div>'+
+          '<div class="sc-row"><span>Vùng gió</span><b>'+(load.wind_load_zone||'?')+' (W₀='+(load.wind_pressure_w0_kn_m2||'?')+')</b></div>'+
+          '<div class="sc-row"><span>Vùng động đất</span><b>'+(load.seismic_zone||'?')+'</b></div>'+
+          '<div class="sc-row"><span>Tổ hợp tải</span><b style="font-size:10px">'+(load.load_combination_basic||'')+'</b></div>'+
+        '</div>'+
+        '<div class="struct-card">'+
+          '<div class="sc-hdr">🪨 Móng</div>'+
+          '<div class="sc-row"><span>Loại</span><b>'+(fnd.type||'?')+'</b></div>'+
+          '<div class="sc-row"><span>Đất giả định</span><b style="font-size:10px">'+(fnd.soil_assumed||'').substring(0,40)+'</b></div>'+
+          '<div class="sc-row"><span>Độ sâu</span><b>'+(fnd.depth_m||'?')+' m</b></div>'+
+          '<div class="sc-row"><span>Kích thước</span><b>'+(fnd.typical_size_m||'?')+'</b></div>'+
+          '<div class="sc-row"><span>Số lượng</span><b>'+(fnd.qty_total||'?')+'</b></div>'+
+        '</div>'+
+        '<div class="struct-card">'+
+          '<div class="sc-hdr">📐 Tiết diện chính</div>'+
+          (fr.columns||[]).slice(0,3).map(c=>'<div class="sc-row"><span>'+(c.location||'')+'</span><b>'+(c.section||'?')+' · '+(c.rebar_main||'')+'</b></div>').join('')+
+          (fr.beams||[]).slice(0,2).map(b=>'<div class="sc-row"><span>'+(b.location||'')+'</span><b>'+(b.section||'?')+'</b></div>').join('')+
+          (fr.slabs||[]).slice(0,1).map(s=>'<div class="sc-row"><span>Sàn</span><b>'+(s.type||'')+' h='+(s.thickness_mm||'?')+'mm</b></div>').join('')+
+        '</div>'+
+      '</div>';
+    }
+    // Render BOQ structural in side panel
+    const boqEl=document.getElementById('boqContent');
+    if(boqEl){
+      const boq=ao.boq_structural||[];
+      boqEl.innerHTML=
+        boq.map(b=>'<div class="boq-item"><div><div class="bi-cat">'+(b.item||'')+'</div><div class="bi-mat">'+(b.qty||'?')+' '+(b.unit||'')+' × '+(b.unit_price||0).toLocaleString('vi-VN')+' VND</div></div><div class="bi-price">'+fmt(b.total_price)+'</div></div>').join('')+
+        '<div class="boq-item" style="border-top:2px solid var(--c1);margin-top:8px;padding-top:12px"><div><div class="bi-cat" style="color:var(--c1)">💰 Tổng BOQ kết cấu</div><div class="bi-mat">Bê tông + thép + ván khuôn</div></div><div class="bi-price" style="color:var(--c1);font-size:13px">'+fmt(ao.boq_total_vnd)+'</div></div>'+
+        '<div style="margin-top:10px;padding:8px;background:rgba(34,197,94,.06);border-radius:6px;font-size:10px;color:var(--text2)">'+
+          '<div style="font-weight:700;margin-bottom:4px;color:var(--green)">✅ Kiểm tra an toàn</div>'+
+          '<div>TCVN 5574: '+(sc.compliant_tcvn_5574?'OK':'⚠️ Cần xem lại')+'</div>'+
+          '<div>TCVN 2737: '+(sc.compliant_tcvn_2737?'OK':'⚠️ Cần xem lại')+'</div>'+
+          (sc.deflection_check?'<div>Chuyển vị: '+sc.deflection_check+'</div>':'')+
+          ((sc.warnings||[]).length?'<div style="color:var(--amb);margin-top:4px">⚠️ '+sc.warnings.join('; ')+'</div>':'')+
+        '</div>';
+    }
+  },300);
 }
 function applyLdStep(i){
   if(i>=ldSteps.length)return;
