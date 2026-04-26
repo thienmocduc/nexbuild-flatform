@@ -16,7 +16,13 @@
     { "source": "/nexdesign-app.html", "destination": "/nexdesign", "permanent": true },
     { "source": "/nexdesign-landing.html", "destination": "/nexdesign-ai", "permanent": true },
     { "source": "/dashboard.html", "destination": "/dashboard", "permanent": true },
-    { "source": "/marketplace.html", "destination": "/marketplace", "permanent": true }
+    { "source": "/marketplace.html", "destination": "/marketplace", "permanent": true },
+    { "source": "/nexbuild-hub.html", "destination": "/", "permanent": true },
+    { "source": "/nexbuild-hub", "destination": "/", "permanent": true },
+    { "source": "/nexbuild-marketplace.html", "destination": "/marketplace", "permanent": true },
+    { "source": "/nexbuild-marketplace", "destination": "/marketplace", "permanent": true },
+    { "source": "/nexbuild-dashboard.html", "destination": "/dashboard", "permanent": true },
+    { "source": "/nexbuild-dashboard", "destination": "/dashboard", "permanent": true }
   ],
   "headers": [
     {

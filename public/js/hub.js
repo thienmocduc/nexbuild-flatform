@@ -165,7 +165,7 @@ document.addEventListener("click", e=>{
 });
 
 function openMarketplace(){
-  window.open('nexbuild-marketplace.html','_blank');
+  window.open('/marketplace','_blank');
 }
 function _openMarketplaceEco(){
   // Đóng drawer nếu đang mở
@@ -322,7 +322,7 @@ function doLogin(){
   if(!email){toast('Vui lòng nhập email hoặc SĐT');return;}
   closeAuthModal();
   toast('✅ Đăng nhập thành công · Đang vào Marketplace...');
-  setTimeout(()=>window.open('nexbuild-marketplace.html','_blank'),900);
+  setTimeout(()=>window.open('/marketplace','_blank'),900);
 }
 function doRegister(){
   const email=document.getElementById('regEmail').value.trim();
@@ -435,7 +435,7 @@ AP_PAGES['hub-content'] = {
     '<div class="acard">'+
     '<div class="acard-t">🔘 CTA Buttons</div>'+
     ctaRow('CTA chính','Bắt đầu miễn phí','#signup')+
-    ctaRow('CTA phụ','Xem Marketplace','nexbuild-marketplace.html')+
+    ctaRow('CTA phụ','Xem Marketplace','/marketplace')+
     ctaRow('Nhà đầu tư','Dành cho nhà đầu tư','mailto:invest@nexbuild.holdings')+
     '<button class="abtn abtn-t abtn-sm" style="margin-top:6px" onclick="toast(\'✅ Lưu CTA config\')">💾 Lưu</button>'+
     '</div></div>'+

@@ -122,8 +122,8 @@
     <div style="font-size:12px;color:var(--text3)" id="tbBreadcrumb">Dashboard</div>
     <div class="tb-acts">
       <button class="tba notif-dot" onclick="setPage('notif')">🔔</button>
-      <button class="tba" onclick="window.location.href='nexbuild-marketplace.html'">← NexMarket</button>
-      <button class="tba" onclick="window.location.href='nexbuild-hub.html'">⬡ Hub</button>
+      <button class="tba" onclick="window.location.href='/marketplace'">← NexMarket</button>
+      <button class="tba" onclick="window.location.href='/'">⬡ Hub</button>
       <button class="tba tba-pri" id="tbRoleBtn" onclick="showRoleSelect()">Chọn vai trò</button>
     </div>
   </div>
@@ -319,7 +319,7 @@
 
   <div class="pg" id="pg-buyer-workers">
     <div class="pg-inner">
-      <div class="sec-hdr"><div class="sec-title">👷 Thợ đã thuê</div><button class="btn btn-teal btn-sm" onclick="window.location.href='nexbuild-marketplace.html'">+ Tìm thợ mới</button></div>
+      <div class="sec-hdr"><div class="sec-title">👷 Thợ đã thuê</div><button class="btn btn-teal btn-sm" onclick="window.location.href='/marketplace'">+ Tìm thợ mới</button></div>
       <div class="grid-2" style="margin-bottom:14px">
         <div style="padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(34,197,94,.2);border-radius:10px;margin-bottom:8px">
           <div style="display:flex;gap:10px;align-items:center">
@@ -857,7 +857,7 @@
         <div class="sec-title">🎓 NexAcademy</div>
         <div style="display:flex;gap:7px;align-items:center">
           <span class="pill p-gold" style="font-size:11px">850 NXT Token</span>
-          <button class="btn btn-ghost btn-sm" onclick="window.open('nexbuild-hub.html','_blank')">Mở đầy đủ ↗</button>
+          <button class="btn btn-ghost btn-sm" onclick="window.open('/','_blank')">Mở đầy đủ ↗</button>
         </div>
       </div>
 
@@ -968,7 +968,7 @@
 
   <div class="pg" id="pg-contractor-bids">
     <div class="pg-inner">
-      <div class="sec-hdr"><div class="sec-title">📋 Quản lý đấu thầu</div><button class="btn btn-blue btn-sm" onclick="window.location.href='nexbuild-marketplace.html'">🔍 Tìm công trình mới</button></div>
+      <div class="sec-hdr"><div class="sec-title">📋 Quản lý đấu thầu</div><button class="btn btn-blue btn-sm" onclick="window.location.href='/marketplace'">🔍 Tìm công trình mới</button></div>
       <div style="display:flex;flex-direction:column;gap:12px">
         <tr>
           <td style="font-weight:600">Shophouse 4T Hai Bà Trưng · F&amp;B</td><td style="font-family:'Noto Sans Mono',monospace;color:var(--ind)">950M</td>
@@ -1276,8 +1276,8 @@ const NAV = {
       ]},
       {label:'Dịch vụ',items:[
         {id:'',ico:'🎨',lbl:'NexDesign AI',badge:'New',link:'nexdesign-app.html'},
-        {id:'',ico:'📦',lbl:'Mua vật liệu',badge:'',link:'nexbuild-marketplace.html'},
-        {id:'',ico:'🔍',lbl:'Tìm thợ',badge:'',link:'nexbuild-marketplace.html#work'},
+        {id:'',ico:'📦',lbl:'Mua vật liệu',badge:'',link:'/marketplace'},
+        {id:'',ico:'🔍',lbl:'Tìm thợ',badge:'',link:'/marketplace#work'},
       ]},
       {label:'Khác',items:[
         {id:'buyer-notif',ico:'🔔',lbl:'Thông báo',badge:'6',notif:true},
@@ -1315,8 +1315,8 @@ const NAV = {
         {id:'contractor-finance',ico:'💰',lbl:'Doanh thu & Escrow',badge:''},
       ]},
       {label:'Công cụ',items:[
-        {id:'',ico:'📦',lbl:'Đặt vật liệu BOQ',badge:'',link:'nexbuild-marketplace.html'},
-        {id:'',ico:'🔍',lbl:'Tìm công trình',badge:'3.2K',link:'nexbuild-marketplace.html'},
+        {id:'',ico:'📦',lbl:'Đặt vật liệu BOQ',badge:'',link:'/marketplace'},
+        {id:'',ico:'🔍',lbl:'Tìm công trình',badge:'3.2K',link:'/marketplace'},
       ]},
     ]
   },

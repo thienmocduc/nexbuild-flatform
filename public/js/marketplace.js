@@ -466,7 +466,7 @@ function setTab(id){
   if(navEl) navEl.classList.add('on');
 }
 
-function goBack(){if(window.history.length>1)window.history.back();else window.location.href='nexbuild-hub.html'}
+function goBack(){if(window.history.length>1)window.history.back();else window.location.href='/'}
 
 // ── THEME ──
 let isDark=true;
