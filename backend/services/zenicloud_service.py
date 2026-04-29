@@ -387,6 +387,70 @@ async def structural_agent_run(
         return {"error": True, "status": 0, "message": str(e)}
 
 
+# ─── Email (replaces Gmail SMTP / Vercel serverless) ──────────
+async def send_email(
+    to: str | list[str],
+    subject: str,
+    body_html: str,
+    *,
+    body_text: str | None = None,
+    from_name: str | None = None,
+    reply_to: str | None = None,
+) -> dict:
+    """Call /email/send — ZeniCloud transactional email.
+
+    Pro tier: 2000 emails/day, 100 VND/email.
+    Returns: {sent, failed, cost_vnd, message_ids, quota_remaining_today}
+    On failure: {error: True, status: int, message: str}
+    """
+    if not ZENI_TOKEN:
+        return {"error": True, "status": 0, "message": "ZENI_TOKEN missing"}
+
+    body: dict[str, Any] = {
+        "to": to if isinstance(to, str) else to,
+        "subject": subject,
+        "body_html": body_html,
+    }
+    if body_text:
+        body["body_text"] = body_text
+    if from_name:
+        body["from_name"] = from_name
+    if reply_to:
+        body["reply_to"] = reply_to
+
+    try:
+        async with httpx.AsyncClient(timeout=30) as client:
+            r = await client.post(
+                f"{ZENI_BASE}/email/send",
+                params={"ws": ZENI_WS},
+                headers=_headers(),
+                json=body,
+            )
+            if r.status_code != 200:
+                logger.error("[zeni] /email/send HTTP %d: %s", r.status_code, r.text[:300])
+                return {"error": True, "status": r.status_code, "message": r.text[:500]}
+            return r.json()
+    except httpx.HTTPError as e:
+        logger.exception("[zeni] send_email error: %s", e)
+        return {"error": True, "status": 0, "message": str(e)}
+
+
+async def get_email_quota() -> dict:
+    """Check daily email quota."""
+    if not ZENI_TOKEN:
+        return {"error": True, "message": "ZENI_TOKEN missing"}
+    try:
+        async with httpx.AsyncClient(timeout=15) as client:
+            r = await client.get(
+                f"{ZENI_BASE}/email/quota",
+                params={"ws": ZENI_WS},
+                headers=_headers(),
+            )
+            return r.json() if r.status_code == 200 else {"error": True, "status": r.status_code}
+    except httpx.HTTPError as e:
+        return {"error": True, "message": str(e)}
+
+
 # ─── Health / quota ─────────────────────────────────────────────
 async def get_subscription() -> dict:
     """Check current quota usage."""

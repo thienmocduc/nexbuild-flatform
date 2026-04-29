@@ -1,0 +1,244 @@
+# ── NexBuild · Auto Deploy to ZeniCloud ────────────────────────
+# Trigger: every push to main → build backend + frontend Docker images
+# → push to ZeniCloud Artifact Registry → POST /api/v1/projects to deploy
+#
+# Required GitHub Secrets:
+#   ZENI_TOKEN          — ZeniCloud PAT (zeni_pat_*)
+#   ZENI_GCP_KEY        — GCP service account JSON (Artifact Registry writer)
+#                         Format: contents of nexbuild-pusher.json
+#   GEMINI_API_KEY      — Optional fallback (deprecated, use ZENI_TOKEN)
+#   ZENI_DB_URL         — Cloud SQL Auth Proxy connection string
+#   ZENI_JWT_SECRET     — JWT secret (random 64 chars)
+#
+# To enable: Settings → Secrets and variables → Actions → New repository secret
+
+name: Deploy to ZeniCloud
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:  # Allow manual trigger
+
+env:
+  ZENI_BASE: https://zenicloud.io/api/v1
+  ZENI_WS: nexbuild
+  REGISTRY: us-central1-docker.pkg.dev
+  GCP_PROJECT: zeni-cloud-core
+  REPO: zeni-images
+  REGION: us-central1
+
+jobs:
+  # ─────────────────────────────────────────────────────────────
+  # JOB 1: Build + push backend Docker image
+  # ─────────────────────────────────────────────────────────────
+  build-backend:
+    runs-on: ubuntu-latest
+    outputs:
+      image_url: ${{ steps.meta.outputs.image_url }}
+      image_tag: ${{ steps.meta.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compute image metadata
+        id: meta
+        run: |
+          TAG="${GITHUB_SHA:0:7}"
+          IMG="${{ env.REGISTRY }}/${{ env.GCP_PROJECT }}/${{ env.REPO }}/nexbuild-flatform-api:${TAG}"
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "image_url=${IMG}" >> $GITHUB_OUTPUT
+          echo "Image will be: ${IMG}"
+
+      - name: Auth to Google Cloud
+        id: gcp_auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.ZENI_GCP_KEY }}
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGISTRY }} --quiet
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build + push backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image_url }}
+            ${{ env.REGISTRY }}/${{ env.GCP_PROJECT }}/${{ env.REPO }}/nexbuild-flatform-api:latest
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.GCP_PROJECT }}/${{ env.REPO }}/nexbuild-flatform-api:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.GCP_PROJECT }}/${{ env.REPO }}/nexbuild-flatform-api:buildcache,mode=max
+          platforms: linux/amd64
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 2: Build + push frontend Docker image
+  # ─────────────────────────────────────────────────────────────
+  build-frontend:
+    runs-on: ubuntu-latest
+    outputs:
+      image_url: ${{ steps.meta.outputs.image_url }}
+      image_tag: ${{ steps.meta.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Compute image metadata
+        id: meta
+        run: |
+          TAG="${GITHUB_SHA:0:7}"
+          IMG="${{ env.REGISTRY }}/${{ env.GCP_PROJECT }}/${{ env.REPO }}/nexbuild-flatform-web:${TAG}"
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "image_url=${IMG}" >> $GITHUB_OUTPUT
+
+      - name: Auth to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.ZENI_GCP_KEY }}
+
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker ${{ env.REGISTRY }} --quiet
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build + push frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile.frontend
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.image_url }}
+            ${{ env.REGISTRY }}/${{ env.GCP_PROJECT }}/${{ env.REPO }}/nexbuild-flatform-web:latest
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.GCP_PROJECT }}/${{ env.REPO }}/nexbuild-flatform-web:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY }}/${{ env.GCP_PROJECT }}/${{ env.REPO }}/nexbuild-flatform-web:buildcache,mode=max
+          platforms: linux/amd64
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 3: Deploy backend to ZeniCloud Cloud Run
+  # ─────────────────────────────────────────────────────────────
+  deploy-backend:
+    needs: build-backend
+    runs-on: ubuntu-latest
+    outputs:
+      backend_url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Deploy via ZeniCloud /api/v1/projects
+        id: deploy
+        env:
+          IMAGE: ${{ needs.build-backend.outputs.image_url }}
+          ZENI_TOKEN: ${{ secrets.ZENI_TOKEN }}
+          DB_URL: ${{ secrets.ZENI_DB_URL }}
+          JWT_SECRET: ${{ secrets.ZENI_JWT_SECRET }}
+        run: |
+          set -e
+          PAYLOAD=$(cat <<JSON
+          {
+            "name": "nexbuild-flatform-api",
+            "type": "web",
+            "runtime": "container",
+            "size": "m",
+            "region": "us-central1",
+            "image": "${IMAGE}",
+            "port": 8080,
+            "allow_unauthenticated": true,
+            "env_vars": {
+              "DEBUG": "false",
+              "ALLOWED_ORIGINS": "[\"https://nexbuild.holdings\",\"https://www.nexbuild.holdings\"]",
+              "DATABASE_URL": "${DB_URL}",
+              "REDIS_URL": "redis://localhost:6379/0",
+              "JWT_SECRET_KEY": "${JWT_SECRET}",
+              "JWT_PRIVATE_KEY_PATH": "nonexistent.pem",
+              "JWT_PUBLIC_KEY_PATH": "nonexistent.pem",
+              "ZENI_TOKEN": "${ZENI_TOKEN}",
+              "ZENI_BASE": "${{ env.ZENI_BASE }}",
+              "ZENI_WS": "${{ env.ZENI_WS }}",
+              "AGENT_MODEL": "gemini-2.5-flash",
+              "RAG_ENABLED": "1",
+              "ESCROW_AUTO_RELEASE_DAYS": "30",
+              "COMMISSION_SUPPLIER_PCT": "2.5",
+              "COMMISSION_BOOKING_PCT": "8.0",
+              "ESCROW_FEE_PCT": "0.5"
+            }
+          }
+          JSON
+          )
+          RES=$(curl -sf -X POST "${{ env.ZENI_BASE }}/projects?ws=${{ env.ZENI_WS }}" \
+            -H "Authorization: Bearer ${ZENI_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "${PAYLOAD}")
+          echo "$RES" | jq .
+          URL=$(echo "$RES" | jq -r '.url // .public_url // .domain // empty')
+          echo "url=${URL}" >> $GITHUB_OUTPUT
+          echo "✅ Backend deployed: ${URL}"
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 4: Deploy frontend to ZeniCloud Cloud Run
+  # ─────────────────────────────────────────────────────────────
+  deploy-frontend:
+    needs: [build-frontend, deploy-backend]
+    runs-on: ubuntu-latest
+    outputs:
+      frontend_url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - name: Deploy via ZeniCloud /api/v1/projects
+        id: deploy
+        env:
+          IMAGE: ${{ needs.build-frontend.outputs.image_url }}
+          BACKEND_URL: ${{ needs.deploy-backend.outputs.backend_url }}
+          ZENI_TOKEN: ${{ secrets.ZENI_TOKEN }}
+        run: |
+          set -e
+          # Default backend URL fallback if deploy-backend didn't return one
+          BACKEND="${BACKEND_URL:-https://nexbuild-flatform-api.zenicloud.run}"
+          PAYLOAD=$(cat <<JSON
+          {
+            "name": "nexbuild-flatform-web",
+            "type": "web",
+            "runtime": "container",
+            "size": "s",
+            "region": "us-central1",
+            "image": "${IMAGE}",
+            "port": 8080,
+            "allow_unauthenticated": true,
+            "env_vars": {
+              "API_BACKEND": "${BACKEND}"
+            }
+          }
+          JSON
+          )
+          RES=$(curl -sf -X POST "${{ env.ZENI_BASE }}/projects?ws=${{ env.ZENI_WS }}" \
+            -H "Authorization: Bearer ${ZENI_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "${PAYLOAD}")
+          echo "$RES" | jq .
+          URL=$(echo "$RES" | jq -r '.url // .public_url // .domain // empty')
+          echo "url=${URL}" >> $GITHUB_OUTPUT
+          echo "✅ Frontend deployed: ${URL}"
+
+  # ─────────────────────────────────────────────────────────────
+  # JOB 5: Print deployment summary
+  # ─────────────────────────────────────────────────────────────
+  summary:
+    needs: [build-backend, build-frontend, deploy-backend, deploy-frontend]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print summary
+        run: |
+          echo "═══════════════════════════════════════════════════════"
+          echo "  NEXBUILD · ZENICLOUD DEPLOY · ${GITHUB_SHA:0:7}"
+          echo "═══════════════════════════════════════════════════════"
+          echo "Backend image:  ${{ needs.build-backend.outputs.image_url }}"
+          echo "Frontend image: ${{ needs.build-frontend.outputs.image_url }}"
+          echo "Backend URL:    ${{ needs.deploy-backend.outputs.backend_url }}"
+          echo "Frontend URL:   ${{ needs.deploy-frontend.outputs.frontend_url }}"
+          echo ""
+          echo "Bind nexbuild.holdings → frontend:"
+          echo "  curl -X POST $ZENI_BASE/projects/<frontend_id>/domain?ws=$ZENI_WS \\"
+          echo "    -H 'Authorization: Bearer \$ZENI_TOKEN' \\"
+          echo "    -d '{\"domain\":\"nexbuild.holdings\"}'"

@@ -1,0 +1,113 @@
+# Frontend Docker image for ZeniCloud Cloud Run deployment.
+# Serves /public static files via nginx, proxies /api/v1 + /health to backend.
+#
+# Build:  docker build -f Dockerfile.frontend -t nexbuild-frontend:latest .
+# Run:    docker run -p 8080:8080 -e API_BACKEND=https://api.example.com nexbuild-frontend
+#
+# On ZeniCloud:
+#   POST /api/v1/projects?ws=nexbuild
+#   { "type": "web", "runtime": "container", "size": "s",
+#     "image": "us-central1-docker.pkg.dev/zeni-cloud-core/zeni-images/nexbuild-frontend:v1",
+#     "port": 8080, "env_vars": {"API_BACKEND": "<backend-url>"} }
+
+FROM nginx:1.27-alpine
+
+# ── Configuration ─────────────────────────────────────────────
+# Cloud Run requires listening on $PORT (default 8080)
+ENV PORT=8080
+EXPOSE 8080
+
+# ── Copy static files ────────────────────────────────────────
+COPY public/ /usr/share/nginx/html/
+
+# ── Nginx config — clean URLs + API proxy ────────────────────
+# We use envsubst to inject runtime $API_BACKEND into the template at startup.
+COPY <<'NGINX_TPL' /etc/nginx/templates/default.conf.template
+server {
+    listen ${PORT};
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Cache static assets aggressively (1 year, immutable)
+    location ~* ^/(css|js|lang|data|img|fonts)/.*\.(css|js|json|png|jpg|jpeg|gif|svg|webp|woff|woff2|ttf)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+        access_log off;
+        try_files $uri =404;
+    }
+
+    # No-cache for HTML (user must always get fresh)
+    location ~* \.html$ {
+        expires -1;
+        add_header Cache-Control "no-cache, must-revalidate";
+        try_files $uri =404;
+    }
+
+    # Clean URLs: /dashboard → /dashboard.html (if file exists)
+    location = /dashboard       { try_files /dashboard.html =404; }
+    location = /marketplace     { try_files /marketplace.html =404; }
+    location = /nexdesign       { try_files /nexdesign-app.html =404; }
+    location = /nexdesign-app   { try_files /nexdesign-app.html =404; }
+    location = /nexdesign-ai    { try_files /nexdesign-landing.html =404; }
+    location = /nexdesign-landing { try_files /nexdesign-landing.html =404; }
+
+    # Legacy URL redirects (from old Vercel rewrites)
+    location = /nexbuild-hub          { return 301 /; }
+    location = /nexbuild-hub.html     { return 301 /; }
+    location = /nexbuild-marketplace  { return 301 /marketplace; }
+    location = /nexbuild-marketplace.html { return 301 /marketplace; }
+    location = /nexbuild-dashboard    { return 301 /dashboard; }
+
+    # Strip .html → 301 to clean URL
+    location ~ ^/(.+)\.html$ {
+        return 301 /$1;
+    }
+
+    # Proxy API + health to backend (set via API_BACKEND env var)
+    location /api/v1/ {
+        proxy_pass ${API_BACKEND}/api/v1/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 300s;
+        proxy_send_timeout 300s;
+    }
+
+    location = /health {
+        proxy_pass ${API_BACKEND}/health;
+        proxy_set_header Host $host;
+    }
+
+    # Fallback: serve index.html for unknown routes (SPA-friendly)
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Security headers
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "DENY" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+
+    # Gzip
+    gzip on;
+    gzip_comp_level 6;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css application/json application/javascript application/xml text/xml image/svg+xml;
+    gzip_vary on;
+}
+NGINX_TPL
+
+# Default backend (overridable at runtime)
+ENV API_BACKEND="https://c-users-admin-documents-nexbuild-os-flatform-production.up.railway.app"
+
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
+    CMD wget --quiet --tries=1 --spider http://localhost:${PORT}/ || exit 1

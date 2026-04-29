@@ -1,14 +1,15 @@
-# Git
+# Git + CI metadata
 .git
 .gitignore
+.github
 
-# Env (secrets — set via Railway variables instead)
+# Env (secrets injected via ZeniCloud Secret Manager)
 .env
 .env.local
 .env.production
 .env.*.local
 
-# Python
+# Python build artifacts
 __pycache__
 *.pyc
 *.pyo
@@ -18,47 +19,49 @@ __pycache__
 .ruff_cache
 *.egg-info
 
-# Local SQLite
+# Local SQLite (production uses ZeniCloud Cloud SQL)
 *.db
 *.sqlite
 *.sqlite3
+nexbuild_dev.db
 
-# Frontend (Vercel handles this)
-public
-src
-node_modules
-next.config.mjs
-tailwind.config.ts
-postcss.config.mjs
-tsconfig.json
-package.json
-package-lock.json
-next-env.d.ts
-.next
+# Frontend artefacts (Dockerfile.frontend ignores backend/, backend ignores public/)
+# These are kept by default for backend build; .dockerignore.frontend can override
 
-# Vercel
+# Docker / Compose (not needed inside images)
+docker-compose.yml
+nginx
+
+# Vercel / Railway leftovers
 .vercel
 .vercelignore
+.railway
+
+# Old serverless wrappers (now in ZeniCloud /email/send)
 api/send-verification.js
 api/verify-email.js
 api/package.json
 
-# Docker
-docker-compose.yml
-nginx
-
-# IDE
+# IDE / OS
 .claude
 .vscode
 .idea
-
-# Docs
-docs
-*.md
-
-# OS
 .DS_Store
 Thumbs.db
 
-# Uploads (use S3 instead)
+# Docs / scripts (not runtime)
+docs
+*.md
+scripts
+
+# Local uploads (production uses ZeniCloud GCP Storage)
 uploads
+
+# Plans / handoffs
+ZENI_*.md
+ZENIOS_*.md
+IOS_*.md
+
+# Test artifacts
+test_*.py
+design_result.json
