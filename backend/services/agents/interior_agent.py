@@ -20,7 +20,7 @@ from api.services.agents.knowledge_base.interior_kb import (
 class InteriorAgent(BaseAgent):
     discipline = "interior"
     temperature = 0.85
-    max_output_tokens = 8192
+    max_output_tokens = 16384
 
     # ─────────────────────────────────────────────────────────
     # SYSTEM PROMPT — 1800+ chars

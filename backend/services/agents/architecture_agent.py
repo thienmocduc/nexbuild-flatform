@@ -23,7 +23,7 @@ from api.services.agents.knowledge_base.architecture_kb import (
 class ArchitectureAgent(BaseAgent):
     discipline = "architecture"
     temperature = 0.8
-    max_output_tokens = 8192
+    max_output_tokens = 16384
 
     # ─────────────────────────────────────────────────────────
     # SYSTEM PROMPT — 2200+ chars

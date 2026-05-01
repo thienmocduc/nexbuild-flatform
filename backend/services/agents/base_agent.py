@@ -31,7 +31,11 @@ class BaseAgent:
     discipline: str = "base"
     system_prompt: str = ""
     temperature: float = 0.8
-    max_output_tokens: int = 8192
+    # 16384 — empirically required: 4 variants × ~1500 char render_prompt +
+    # 15-20 BOQ items + scene_3d furniture[] easily exceeds 8192 → JSON truncated
+    # mid-stream → parser fails → falls back to demo. Verified ZeniCloud accepts
+    # up to 32768 (no rate-limit issue at 16384).
+    max_output_tokens: int = 16384
     model: str = AGENT_MODEL
 
     # ────────────────────────────────────────────────────────────

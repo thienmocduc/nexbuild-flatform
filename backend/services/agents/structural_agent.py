@@ -27,7 +27,7 @@ from api.services.agents.knowledge_base.structural_kb import (
 class StructuralAgent(BaseAgent):
     discipline = "structural"
     temperature = 0.5  # Lower temp — structural needs precision
-    max_output_tokens = 8192
+    max_output_tokens = 16384
 
     # ─────────────────────────────────────────────────────────
     # SYSTEM PROMPT — 2000+ chars
